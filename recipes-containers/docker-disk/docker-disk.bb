@@ -91,3 +91,4 @@ do_install () {
 
 FILES_${PN} += "/var/lib/ ${systemd_system_unitdir}"
 SYSTEMD_SERVICE_${PN} = "docker-preload.service"
+INSANE_SKIP_${PN} = "already-stripped build-deps arch dev-so file-rdeps xorg-driver-abi build-deps"
