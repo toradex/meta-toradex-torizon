@@ -6,7 +6,7 @@ SDK_VERSION = "${DISTRO_VERSION}"
 
 MAINTAINER = "OSF Support <support@opensourcefoundries.com>"
 
-TARGET_VENDOR = "-osf"
+TARGET_VENDOR = "-lmp"
 
 TCLIBCAPPEND = ""
 
