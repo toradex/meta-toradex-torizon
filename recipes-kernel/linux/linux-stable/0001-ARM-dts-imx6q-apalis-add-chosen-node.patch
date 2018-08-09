@@ -1,0 +1,63 @@
+From 6c74366b8db6fc70b65266bf52c58a89ebc946f1 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Mon, 9 Jul 2018 17:48:41 +0200
+Subject: [PATCH 1/8] ARM: dts: imx6q-apalis: add chosen node
+
+Add Apalis UART1 as default serial console.
+
+Signed-off-by: Stefan Agner <stefan@agner.ch>
+Signed-off-by: Shawn Guo <shawnguo@kernel.org>
+---
+ arch/arm/boot/dts/imx6q-apalis-eval.dts       | 4 ++++
+ arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts | 4 ++++
+ arch/arm/boot/dts/imx6q-apalis-ixora.dts      | 4 ++++
+ 3 files changed, 12 insertions(+)
+
+diff --git a/arch/arm/boot/dts/imx6q-apalis-eval.dts b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+index aa0e631f3c0a..621d9709effa 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-eval.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-eval.dts
+@@ -62,6 +62,10 @@
+ 		rtc1 = &snvs_rtc;
+ 	};
+ 
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
+index e8dccf552122..4e1c8feaef82 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-ixora-v1.1.dts
+@@ -63,6 +63,10 @@
+ 		rtc1 = &snvs_rtc;
+ 	};
+ 
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+diff --git a/arch/arm/boot/dts/imx6q-apalis-ixora.dts b/arch/arm/boot/dts/imx6q-apalis-ixora.dts
+index 6831dfd24cc1..469e3d0e2827 100644
+--- a/arch/arm/boot/dts/imx6q-apalis-ixora.dts
++++ b/arch/arm/boot/dts/imx6q-apalis-ixora.dts
+@@ -62,6 +62,10 @@
+ 		rtc1 = &snvs_rtc;
+ 	};
+ 
++	chosen {
++		stdout-path = "serial0:115200n8";
++	};
++
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		pinctrl-names = "default";
+-- 
+2.18.0
+
