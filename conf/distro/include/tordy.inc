@@ -30,8 +30,8 @@ PACKAGECONFIG_append_pn-qemu-native = " libusb"
 IMAGE_FSTYPES = "tar.xz ext4.gz wic.gz wic.bmap"
 IMAGE_FSTYPES_remove = "tar.gz tar.bz2 wic"
 
-# LMP default classes and overwrites
-INHERIT += "lmp"
+# TordyOS machine specific overrides
+INHERIT += "tordy-machine-custom"
 
 INHERIT += "buildhistory"
 INHERIT += "image-buildinfo"
