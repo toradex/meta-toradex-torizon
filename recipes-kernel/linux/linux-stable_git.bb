@@ -1,7 +1,7 @@
-LINUX_VERSION ?= "4.17.3"
+LINUX_VERSION ?= "4.18-rc8"
 
-SRCREV = "83e05c58300605f3ab87819c19d1822f54eff81e"
-SRCBRANCH = "linux-4.17.y"
+SRCREV = "1ffaddd029c867d134a1dde39f540dcc8c52e274"
+SRCBRANCH = "master"
 
 SRC_URI = "git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;protocol=https;branch=${SRCBRANCH};name=kernel \
            file://0001-mmc-sdhci-esdhc-imx-disable-irq-during-clock-change.patch \
