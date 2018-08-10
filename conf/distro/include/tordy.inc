@@ -31,7 +31,7 @@ IMAGE_FSTYPES = "tar.xz ext4.gz wic.gz wic.bmap"
 IMAGE_FSTYPES_remove = "tar.gz tar.bz2 wic"
 
 # TordyOS machine specific overrides
-INHERIT += "tordy-machine-custom"
+INHERIT += "tordy"
 
 INHERIT += "buildhistory"
 INHERIT += "image-buildinfo"
