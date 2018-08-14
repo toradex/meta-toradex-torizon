@@ -1,0 +1,60 @@
+From 4ea17d6a57208571089ac2a94f7c9590484077b8 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan@agner.ch>
+Date: Thu, 14 Jun 2018 14:44:54 +0200
+Subject: [PATCH 5/5] colibri/apalis: boot from internal eMMC first
+
+When using distro boot, boot from internal eMMC first.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ include/configs/apalis_imx6.h       | 2 +-
+ include/configs/colibri_imx6.h      | 2 +-
+ include/configs/colibri_imx7_emmc.h | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/include/configs/apalis_imx6.h b/include/configs/apalis_imx6.h
+index 882670420c..8f01e5dc52 100644
+--- a/include/configs/apalis_imx6.h
++++ b/include/configs/apalis_imx6.h
+@@ -178,9 +178,9 @@
+ #ifndef CONFIG_SPL_BUILD
+ #define BOOTENV_RUN_NET_USB_START ""
+ #define BOOT_TARGET_DEVICES(func) \
++        func(MMC, mmc, 0) \
+         func(MMC, mmc, 1) \
+         func(MMC, mmc, 2) \
+-        func(MMC, mmc, 0) \
+         func(USB, usb, 0) \
+         func(DHCP, dhcp, na)
+ #include <config_distro_bootcmd.h>
+diff --git a/include/configs/colibri_imx6.h b/include/configs/colibri_imx6.h
+index bdd4efb102..32c68bb31d 100644
+--- a/include/configs/colibri_imx6.h
++++ b/include/configs/colibri_imx6.h
+@@ -159,8 +159,8 @@
+ #ifndef CONFIG_SPL_BUILD
+ #define BOOTENV_RUN_NET_USB_START ""
+ #define BOOT_TARGET_DEVICES(func) \
+-        func(MMC, mmc, 1) \
+         func(MMC, mmc, 0) \
++        func(MMC, mmc, 1) \
+         func(USB, usb, 0) \
+         func(DHCP, dhcp, na)
+ #include <config_distro_bootcmd.h>
+diff --git a/include/configs/colibri_imx7_emmc.h b/include/configs/colibri_imx7_emmc.h
+index bd437e543c..49a8b10547 100644
+--- a/include/configs/colibri_imx7_emmc.h
++++ b/include/configs/colibri_imx7_emmc.h
+@@ -110,8 +110,8 @@
+ 
+ #define BOOTENV_RUN_NET_USB_START ""
+ #define BOOT_TARGET_DEVICES(func) \
+-	func(MMC, mmc, 1) \
+ 	func(MMC, mmc, 0) \
++	func(MMC, mmc, 1) \
+ 	func(USB, usb, 0) \
+ 	func(DHCP, dhcp, na)
+ #include <config_distro_bootcmd.h>
+-- 
+2.18.0
+

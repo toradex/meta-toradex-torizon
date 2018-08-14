@@ -1,0 +1,43 @@
+From 67c3f74f8076b9b911efa36d1bb609ed527268c1 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Tue, 14 Aug 2018 13:49:00 +0200
+Subject: [PATCH 4/5] apalis_imx6: use distro boot by default
+
+Use distro boot by default. Also make sure to specify the device
+tree using fdtfile as suggested in README.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ include/configs/apalis_imx6.h | 8 +-------
+ 1 file changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/include/configs/apalis_imx6.h b/include/configs/apalis_imx6.h
+index 125241cdf4..882670420c 100644
+--- a/include/configs/apalis_imx6.h
++++ b/include/configs/apalis_imx6.h
+@@ -173,13 +173,7 @@
+ #define CONFIG_LOADADDR			0x12000000
+ #define CONFIG_SYS_TEXT_BASE		0x17800000
+ 
+-#ifdef CONFIG_TDX_EASY_INSTALLER
+ #define CONFIG_BOOTCOMMAND "run distro_bootcmd"
+-#else
+-#define CONFIG_BOOTCOMMAND "run emmcboot; echo; echo emmcboot failed; " \
+-		"run distro_bootcmd; usb start; " \
+-		"setenv stdout serial,vga; setenv stdin serial,usbkbd"
+-#endif
+ 
+ #ifndef CONFIG_SPL_BUILD
+ #define BOOTENV_RUN_NET_USB_START ""
+@@ -271,7 +265,7 @@
+ 	"defargs=vmalloc=400M user_debug=30\0" \
+ 	"dfu_alt_info=" DFU_ALT_EMMC_INFO "\0" \
+ 	EMMC_BOOTCMD \
+-	"fdt_file=" FDT_FILE "\0" \
++	"fdtfile=" FDT_FILE "\0" \
+ 	"fdt_fixup=;\0" \
+ 	MEM_LAYOUT_ENV_SETTINGS \
+ 	NFS_BOOTCMD \
+-- 
+2.18.0
+

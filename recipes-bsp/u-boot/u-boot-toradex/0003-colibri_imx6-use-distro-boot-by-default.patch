@@ -1,0 +1,42 @@
+From d65f9cdaa9ce3e08cc44d060859c3ecae7829318 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 28 Jun 2018 12:56:47 +0200
+Subject: [PATCH 3/5] colibri_imx6: use distro boot by default
+
+Use distro boot by default. Also make sure to specify the device
+tree using fdtfile as suggested in README.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ include/configs/colibri_imx6.h | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
+
+diff --git a/include/configs/colibri_imx6.h b/include/configs/colibri_imx6.h
+index fa2a0ffe05..bdd4efb102 100644
+--- a/include/configs/colibri_imx6.h
++++ b/include/configs/colibri_imx6.h
+@@ -154,13 +154,7 @@
+ #define CONFIG_LOADADDR			0x12000000
+ #define CONFIG_SYS_TEXT_BASE		0x17800000
+ 
+-#ifdef CONFIG_TDX_EASY_INSTALLER
+ #define CONFIG_BOOTCOMMAND "run distro_bootcmd"
+-#else
+-#define CONFIG_BOOTCOMMAND "run emmcboot; echo; echo emmcboot failed; " \
+-		"run distro_bootcmd; usb start; " \
+-		"setenv stdout serial,vga; setenv stdin serial,usbkbd"
+-#endif
+ 
+ #ifndef CONFIG_SPL_BUILD
+ #define BOOTENV_RUN_NET_USB_START ""
+@@ -247,6 +241,7 @@
+ 	"dfu_alt_info=" DFU_ALT_EMMC_INFO "\0" \
+ 	EMMC_BOOTCMD \
+ 	"fdt_file=" FDT_FILE "\0" \
++	"fdtfile=" FDT_FILE "\0" \
+ 	"fdt_fixup=;\0" \
+ 	MEM_LAYOUT_ENV_SETTINGS \
+ 	NFS_BOOTCMD \
+-- 
+2.18.0
+
