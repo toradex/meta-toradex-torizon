@@ -1,4 +1,4 @@
-LINUX_VERSION ?= "4.18-rc8"
+LINUX_VERSION ?= "4.18"
 
 SRCREV = "2d43c0c1ecd2dbcbe1b1b1519fb6aa23de259866"
 SRCBRANCH = "toradex_4.18.y"
