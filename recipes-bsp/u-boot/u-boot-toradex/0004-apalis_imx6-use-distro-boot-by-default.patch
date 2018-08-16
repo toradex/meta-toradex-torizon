@@ -1,4 +1,4 @@
-From 67c3f74f8076b9b911efa36d1bb609ed527268c1 Mon Sep 17 00:00:00 2001
+From 7c475d43e57a3caf40162cbb7d899688d4b36f02 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Tue, 14 Aug 2018 13:49:00 +0200
 Subject: [PATCH 4/5] apalis_imx6: use distro boot by default
