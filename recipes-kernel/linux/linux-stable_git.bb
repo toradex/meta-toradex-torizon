@@ -6,6 +6,7 @@ SRCBRANCH = "toradex_4.18.y"
 SRC_URI = "git://gitlab.toradex.int/bsp/linux-toradex.git;protocol=http;branch=${SRCBRANCH};name=kernel \
     file://distro.scc \
     file://distro.cfg \
+    file://test.cfg \
 "
 
 require recipes-kernel/linux/linux-lmp.inc
