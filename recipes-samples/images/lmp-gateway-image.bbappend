@@ -1,5 +1,5 @@
-DESCRIPTION = "TordyOS image featuring OTA and container capabilities"
-SUMMARY = "Basic TordyOS console image, based on Linux microPlatform gateway image."
+SUMMARY = "TordyOS image featuring OTA and container capabilities"
+DESCRIPTION = "Basic TordyOS console image, based on Linux microPlatform gateway image."
 PV = "0.1"
 
 EXTRA_USERS_PARAMS = "\
