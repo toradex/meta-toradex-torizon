@@ -1,4 +1,4 @@
-From 41317468480039e09c861cae9b2539558b0bdc9b Mon Sep 17 00:00:00 2001
+From 6c14cd74494eef4ba653e5e797c26421955c58ea Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Thu, 28 Jun 2018 12:56:47 +0200
 Subject: [PATCH 3/5] colibri_imx6: use distro boot by default

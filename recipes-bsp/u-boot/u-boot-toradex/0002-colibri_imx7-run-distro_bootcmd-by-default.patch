@@ -1,4 +1,4 @@
-From 04a9aafd775b67db8a21d94e76110de83959c8bc Mon Sep 17 00:00:00 2001
+From c08c412549d86ed554f4c1dee4fc7d8d63f51949 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Thu, 16 Aug 2018 09:20:15 +0200
 Subject: [PATCH 2/5] colibri_imx7: run distro_bootcmd by default
@@ -9,12 +9,12 @@ CONFIG_CMD_UBIFS earlier in the header file.
 
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
- include/configs/colibri_imx7.h      | 20 ++++++++------------
+ include/configs/colibri_imx7.h      | 22 +++++++++-------------
  include/configs/colibri_imx7_emmc.h |  8 ++------
- 2 files changed, 10 insertions(+), 18 deletions(-)
+ 2 files changed, 11 insertions(+), 19 deletions(-)
 
 diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
-index 3903591f9a..edaf006378 100644
+index 3903591f9a..3b7ce78091 100644
 --- a/include/configs/colibri_imx7.h
 +++ b/include/configs/colibri_imx7.h
 @@ -54,6 +54,11 @@
@@ -61,6 +61,15 @@ index 3903591f9a..edaf006378 100644
  /* Dynamic MTD partition support */
  #define CONFIG_CMD_MTDPARTS	/* Enable 'mtdparts' command line support */
  #define CONFIG_MTD_PARTITIONS
+@@ -233,7 +229,7 @@
+ 				"1536k(u-boot1)ro,"		\
+ 				"1536k(u-boot2)ro,"		\
+ 				"512k(u-boot-env),"		\
+-				"-(ubi)"
++				"-(UBI)"
+ 
+ /* DMA stuff, needed for GPMI/MXS NAND support */
+ #define CONFIG_APBH_DMA
 diff --git a/include/configs/colibri_imx7_emmc.h b/include/configs/colibri_imx7_emmc.h
 index 23d8eb94b1..bd437e543c 100644
 --- a/include/configs/colibri_imx7_emmc.h
