@@ -1,6 +1,5 @@
 SUMMARY = "TordyOS image that only includes OTA+ support"
 DESCRIPTION = "Minimal TordyOS console image, featuring SOTA update capabilities."
-PV = "0.1"
 
 require image-common.inc
 

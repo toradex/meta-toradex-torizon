@@ -4,6 +4,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 RDEPENDS_${PN}_append_sota = " u-boot-ostree-scr"
 
+LOCALVERSION = "-${DISTRO_VERSION}"
+
 SRCREV = "f4db39ecb6319affd10b5a10212d7af3148ca731"
 
 SRC_URI_append += " \

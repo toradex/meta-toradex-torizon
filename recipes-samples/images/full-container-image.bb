@@ -1,6 +1,5 @@
 SUMMARY = "TordyOS image featuring OTA and container capabilities"
 DESCRIPTION = "Basic TordyOS console image, featuring complete Docker runtime and SOTA update capabilities."
-PV = "0.1"
 
 require image-common.inc
 
