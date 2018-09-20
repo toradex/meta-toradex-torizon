@@ -1,0 +1,10 @@
+ACTION=="add", ATTRS{name}=="21a8000.i2c", SYMLINK+="colibri-i2c1" #I2C3
+ACTION=="add", ATTRS{name}=="21a0000.i2c", SYMLINK+="colibri-i2c2" #I2C1
+ACTION=="add", ATTRS{name}=="21a4000.i2c", SYMLINK+="colibri-i2c3" #I2C2
+ACTION=="add", ATTRS{name}=="21f8000.i2c", SYMLINK+="colibri-i2c4" #I2C4
+ACTION=="add", ATTRS{iomem_base}=="0x2020000", SYMLINK+="colibri-ttya"
+ACTION=="add", ATTRS{iomem_base}=="0x21E8000", SYMLINK+="colibri-ttyb"
+ACTION=="add", ATTRS{iomem_base}=="0x21EC000", SYMLINK+="colibri-ttyc"
+ACTION=="add", ATTRS{iomem_base}=="0x21F0000", SYMLINK+="colibri-ttyd"
+ACTION=="add", ATTRS{iomem_base}=="0x21F4000", SYMLINK+="colibri-ttye"
+ACTION=="add", KERNELS=="20bc000.wdog", SYMLINK+="colibri-watchdog"
