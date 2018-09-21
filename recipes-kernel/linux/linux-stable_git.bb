@@ -8,8 +8,8 @@ SRC_URI = "git://gitlab.toradex.int/bsp/linux-toradex.git;protocol=http;branch=$
     file://distro.cfg \
 "
 
-require recipes-kernel/linux/linux-lmp.inc
-require recipes-kernel/linux/linux-lmp-machine-custom.inc
+require recipes-kernel/linux/linux-stable.inc
+require recipes-kernel/linux/linux-stable-machine-custom.inc
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
 COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx7|colibri-imx6)"
