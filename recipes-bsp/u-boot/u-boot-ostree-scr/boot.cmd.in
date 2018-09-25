@@ -4,7 +4,9 @@ then
     exit
 fi
 
-setenv bootcmd_dtb 'load ${devtype} ${devnum}:1 ${fdt_addr_r} /${fdtfile}'
+setenv load_overlay 'load ${devtype} ${devnum}:1 ${loadaddr} /fdt_overlays/${overlay_file}'
+setenv apply_overlays 'fdt addr ${fdt_addr_r} && fdt resize 0x20000 && for overlay_file in ${fdt_overlays}; do echo "Applying Overlay: ${overlay_file}" && run load_overlay && fdt apply ${loadaddr}; done;'
+setenv bootcmd_dtb 'load ${devtype} ${devnum}:1 ${fdt_addr_r} /${fdtfile}; run apply_overlays || true'
 setenv bootcmd_load_k 'load ${devtype} ${devnum}:2 ${kernel_addr_r} "/boot"${kernel_image}'
 setenv bootcmd_load_r 'load ${devtype} ${devnum}:2 ${ramdisk_addr_r} "/boot"${ramdisk_image}; setenv ramdisk_size ${filesize}'
 
