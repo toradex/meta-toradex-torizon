@@ -8,6 +8,7 @@ SRC_URI = "git://gitlab.toradex.int/bsp/linux-toradex.git;protocol=http;branch=$
     file://distro.cfg \
     file://ioaccounting.cfg \
 "
+export DTC_FLAGS = "-@"
 
 require recipes-kernel/linux/linux-stable.inc
 require recipes-kernel/linux/linux-stable-machine-custom.inc
