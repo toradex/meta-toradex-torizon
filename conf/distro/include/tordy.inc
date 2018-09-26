@@ -4,7 +4,7 @@ DISTRO_VERSION = "2.5"
 SDK_NAME_PREFIX = "${DISTRO}"
 SDK_VERSION = "${DISTRO_VERSION}"
 
-MAINTAINER = "OSF Support <support@opensourcefoundries.com>"
+MAINTAINER = "Toradex <support.arm@toradex.com>"
 
 TARGET_VENDOR = "-lmp"
 
@@ -37,15 +37,3 @@ INHERIT += "buildhistory"
 INHERIT += "image-buildinfo"
 BUILDHISTORY_COMMIT = "1"
 
-PREMIRRORS ??= "\
-     git://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-     ftp://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-     http://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-     https://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-"
-
-MIRRORS =+ "\
-     ftp://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-     http://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-     https://.*/.* https://storage.googleapis.com/lmp-cache/downloads/ \n \
-"
