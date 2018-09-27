@@ -9,6 +9,7 @@ inherit kernel siteinfo
 require recipes-kernel/linux/linux-yocto.inc
 
 KCONFIG_MODE = "--alldefconfig"
+KERNEL_DTS_PATH = "/usr/src/dts"
 
 # You can define CMDLINE_DEBUG as "debug" in your local.conf or distro.conf
 # to enable kernel debugging.
@@ -115,6 +116,11 @@ do_install_append() {
     install -d ${D}/boot
     make -C ${S} O=${B} ARCH=$ARCH dtbs || true
     install -m 0644 ${B}/arch/$ARCH/boot/dts/*.dtb ${D}/boot || true
+
+    mkdir -p ${D}/${KERNEL_DTS_PATH}
+    cp -r ${S}/arch/$ARCH/boot/dts/* ${D}/${KERNEL_DTS_PATH}
+    cp -r --dereference ${S}/include/dt-bindings/ ${D}/${KERNEL_DTS_PATH}
+    chown -R root:root ${D}/${KERNEL_DTS_PATH}
 }
 
 do_deploy_append() {
@@ -135,9 +141,13 @@ do_deploy_append() {
     ln -sf ${KERNEL_CONFIG_BASE_NAME} ${DEPLOYDIR}/${KERNEL_CONFIG_SYMLINK_NAME}
 }
 
-PACKAGES =+ "${KERNEL_PACKAGE_NAME}-devicetree-overlays"
+PACKAGES =+ "${KERNEL_PACKAGE_NAME}-devicetree-overlays ${KERNEL_PACKAGE_NAME}-devicetree-source"
 FILES_${KERNEL_PACKAGE_NAME}-devicetree-overlays = "${nonarch_base_libdir}/firmware/*.dtbo ${nonarch_base_libdir}/firmware/*.dts"
 FILES_${KERNEL_PACKAGE_NAME}-devicetree += "/boot/*.dtb"
+FILES_${KERNEL_PACKAGE_NAME}-devicetree-source += "${KERNEL_DTS_PATH}"
 
 RDEPENDS_${KERNEL_PACKAGE_NAME}-image_append = " ${KERNEL_PACKAGE_NAME}-devicetree"
-RRECOMMENDS_${KERNEL_PACKAGE_NAME}-image_append = " ${KERNEL_PACKAGE_NAME}-devicetree-overlays"
+RRECOMMENDS_${KERNEL_PACKAGE_NAME}-image_append = " \
+    ${KERNEL_PACKAGE_NAME}-devicetree-overlays \
+    ${KERNEL_PACKAGE_NAME}-devicetree-source \
+"
