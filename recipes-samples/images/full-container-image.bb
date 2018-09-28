@@ -44,6 +44,10 @@ CORE_IMAGE_BASE_INSTALL += " \
     strace \
     tcpdump \
     vim-tiny \
+    kernel-devicetree-source \
+    dtc \
+    cpp \
+    make \
 "
 
 # docker pulls runc/containerd, which in turn recommend lxc unecessarily
