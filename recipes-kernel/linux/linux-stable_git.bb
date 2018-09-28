@@ -1,6 +1,6 @@
-LINUX_VERSION ?= "4.18.9"
+LINUX_VERSION ?= "4.18.10"
 
-SRCREV = "c08dfbe8515590c2fdc5f7d86a15e1de3d840b43"
+SRCREV = "85e2c85d7e1331788da6ba168d4425d6f211c5ec"
 SRCBRANCH = "toradex_4.18.y"
 
 SRC_URI = "git://gitlab.toradex.int/bsp/linux-toradex.git;protocol=http;branch=${SRCBRANCH};name=kernel \
