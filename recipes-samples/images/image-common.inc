@@ -29,11 +29,6 @@ CORE_IMAGE_BASE_INSTALL += " \
     sudo \
 "
 
-# OTA+ extras (OSF device provisioning)
-CORE_IMAGE_BASE_INSTALL += " \
-    lmp-device-register \
-"
-
 fakeroot do_populate_rootfs_common_src () {
     # Allow sudo group users to use sudo
     install -m 0440 ${WORKDIR}/sudoers ${IMAGE_ROOTFS}${sysconfdir}/sudoers.d/lmp
