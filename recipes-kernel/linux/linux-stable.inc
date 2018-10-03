@@ -82,15 +82,6 @@ do_install_append() {
     chown -R root:root ${D}/${KERNEL_DTS_PATH}
 }
 
-do_deploy_append() {
-    # Workaround for usrmerge
-    if [ ${MODULE_TARBALL_DEPLOY} = "1" ] && (grep -q -i -e '^CONFIG_MODULES=y$' .config); then
-        mkdir -p ${D}${nonarch_base_libdir}
-        tar -cvzf $deployDir/modules-${MODULE_TARBALL_NAME}.tgz -C ${D} ${nonarch_base_libdir#/}
-        ln -sf modules-${MODULE_TARBALL_NAME}.tgz $deployDir/modules-${MODULE_TARBALL_LINK_NAME}.tgz
-    fi
-}
-
 # Kernel config
 KERNEL_CONFIG_NAME ?= "${KERNEL_PACKAGE_NAME}-config-${KERNEL_ARTIFACT_NAME}"
 KERNEL_CONFIG_LINK_NAME ?= "${KERNEL_PACKAGE_NAME}-config"
