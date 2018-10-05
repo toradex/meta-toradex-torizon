@@ -37,3 +37,6 @@ INHERIT += "buildhistory"
 INHERIT += "image-buildinfo"
 BUILDHISTORY_COMMIT = "1"
 
+#Add layers revision information to ostree body
+OSTREE_COMMIT_BODY = "${@get_layer_revision_information(d)}"
+
