@@ -1,5 +1,3 @@
-IMAGE_CLASSES_append = " image_type_tezi"
-IMAGE_FSTYPES_append = " teziimg-distro"
 # The payload offsets are given in number of 512 byte blocks.
 OFFSET_BOOTROM_PAYLOAD = "2"
 TORADEX_PRODUCT_IDS = "0032 0033 0039 0041"
