@@ -1,1 +1,1 @@
-IMAGE_FSTYPES_remove += "teziimg"
+IMAGE_FSTYPES_remove += "teziimg-distro"

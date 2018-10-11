@@ -1,5 +1,5 @@
 IMAGE_CLASSES_append = " image_type_tezi"
-IMAGE_FSTYPES_append = " teziimg"
+IMAGE_FSTYPES_append = " teziimg-distro"
 # The payload offsets are given in number of 512 byte blocks.
 OFFSET_BOOTROM_PAYLOAD = "2"
 TORADEX_PRODUCT_IDS = "0032 0033 0039 0041"
@@ -11,5 +11,8 @@ TORADEX_FLASH_TYPE = "rawnand emmc"
 
 UBOOT_BINARY_TEZI_EMMC = "u-boot.imx-sd"
 UBOOT_BINARY_TEZI_RAWNAND = "u-boot.imx-nd"
+
+UBOOT_ENV_TEZI_EMMC = "uEnv-sd.txt"
+UBOOT_ENV_TEZI_RAWNAND = "uEnv-nd.txt"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc" 
