@@ -1,4 +1,5 @@
 TORADEX_PRODUCT_IDS = "0027 0028 0029 0035"
+TORADEX_FLASH_TYPE = "emmc"
 # The payload offsets are given in number of 512 byte blocks.
 OFFSET_BOOTROM_PAYLOAD = "2"
 OFFSET_SPL_PAYLOAD = "138"
