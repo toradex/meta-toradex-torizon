@@ -1,8 +1,0 @@
-bootcmd_ubi=ubi part ubi && ubifsmount ubi:rootfs
-bootcmd_dtb=ubi read ${fdt_addr_r} dtb
-bootcmd_otenv=ubifsload ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
-bootcmd_args=env set bootargs ubi.mtd=ubi root=/dev/ubi0_3 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs}
-bootcmd_load_k=ubifsload ${kernel_addr_r} "/boot"${kernel_image}
-bootcmd_load_r=ubifsload ${ramdisk_addr_r} "/boot"${ramdisk_image}; setenv ramdisk_size ${filesize}
-bootcmd_run=bootz ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
-bootcmd=run bootcmd_ubi; run bootcmd_dtb; run bootcmd_otenv; run bootcmd_args; run bootcmd_load_k; run bootcmd_load_r; run bootcmd_run
