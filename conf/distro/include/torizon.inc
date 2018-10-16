@@ -30,7 +30,7 @@ PACKAGECONFIG_append_pn-qemu-native = " libusb"
 IMAGE_FSTYPES = "teziimg-distro"
 IMAGE_CLASSES += "image_type_tezi image_torizon_tezi"
 
-# TordyOS machine specific overrides
+# Torizon machine specific overrides
 INHERIT += "torizon"
 
 INHERIT += "buildhistory"
