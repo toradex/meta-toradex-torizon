@@ -1,4 +1,4 @@
-# TordyOS configuration
+# Torizon configuration
 
 # Toradex (support both NAND and eMMC targets with one single image)
 OSTREE_KERNEL_ARGS_append_colibri-imx7 = " console=tty1 console=ttymxc0,115200"

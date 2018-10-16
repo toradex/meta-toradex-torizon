@@ -1,4 +1,4 @@
-DISTRO_VERSION = "0.1"
+DISTRO_VERSION = "0.2"
 
 # These default to 'oecore' and 'nodistro'
 SDK_NAME_PREFIX = "${DISTRO}"
@@ -6,7 +6,7 @@ SDK_VERSION = "${DISTRO_VERSION}"
 
 MAINTAINER = "Toradex <support.arm@toradex.com>"
 
-TARGET_VENDOR = "-lmp"
+TARGET_VENDOR = "-torizon"
 
 TCLIBCAPPEND = ""
 
@@ -31,7 +31,7 @@ IMAGE_FSTYPES = "teziimg-distro"
 IMAGE_CLASSES += "image_type_tezi image_torizon_tezi"
 
 # TordyOS machine specific overrides
-INHERIT += "tordy"
+INHERIT += "torizon"
 
 INHERIT += "buildhistory"
 INHERIT += "image-buildinfo"

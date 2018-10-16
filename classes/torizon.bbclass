@@ -1,4 +1,4 @@
-inherit tordy-machine-custom
+inherit torizon-machine-custom
 
 # Done as a rootfs post process hook in order to be part of the ostree image
 sota_fstab_update() {
