@@ -54,7 +54,7 @@ python () {
     d.delVarFlag("do_unpack", "noexec")
 }
 
-EXTRA_USERS_PARAMS = "\
-useradd -P tordy tordy; \
-usermod -a -G sudo,users,plugdev tordy; \
+EXTRA_USERS_PARAMS = " \
+useradd -P torizon torizon; \
+usermod -a -G sudo,users,plugdev torizon; \
 "

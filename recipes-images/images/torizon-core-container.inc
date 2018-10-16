@@ -1,5 +1,3 @@
-SUMMARY = "TordyOS image featuring OTA and container capabilities"
-
 require image-common.inc
 
 IMAGE_FEATURES += "ssh-server-openssh"
