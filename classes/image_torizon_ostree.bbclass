@@ -37,3 +37,7 @@ def get_layer_revision_information(d):
         e = sys.exc_info()[0]
         bb.warn("Failed to get layers information. Exception: %s",e)
     return '\n'.join(res)
+
+# Add layers revision information to ostree body
+OSTREE_COMMIT_BODY = "${@get_layer_revision_information(d)}"
+

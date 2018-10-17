@@ -28,7 +28,7 @@ PACKAGECONFIG_append_pn-qemu-native = " libusb"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
-IMAGE_CLASSES += "image_type_tezi image_torizon_tezi"
+IMAGE_CLASSES += "image_type_tezi image_torizon_tezi image_torizon_ostree"
 
 # Torizon machine specific overrides
 INHERIT += "torizon"
@@ -36,7 +36,4 @@ INHERIT += "torizon"
 INHERIT += "buildhistory"
 INHERIT += "image-buildinfo"
 BUILDHISTORY_COMMIT = "1"
-
-#Add layers revision information to ostree body
-OSTREE_COMMIT_BODY = "${@get_layer_revision_information(d)}"
 
