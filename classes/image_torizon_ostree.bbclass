@@ -1,5 +1,5 @@
 #Name an ostree branch after image basename, this allows having multiple images in one repo
-OSTREE_BRANCH = "${IMAGE_BASENAME}"
+OSTREE_BRANCHNAME = "${IMAGE_BASENAME}"
 
 #Force ostree summary to be updated
 OSTREE_UPDATE_SUMMARY = "1"
