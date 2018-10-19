@@ -1,7 +1,5 @@
 require conf/distro/include/torizon-common.inc
 
-PREFERRED_PROVIDER_virtual/kernel = "linux-stable"
-
 # TODO: review default distro features
 DISTRO_FEATURES_append = " pam systemd usrmerge virtualization"
 DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc pulseaudio sysvinit"
