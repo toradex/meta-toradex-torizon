@@ -23,9 +23,6 @@ REQUIRED_DISTRO_FEATURES = "pam systemd"
 
 # Base packages
 CORE_IMAGE_BASE_INSTALL += " \
-    aktualizr-host-tools \
-    haveged \
-    networkmanager \
     sudo \
 "
 
