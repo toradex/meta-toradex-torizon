@@ -1,6 +1,7 @@
 require conf/distro/include/arm-defaults.inc
 
-DISTRO_VERSION = "0.2"
+DISTRO_VERSION := "0.2a1"
+TDX_BUILDNB ?= ""
 
 # These default to 'oecore' and 'nodistro'
 SDK_NAME_PREFIX = "${DISTRO}"
