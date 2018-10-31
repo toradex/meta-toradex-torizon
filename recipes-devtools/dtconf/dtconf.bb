@@ -18,6 +18,4 @@ do_install () {
     install -d ${D}${DEST_FOLDER}/
     install -d ${D}${DEST_FOLDER}/conf
     install -m 0755 ${WORKDIR}/git/dtconf.sh ${D}${bindir}/dtconf
-    install -m 0644 ${WORKDIR}/git/fw_env.config ${D}${DEST_FOLDER}/conf/fw_env.config
-    install -m 0755 ${WORKDIR}/git/fw_unlock_mmc.sh ${D}${DEST_FOLDER}/conf/fw_unlock_mmc.sh
 }
