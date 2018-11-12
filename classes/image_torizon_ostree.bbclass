@@ -45,5 +45,4 @@ def get_layer_revision_information(d):
     return '\n'.join(res)
 
 # Add layers revision information to ostree body
-OSTREE_COMMIT_BODY = "${@get_layer_revision_information(d)}"
-
+OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
