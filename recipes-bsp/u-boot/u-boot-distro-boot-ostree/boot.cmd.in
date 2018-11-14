@@ -14,11 +14,11 @@ if test ${devtype} != ubi
 then
 # Load commands for regular block devices
 setenv bootcmd_otenv 'ext4load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}'
-setenv bootcmd_args 'env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs}'
+setenv bootcmd_args 'env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${tdxargs}'
 else
 # Load commands for raw NAND devices
 setenv bootcmd_otenv 'ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}'
-setenv bootcmd_args 'env set bootargs ubi.mtd=UBI root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs}'
+setenv bootcmd_args 'env set bootargs ubi.mtd=UBI root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}'
 fi
 
 setenv bootcmd_run '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
