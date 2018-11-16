@@ -48,3 +48,18 @@ def get_layer_revision_information(d):
 OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
 
 IMAGE_CMD_ostree[vardepsexclude] += "OSTREE_COMMIT_BODY"
+
+do_image_ostree[postfuncs] += " generate_diff_file"
+
+generate_diff_file () {
+    if [ "${OSTREE_CREATE_DIFF}" = "1"  ]; then
+        if [ -n "${OSTREE_CHANGE_LOG_FILE}"  ]; then
+            if ostree --repo=${OSTREE_REPO} diff ${IMAGE_BASENAME} ; then
+                touch "${OSTREE_CHANGE_LOG_FILE}"
+                echo "${OSTREE_CHANGE_LOG_HEADER}" >> "${OSTREE_CHANGE_LOG_FILE}"
+                ostree --repo=${OSTREE_REPO} diff ${IMAGE_BASENAME} >> ${OSTREE_CHANGE_LOG_FILE}
+                echo "${OSTREE_CHANGE_LOG_FOOTER}" >> "${OSTREE_CHANGE_LOG_FILE}"
+            fi
+        fi
+    fi
+}
