@@ -1,20 +1,16 @@
-From c08c412549d86ed554f4c1dee4fc7d8d63f51949 Mon Sep 17 00:00:00 2001
-From: Stefan Agner <stefan.agner@toradex.com>
-Date: Thu, 16 Aug 2018 09:20:15 +0200
-Subject: [PATCH 2/5] colibri_imx7: run distro_bootcmd by default
+From a59bdbd56189129d62ecf74bbce842a28774e293 Mon Sep 17 00:00:00 2001
+From: Luka Pivk <luka.pivk@toradex.com>
+Date: Mon, 19 Nov 2018 16:52:33 +0100
+Subject: [PATCH] commit for rebase
 
-Use distro boot for eMMC as well as for the raw NAND version. To
-be able to use the UBIFS distro boot macro we need to define
-CONFIG_CMD_UBIFS earlier in the header file.
-
-Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+Signed-off-by: Luka Pivk <luka.pivk@toradex.com>
 ---
  include/configs/colibri_imx7.h      | 22 +++++++++-------------
  include/configs/colibri_imx7_emmc.h |  8 ++------
  2 files changed, 11 insertions(+), 19 deletions(-)
 
 diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
-index 3903591f9a..3b7ce78091 100644
+index ea98570b90..a563189487 100644
 --- a/include/configs/colibri_imx7.h
 +++ b/include/configs/colibri_imx7.h
 @@ -54,6 +54,11 @@
@@ -29,7 +25,7 @@ index 3903591f9a..3b7ce78091 100644
  #undef CONFIG_BOOTM_PLAN9
  #undef CONFIG_BOOTM_RTEMS
  
-@@ -116,16 +121,12 @@
+@@ -115,16 +120,12 @@
  		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0"
  #endif /* CONFIG_TDX_EASY_INSTALLER */
  
@@ -49,7 +45,7 @@ index 3903591f9a..3b7ce78091 100644
  	func(MMC, mmc, 0) \
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
-@@ -218,11 +219,6 @@
+@@ -217,11 +218,6 @@
  #define CONFIG_SYS_NAND_ONFI_DETECTION
  #define CONFIG_SYS_NAND_USE_FLASH_BBT
  
@@ -61,7 +57,7 @@ index 3903591f9a..3b7ce78091 100644
  /* Dynamic MTD partition support */
  #define CONFIG_CMD_MTDPARTS	/* Enable 'mtdparts' command line support */
  #define CONFIG_MTD_PARTITIONS
-@@ -233,7 +229,7 @@
+@@ -232,7 +228,7 @@
  				"1536k(u-boot1)ro,"		\
  				"1536k(u-boot2)ro,"		\
  				"512k(u-boot-env),"		\
@@ -71,12 +67,12 @@ index 3903591f9a..3b7ce78091 100644
  /* DMA stuff, needed for GPMI/MXS NAND support */
  #define CONFIG_APBH_DMA
 diff --git a/include/configs/colibri_imx7_emmc.h b/include/configs/colibri_imx7_emmc.h
-index 23d8eb94b1..bd437e543c 100644
+index 9c49f885d8..3cd2f254f1 100644
 --- a/include/configs/colibri_imx7_emmc.h
 +++ b/include/configs/colibri_imx7_emmc.h
 @@ -105,12 +105,8 @@
- 	"load mmc 1:1 ${fdt_addr_r} ${soc}-colibri-emmc-${fdt_board}.dtb && " \
- 	"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
+ 		"${soc}-colibri-emmc-${fdt_board}.dtb && run fdt_fixup && " \
+ 		"bootz ${kernel_addr_r} - ${fdt_addr_r}\0"
  
 -#ifdef CONFIG_TDX_EASY_INSTALLER
 -#define CONFIG_BOOTCOMMAND "run distro_bootcmd"
@@ -90,5 +86,5 @@ index 23d8eb94b1..bd437e543c 100644
  #define BOOTENV_RUN_NET_USB_START ""
  #define BOOT_TARGET_DEVICES(func) \
 -- 
-2.18.0
+2.17.2
 

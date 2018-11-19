@@ -6,7 +6,7 @@ RDEPENDS_${PN}_append_sota = " u-boot-distro-boot-ostree"
 
 LOCALVERSION = "-${DISTRO_VERSION}"
 
-SRCREV = "f4db39ecb6319affd10b5a10212d7af3148ca731"
+SRCREV = "07edca0bb81857a339f26f3465d5c5602705a94d"
 
 SRC_URI_append += " \
     file://0001-colibri_imx7-prefer-non-secure-mode-by-default.patch \
