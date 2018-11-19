@@ -14,4 +14,5 @@ SRC_URI_append += " \
     file://0003-colibri_imx6-use-distro-boot-by-default.patch \
     file://0004-apalis_imx6-use-distro-boot-by-default.patch \
     file://0005-colibri-apalis-boot-from-internal-eMMC-first.patch \
+    file://0006-colibri_imx6ull-run-distro_bootcmd-by-default.patch \
 "

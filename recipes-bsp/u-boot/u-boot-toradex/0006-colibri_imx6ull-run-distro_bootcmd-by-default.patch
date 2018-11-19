@@ -1,0 +1,60 @@
+diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
+index 32662cfe1c..ff17d83cb8 100644
+--- a/include/configs/colibri-imx6ull.h
++++ b/include/configs/colibri-imx6ull.h
+@@ -46,6 +46,11 @@
+ #define CONFIG_TFTP_BLOCKSIZE		16352
+ #define CONFIG_TFTP_TSIZE
+ 
++#define CONFIG_RBTREE
++#define CONFIG_LZO
++#define CONFIG_CMD_UBIFS
++
++
+ /* ENET1 */
+ #define IMX_FEC_BASE			ENET2_BASE_ADDR
+ 
+@@ -116,17 +121,14 @@
+ 		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0"
+ #endif /* CONFIG_TDX_EASY_INSTALLER */
+ 
+-#ifdef CONFIG_TDX_EASY_INSTALLER
+-#define CONFIG_BOOTCOMMAND "setenv fdtfile " FDT_FILE " && " \
+-	"run bootcmd_mmc0; run ubiboot; run distro_bootcmd"
+-#else
+-#define CONFIG_BOOTCOMMAND "run ubiboot; " \
+-	"setenv fdtfile " FDT_FILE " && run distro_bootcmd"
+-#endif
++#define CONFIG_BOOTCOMMAND \
++    "setenv fdtfile imx6ull-colibri${variant}-${fdt_board}.dtb && run distro_bootcmd"
++
+ 
+ #define BOOTENV_RUN_NET_USB_START ""
+ #define BOOT_TARGET_DEVICES(func) \
+-	func(MMC, mmc, 0) \
++	func(UBIFS, ubifs, 0) \
++       func(MMC, mmc, 0) \
+ 	func(USB, usb, 0) \
+ 	func(DHCP, dhcp, na)
+ #include <config_distro_bootcmd.h>
+@@ -220,11 +222,6 @@
+ #define CONFIG_SYS_NAND_ONFI_DETECTION
+ #define CONFIG_SYS_NAND_USE_FLASH_BBT
+ 
+-/* UBI stuff */
+-#define CONFIG_RBTREE
+-#define CONFIG_LZO
+-#define CONFIG_CMD_UBIFS	/* increases size by almost 60 KB */
+-
+ /* Dynamic MTD partition support */
+ #define CONFIG_CMD_MTDPARTS	/* Enable 'mtdparts' command line support */
+ #define CONFIG_MTD_PARTITIONS
+@@ -235,7 +232,7 @@
+ 				"1536k(u-boot1)ro,"		\
+ 				"1536k(u-boot2)ro,"		\
+ 				"512k(u-boot-env),"		\
+-				"-(ubi)"
++				"-(UBI)"
+ 
+ /* DMA stuff, needed for GPMI/MXS NAND support */
+ #define CONFIG_APBH_DMA

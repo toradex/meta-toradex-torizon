@@ -11,6 +11,9 @@ IMAGE_BOOT_FILES_append_colibri-imx6 = " boot.scr uEnv.txt u-boot-colibri-imx6.i
 OSTREE_KERNEL_ARGS_append_apalis-imx6 = " console=tty1 console=ttymxc0,115200"
 IMAGE_BOOT_FILES_append_apalis-imx6 = " boot.scr uEnv.txt u-boot-apalis-imx6.imx;u-boot.imx ${MACHINE_ARCH}/*;${MACHINE_ARCH}"
 
+OSTREE_KERNEL_ARGS_append_colibri_imx6ull = " console=tty1 console=ttymxc0,115200"
+IMAGE_BOOT_FILES_append_colibri_imx6ull = " boot.scr uEnv.txt u-boot-colibri-imx6ull.imx;u-boot-nand.imx ${MACHINE_ARCH}/*;${MACHINE_ARCH}"
+
 # Cross machines / BSPs
 ## Drop IMX BSP that is not needed
 MACHINE_EXTRA_RRECOMMENDS_remove_imx = "imx-alsa-plugins"
