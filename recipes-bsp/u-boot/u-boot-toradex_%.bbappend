@@ -2,8 +2,6 @@ require recipes-bsp/u-boot/u-boot-toradex-env.inc
 
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
-RDEPENDS_${PN}_append_sota = " u-boot-distro-boot-ostree"
-
 LOCALVERSION = "-${DISTRO_VERSION}"
 
 SRCREV = "07edca0bb81857a339f26f3465d5c5602705a94d"
