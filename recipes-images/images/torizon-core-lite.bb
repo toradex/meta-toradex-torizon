@@ -3,6 +3,7 @@ DESCRIPTION = "Minimal TorizonCore console image, featuring secure OTA update \
 capabilities."
 
 require image-common.inc
+require torizon-core-common.inc
 
 IMAGE_FEATURES += "ssh-server-dropbear"
 

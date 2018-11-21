@@ -7,6 +7,7 @@ SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBR
     file://distro.scc \
     file://distro.cfg \
     file://ioaccounting.cfg \
+    file://0001-enable-lm816.patch \
 "
 export DTC_FLAGS = "-@"
 

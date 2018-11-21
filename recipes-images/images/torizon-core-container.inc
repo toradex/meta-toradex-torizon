@@ -1,4 +1,5 @@
 require image-common.inc
+require torizon-core-common.inc
 
 IMAGE_FEATURES += "ssh-server-openssh"
 
@@ -15,13 +16,11 @@ CORE_IMAGE_BASE_INSTALL += " \
     htop \
     iptables \
     kernel-modules \
-    networkmanager-nmtui \
     ${@bb.utils.contains("MACHINE_FEATURES", "optee", "optee-test optee-client", "", d)} \
     rsync \
     sshfs-fuse \
     aktualizr-host-tools \
     haveged \
-    networkmanager \
 "
 
 CORE_IMAGE_BASE_INSTALL += " \
