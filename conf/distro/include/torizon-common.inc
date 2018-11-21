@@ -28,4 +28,4 @@ DISTRO_FEATURES_NATIVESDK_remove = "x11"
 
 PREFERRED_PROVIDER_iasl-native = "acpica-native"
 
-PREFERRED_PROVIDER_virtual/kernel = "linux-stable"
+
