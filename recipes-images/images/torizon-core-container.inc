@@ -15,7 +15,6 @@ CORE_IMAGE_BASE_INSTALL += " \
     hostapd \
     htop \
     iptables \
-    kernel-modules \
     ${@bb.utils.contains("MACHINE_FEATURES", "optee", "optee-test optee-client", "", d)} \
     rsync \
     sshfs-fuse \
