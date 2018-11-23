@@ -5,6 +5,16 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 DEPENDS += "${@bb.utils.contains('ARCH', 'x86', 'elfutils-native', '', d)}"
 DEPENDS += "openssl-native util-linux-native"
 
+SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBRANCH};name=kernel \
+    file://distro.scc \
+    file://distro.cfg \
+    file://ioaccounting.cfg \
+    file://0001-enable-lm816.patch \
+"
+export DTC_FLAGS = "-@"
+
+LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
+
 inherit kernel siteinfo
 require recipes-kernel/linux/linux-yocto.inc
 
