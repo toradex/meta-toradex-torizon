@@ -1,8 +1,8 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-stable:"
 
-LINUX_VERSION ?= "4.19.2"
+LINUX_VERSION ?= "4.19.4"
 
-SRCREV = "b28d1da7494461bf966c274c12aa61d647ae6e17"
+SRCREV = "9dd45f508cf6835703d107e9fb8756a7771eaa22"
 SRCBRANCH = "toradex_4.19.y-rt"
 
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBRANCH};name=kernel \
