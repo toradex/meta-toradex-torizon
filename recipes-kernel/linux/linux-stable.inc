@@ -6,9 +6,12 @@ DEPENDS += "${@bb.utils.contains('ARCH', 'x86', 'elfutils-native', '', d)}"
 DEPENDS += "openssl-native util-linux-native"
 
 SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBRANCH};name=kernel \
+    file://defconfig \
     file://distro.scc \
     file://distro.cfg \
     file://ioaccounting.cfg \
+    file://imx.scc \
+    file://imx.cfg \
     file://0001-enable-lm816.patch \
 "
 export DTC_FLAGS = "-@"

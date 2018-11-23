@@ -9,8 +9,4 @@ SRC_URI += "file://distro-rt.cfg"
 
 require recipes-kernel/linux/linux-stable.inc
 
-KBUILD_DEFCONFIG_mx6 ?= "imx_v6_v7_defconfig"
-KBUILD_DEFCONFIG_mx7 ?= "imx_v6_v7_defconfig"
-SRC_URI_append_imx += " file://imx.scc file://imx.cfg"
-
 COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx7|colibri-imx6)"
