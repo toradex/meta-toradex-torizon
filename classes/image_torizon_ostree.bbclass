@@ -49,7 +49,7 @@ OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
 
 IMAGE_CMD_ostree[vardepsexclude] += "OSTREE_COMMIT_BODY"
 
-do_image_ostree[postfuncs] += " generate_diff_file"
+do_image_ostreecommit[postfuncs] += " generate_diff_file"
 
 generate_diff_file () {
     if [ "${OSTREE_CREATE_DIFF}" = "1"  ]; then
