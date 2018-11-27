@@ -9,6 +9,7 @@ OSTREE_CHANGE_LOG_FILE = "${OSTREE_REPO}/${DISTRO}-${IMAGE_BASENAME}-diff.log"
 OSTREE_CHANGE_LOG_FOOTER = "================================"
 OSTREE_CHANGE_LOG_HEADER = "Changes in version ${IMAGE_NAME}"
 OSTREE_CREATE_DIFF = "1"
+OSTREE_DEPLOY_DEVICETREE = "1"
 
 # Get git hashes from all layers
 # inspiration taken from image-buildinfo
