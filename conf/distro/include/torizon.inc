@@ -16,6 +16,7 @@ OSTREE_OSNAME = "torizon"
 INITRAMFS_IMAGE = "initramfs-ostree-torizon-image"
 INITRAMFS_FSTYPES = "cpio.gz"
 BUILD_OTA_TARBALL = "1"
+BUILD_OSTREE_TARBALL = "0"
 # We do not need wic or ext4 images
 IMAGE_FSTYPES_remove_sota = "ota-ext4 wic"
 ## No need to install the kernel image into the boot partition
