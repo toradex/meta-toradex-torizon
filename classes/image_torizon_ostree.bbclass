@@ -5,7 +5,7 @@ OSTREE_BRANCHNAME = "${DISTRO}/${IMAGE_BASENAME}"
 OSTREE_UPDATE_SUMMARY = "1"
 
 #Create change log file inside ostree
-OSTREE_CHANGE_LOG_FILE = "${OSTREE_REPO}/${IMAGE_BASENAME}-diff.log"
+OSTREE_CHANGE_LOG_FILE = "${OSTREE_REPO}/${DISTRO}-${IMAGE_BASENAME}-diff.log"
 OSTREE_CHANGE_LOG_FOOTER = "================================"
 OSTREE_CHANGE_LOG_HEADER = "Changes in version ${IMAGE_NAME}"
 OSTREE_CREATE_DIFF = "1"
