@@ -54,10 +54,10 @@ do_image_ostreecommit[postfuncs] += " generate_diff_file"
 generate_diff_file () {
     if [ "${OSTREE_CREATE_DIFF}" = "1"  ]; then
         if [ -n "${OSTREE_CHANGE_LOG_FILE}"  ]; then
-            if ostree --repo=${OSTREE_REPO} diff ${IMAGE_BASENAME} ; then
+            if ostree --repo=${OSTREE_REPO} diff ${OSTREE_BRANCHNAME} ; then
                 touch "${OSTREE_CHANGE_LOG_FILE}"
                 echo "${OSTREE_CHANGE_LOG_HEADER}" >> "${OSTREE_CHANGE_LOG_FILE}"
-                ostree --repo=${OSTREE_REPO} diff ${IMAGE_BASENAME} >> ${OSTREE_CHANGE_LOG_FILE}
+                ostree --repo=${OSTREE_REPO} diff ${OSTREE_BRANCHNAME} >> ${OSTREE_CHANGE_LOG_FILE}
                 echo "${OSTREE_CHANGE_LOG_FOOTER}" >> "${OSTREE_CHANGE_LOG_FILE}"
             fi
         fi
