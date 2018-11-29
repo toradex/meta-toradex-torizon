@@ -3,6 +3,7 @@ IMAGE_INSTALL_append = " \
     networkmanager \
     linux-firmware-rtl8192cu \
     kernel-modules \
+    set-hostname \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \

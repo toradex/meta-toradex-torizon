@@ -41,3 +41,5 @@ BBMASK += " \
     /meta-lmp/recipes-devtools/riscv-tools/ \
     /meta-lmp/recipes-sota/aktualizr/aktualizr_%.bbappend \
 "
+
+hostname_pn-base-files = ""
