@@ -1,7 +1,7 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-SRCREV = "21799355033fcf8173520764cf14bc6e0f1bf227"
+SRCREV = "525c5d0c14e1809c76fe8c7faf6e2e9f364b56b8"
 SRC_URI = "git://github.com/toradex/device-tree-conf.git;protocol=https;branch=master"
 
 DEST_FOLDER = "${datadir}/device-tree-conf"
