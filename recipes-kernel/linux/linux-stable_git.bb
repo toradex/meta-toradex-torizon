@@ -1,6 +1,6 @@
-LINUX_VERSION ?= "4.19.6"
+LINUX_VERSION ?= "4.19.8"
 
-SRCREV = "b62d18524e9e96d0a5252048827523cd07fa2fc6"
+SRCREV = "c6051ffcb824b7491419c6ac407b1a6d7756dcab"
 SRCBRANCH = "toradex_4.19.y"
 
 require recipes-kernel/linux/linux-stable.inc
