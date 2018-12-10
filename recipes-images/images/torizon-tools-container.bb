@@ -12,6 +12,7 @@ CORE_IMAGE_BASE_INSTALL += " \
     dtc \
     cpp \
     make \
+    libdrm-tests \
 "
 
 IMAGE_INSTALL_remove = " \
