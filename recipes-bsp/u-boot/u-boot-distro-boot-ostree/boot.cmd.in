@@ -4,7 +4,8 @@ then
     exit
 fi
 
-setenv load_overlay 'load ${devtype} ${devnum}:1 ${loadaddr} overlays.txt; env import -t ${loadaddr} ${filesize}'
+setenv overlays_file "overlays.txt"
+setenv load_overlay 'load ${devtype} ${devnum}:1 ${loadaddr} ${overlays_file}; env import -t ${loadaddr} ${filesize}'
 setenv apply_overlays 'fdt addr ${fdt_addr_r} && fdt resize 0x20000 && for overlay_file in ${fdt_overlays}; do echo "Applying Overlay: ${overlay_file}" && run load_overlay && fdt apply ${loadaddr}; done;'
 
 setenv bootcmd_load_k 'load ${devtype} ${devnum}:2 ${kernel_addr_r} "/boot"${kernel_image}'
@@ -21,7 +22,7 @@ setenv bootcmd_otenv 'ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum
 setenv bootcmd_args 'env set bootargs ubi.mtd=UBI root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}'
 fi
 
-setenv bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot"${fdt_path}devicetree-${fdtfile}; run apply_overlays || true'
+setenv bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot"${fdt_path}devicetree-${fdtfile}; if test -e ${devtype} ${devnum}:1 ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
 setenv bootcmd_run '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
 setenv bootcmd 'run bootcmd_otenv && run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_load_r && run bootcmd_run'
 run bootcmd
