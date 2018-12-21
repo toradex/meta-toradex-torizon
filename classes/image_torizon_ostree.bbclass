@@ -48,7 +48,7 @@ def get_layer_revision_information(d):
 # Add layers revision information to ostree body
 OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
 
-IMAGE_CMD_ostree[vardepsexclude] += "OSTREE_COMMIT_BODY"
+IMAGE_CMD_ostreecommit[vardepsexclude] += "OSTREE_COMMIT_BODY"
 
 do_image_ostreecommit[postfuncs] += " generate_diff_file"
 
