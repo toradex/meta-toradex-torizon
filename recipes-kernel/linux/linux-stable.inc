@@ -5,15 +5,6 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 DEPENDS += "${@bb.utils.contains('ARCH', 'x86', 'elfutils-native', '', d)}"
 DEPENDS += "openssl-native util-linux-native"
 
-SRC_URI = "git://git.toradex.com/linux-toradex.git;protocol=https;branch=${SRCBRANCH};name=kernel \
-    file://defconfig \
-    file://distro.scc \
-    file://distro.cfg \
-    file://ioaccounting.cfg \
-    file://imx.scc \
-    file://imx.cfg \
-    file://0001-enable-lm816.patch \
-"
 export DTC_FLAGS = "-@"
 
 LIC_FILES_CHKSUM = "file://COPYING;md5=bbea815ee2795b2f4230826c0c6b8814"
@@ -24,15 +15,19 @@ require recipes-kernel/linux/linux-yocto.inc
 KCONFIG_MODE = "--alldefconfig"
 KERNEL_DTS_PATH = "/usr/src/dts"
 
+KMETA = "kernel-meta"
+
+SRC_URI += " \
+	git://git.toradex.com/linux-toradex.git;protocol=https;branch=${KBRANCH};name=machine \
+	git://github.com/toradex/toradex-kernel-cache.git;protocol=https;type=kmeta;name=meta;branch=master;destsuffix=${KMETA} \
+"
+
 # You can define CMDLINE_DEBUG as "debug" in your local.conf or distro.conf
 # to enable kernel debugging.
 CMDLINE_DEBUG ?= ""
 CMDLINE_append = " ${CMDLINE_DEBUG}"
 
 KERNEL_INITRAMFS ?= '${@oe.utils.conditional("INITRAMFS_IMAGE_BUNDLE", "1", "1", "", d)}'
-
-# No need for extra fragments besides what is provided by LMP
-KERNEL_FEATURES_remove += " features/debug/printk.scc"
 
 # Always have a package to allow forcing package dependency
 ALLOW_EMPTY_${KERNEL_PACKAGE_NAME}-devicetree = "1"
@@ -69,55 +64,6 @@ do_configure_prepend() {
 
     # Set cmdline
     kernel_configure_variable CMDLINE "\"${CMDLINE}\""
-
-    # Localversion
-    kernel_configure_variable LOCALVERSION "\"\""
-    kernel_configure_variable LOCALVERSION_AUTO n
-
-    # Udev quirks
-    # Newer versions of udev mandate that sysfs doesn't have deprecated entries
-    kernel_configure_variable SYSFS_DEPRECATED n
-    kernel_configure_variable SYSFS_DEPRECATED_V2 n
-    kernel_configure_variable HOTPLUG y
-    kernel_configure_variable UEVENT_HELPER_PATH "\"\""
-    kernel_configure_variable UNIX y
-    kernel_configure_variable SYSFS y
-    kernel_configure_variable PROC_FS y
-    kernel_configure_variable TMPFS y
-    kernel_configure_variable INOTIFY_USER y
-    kernel_configure_variable SIGNALFD y
-    kernel_configure_variable TMPFS_POSIX_ACL y
-    kernel_configure_variable BLK_DEV_BSG y
-    kernel_configure_variable DEVTMPFS y
-    kernel_configure_variable DEVTMPFS_MOUNT y
-
-    # Systemd need cgroup support
-    kernel_configure_variable CGROUP_SCHED y
-    kernel_configure_variable CGROUPS y
-    kernel_configure_variable CGROUP_NS y
-    kernel_configure_variable CGROUP_FREEZER y
-    kernel_configure_variable CGROUP_DEVICE y
-    kernel_configure_variable CPUSETS y
-    kernel_configure_variable PROC_PID_CPUSET y
-    kernel_configure_variable CGROUP_CPUACCT y
-    kernel_configure_variable RESOURCE_COUNTERS y
-
-    # Systemd
-    kernel_configure_variable RT_GROUP_SCHED n
-
-    if [ ! -z "${KERNEL_INITRAMFS}" ]; then
-        kernel_configure_variable BLK_DEV_INITRD y
-        kernel_configure_variable INITRAMFS_SOURCE ""
-        kernel_configure_variable RD_GZIP y
-        kernel_configure_variable OVERLAY_FS y
-        kernel_configure_variable SQUASHFS y
-        kernel_configure_variable UBIFS_FS y
-    fi
-
-    # Activate CONFIG_LEGACY_PTYS
-    kernel_configure_variable LEGACY_PTYS y
-    # this module is built externally via drbd-utils
-    kernel_configure_variable BLK_DEV_DRBD n
 
     # Keep this the last line
     # Remove all modified configs and add the rest to .config
