@@ -1,6 +1,7 @@
 IMAGE_INSTALL_append = " \
     udev-toradex-rules \
     networkmanager \
+    wireless-regdb-static \
     linux-firmware-rtl8192cu \
     kernel-modules \
     set-hostname \
