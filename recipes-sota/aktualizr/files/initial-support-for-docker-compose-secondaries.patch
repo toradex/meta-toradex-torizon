@@ -1,0 +1,250 @@
+From 0c1969351e7bb5102bdec7409d1c2f8974dfe2b9 Mon Sep 17 00:00:00 2001
+From: Phil Wise <phil@phil-wise.com>
+Date: Thu, 3 Jan 2019 11:48:22 +0000
+Subject: [PATCH] Initial support for docker-compose secondaries
+
+Signed-off-by: Phil Wise <phil@phil-wise.com>
+---
+ .../docker-compose.json                       | 11 ++++++
+ .../example-redis.yml                         |  5 +++
+ src/libaktualizr/uptane/CMakeLists.txt        |  6 ++-
+ src/libaktualizr/uptane/dockersecondary.cc    | 38 +++++++++++++++++++
+ src/libaktualizr/uptane/dockersecondary.h     | 26 +++++++++++++
+ src/libaktualizr/uptane/secondaryconfig.cc    |  2 +
+ src/libaktualizr/uptane/secondaryconfig.h     |  2 +
+ src/libaktualizr/uptane/secondaryfactory.h    |  3 ++
+ src/libaktualizr/utilities/utils.cc           | 15 ++++++--
+ src/libaktualizr/utilities/utils.h            |  4 +-
+ 10 files changed, 104 insertions(+), 8 deletions(-)
+ create mode 100644 config/docker-compose-secondaries/docker-compose.json
+ create mode 100644 config/docker-compose-secondaries/example-redis.yml
+ create mode 100644 src/libaktualizr/uptane/dockersecondary.cc
+ create mode 100644 src/libaktualizr/uptane/dockersecondary.h
+
+diff --git a/config/docker-compose-secondaries/docker-compose.json b/config/docker-compose-secondaries/docker-compose.json
+new file mode 100644
+index 000000000..1cba840ce
+--- /dev/null
++++ b/config/docker-compose-secondaries/docker-compose.json
+@@ -0,0 +1,11 @@
++{
++  "secondary_type" : "docker_compose",
++  "partial_verifying" : "false",
++  "ecu_hardware_id" : "docker-compose",
++  "full_client_dir" : "storage/demo-vsec1",
++  "ecu_private_key" : "sec.private",
++  "ecu_public_key" : "sec.public",
++  "firmware_path" : "storage/demo-vsec1/docker.yml",
++  "target_name_path" : "storage/demo-vsec1/target_name",
++  "metadata_path" : "storage/demo-vsec1/metadata"
++}
+diff --git a/config/docker-compose-secondaries/example-redis.yml b/config/docker-compose-secondaries/example-redis.yml
+new file mode 100644
+index 000000000..c9d8d5545
+--- /dev/null
++++ b/config/docker-compose-secondaries/example-redis.yml
+@@ -0,0 +1,5 @@
++version: '3'
++services:
++  redis:
++    image: "redis:alpine"
++    restart: always
+\ No newline at end of file
+diff --git a/src/libaktualizr/uptane/CMakeLists.txt b/src/libaktualizr/uptane/CMakeLists.txt
+index dda461eed..2571c93de 100644
+--- a/src/libaktualizr/uptane/CMakeLists.txt
++++ b/src/libaktualizr/uptane/CMakeLists.txt
+@@ -1,4 +1,5 @@
+-set(SOURCES fetcher.cc
++set(SOURCES dockersecondary.cc
++    fetcher.cc
+     ipsecondarydiscovery.cc
+     ipuptanesecondary.cc
+     managedsecondary.cc
+@@ -12,7 +13,8 @@ set(SOURCES fetcher.cc
+     imagesrepository.cc
+     virtualsecondary.cc)
+ 
+-set(HEADERS exceptions.h
++set(HEADERS dockersecondary.h
++    exceptions.h
+     fetcher.h
+     ipsecondarydiscovery.h
+     ipuptanesecondary.h
+diff --git a/src/libaktualizr/uptane/dockersecondary.cc b/src/libaktualizr/uptane/dockersecondary.cc
+new file mode 100644
+index 000000000..6dc954a1f
+--- /dev/null
++++ b/src/libaktualizr/uptane/dockersecondary.cc
+@@ -0,0 +1,38 @@
++#include "uptane/dockersecondary.h"
++
++#include "logging/logging.h"
++
++#include <sstream>
++
++using std::stringstream;
++
++namespace Uptane {
++DockerComposeSecondary::DockerComposeSecondary(const SecondaryConfig& sconfig_in) : ManagedSecondary(sconfig_in) {}
++
++bool DockerComposeSecondary::storeFirmware(const std::string& target_name, const std::string& content) {
++  Utils::writeFile(sconfig.target_name_path, target_name, true);
++  Utils::writeFile(sconfig.firmware_path, content, true);
++  stringstream cmd_line;
++  cmd_line << "docker-compose -f " << sconfig.firmware_path << " up -d";
++  LOG_INFO << " Running " << cmd_line.str();
++  int rescode = system(cmd_line.str().c_str());
++  return rescode == 0;
++}
++
++bool DockerComposeSecondary::getFirmwareInfo(std::string* target_name, size_t& target_len, std::string* sha256hash) {
++  std::string content;
++  // Send hash of yaml
++
++  if (!boost::filesystem::exists(sconfig.target_name_path) || !boost::filesystem::exists(sconfig.firmware_path)) {
++    *target_name = std::string("noimage");
++    content = "";
++  } else {
++    *target_name = Utils::readFile(sconfig.target_name_path.string());
++    content = Utils::readFile(sconfig.firmware_path.string());
++  }
++  *sha256hash = boost::algorithm::to_lower_copy(boost::algorithm::hex(Crypto::sha256digest(content)));
++  target_len = content.size();
++
++  return true;
++}
++}  // namespace Uptane
+\ No newline at end of file
+diff --git a/src/libaktualizr/uptane/dockersecondary.h b/src/libaktualizr/uptane/dockersecondary.h
+new file mode 100644
+index 000000000..ecd39735b
+--- /dev/null
++++ b/src/libaktualizr/uptane/dockersecondary.h
+@@ -0,0 +1,26 @@
++#ifndef UPTANE_DOCKERSECONDARY_H_
++#define UPTANE_DOCKERSECONDARY_H_
++
++#include <string>
++
++#include "uptane/managedsecondary.h"
++#include "utilities/types.h"
++
++namespace Uptane {
++
++/**
++ * An Uptane secondary that runs on the same device as the primary but treats
++ * the firmware that it is pushed as a docker-compose yaml file
++ */
++class DockerComposeSecondary : public ManagedSecondary {
++ public:
++  explicit DockerComposeSecondary(const SecondaryConfig& sconfig_in);
++  ~DockerComposeSecondary() override = default;
++
++ private:
++  bool storeFirmware(const std::string& target_name, const std::string& content) override;
++  bool getFirmwareInfo(std::string* target_name, size_t& target_len, std::string* sha256hash) override;
++};
++}  // namespace Uptane
++
++#endif  // UPTANE_DOCKERSECONDARY_H_
+diff --git a/src/libaktualizr/uptane/secondaryconfig.cc b/src/libaktualizr/uptane/secondaryconfig.cc
+index c974e4630..b027bc59d 100644
+--- a/src/libaktualizr/uptane/secondaryconfig.cc
++++ b/src/libaktualizr/uptane/secondaryconfig.cc
+@@ -16,6 +16,8 @@ SecondaryConfig::SecondaryConfig(const boost::filesystem::path &config_file) {
+     secondary_type = Uptane::SecondaryType::kIpUptane;
+   } else if (stype == "opcua_uptane") {
+     secondary_type = Uptane::SecondaryType::kOpcuaUptane;
++  } else if (stype == "docker_compose") {
++    secondary_type = Uptane::SecondaryType::kDockerCompose;
+   } else {
+     LOG_ERROR << "Unrecognized secondary type: " << stype;
+   }
+diff --git a/src/libaktualizr/uptane/secondaryconfig.h b/src/libaktualizr/uptane/secondaryconfig.h
+index 41048147c..c2518db55 100644
+--- a/src/libaktualizr/uptane/secondaryconfig.h
++++ b/src/libaktualizr/uptane/secondaryconfig.h
+@@ -23,6 +23,8 @@ enum class SecondaryType {
+   kIpUptane,  // Custom Uptane protocol over TCP/IP network
+ 
+   kVirtualUptane,  // Partial UPTANE secondary implemented inside primary
++
++  kDockerCompose,  // Secondary 'firmware' is a docker-compose image
+ };
+ 
+ class SecondaryConfig {
+diff --git a/src/libaktualizr/uptane/secondaryfactory.h b/src/libaktualizr/uptane/secondaryfactory.h
+index 3da7a795a..077ceab73 100644
+--- a/src/libaktualizr/uptane/secondaryfactory.h
++++ b/src/libaktualizr/uptane/secondaryfactory.h
+@@ -2,6 +2,7 @@
+ #define UPTANE_SECONDARYFACTORY_H_
+ 
+ #include "logging/logging.h"
++#include "uptane/dockersecondary.h"
+ #include "uptane/ipuptanesecondary.h"
+ #include "uptane/opcuasecondary.h"
+ #include "uptane/secondaryconfig.h"
+@@ -28,6 +29,8 @@ class SecondaryFactory {
+         LOG_ERROR << "libaktualizr was built without OPC-UA secondary support.";
+         return std::shared_ptr<SecondaryInterface>();  // NULL-equivalent
+ #endif
++      case SecondaryType::kDockerCompose:
++        return std::make_shared<DockerComposeSecondary>(sconfig);
+       default:
+         LOG_ERROR << "Unrecognized secondary type: " << static_cast<int>(sconfig.secondary_type);
+         return std::shared_ptr<SecondaryInterface>();  // NULL-equivalent
+diff --git a/src/libaktualizr/utilities/utils.cc b/src/libaktualizr/utilities/utils.cc
+index 2bd7c1c84..30dad4304 100644
+--- a/src/libaktualizr/utilities/utils.cc
++++ b/src/libaktualizr/utilities/utils.cc
+@@ -313,7 +313,8 @@ static ssize_t read_cb(struct archive *a, void *client_data, const void **buffer
+   return s->is.gcount();
+ }
+ 
+-void Utils::writeFile(const boost::filesystem::path &filename, const std::string &content, bool create_directories) {
++void Utils::writeFile(const boost::filesystem::path &filename, const std::string &content, bool create_directories,
++                      bool atomic) {
+   // also replace the target file atomically by creating filename.new and
+   // renaming it to the target file name
+   boost::filesystem::path tmpFilename = filename;
+@@ -327,13 +328,19 @@ void Utils::writeFile(const boost::filesystem::path &filename, const std::string
+     throw std::runtime_error(std::string("Error opening file ") + tmpFilename.string());
+   }
+   file << content;
++  if (atomic) {
++    sync();
++  }
+   file.close();
+-
+   boost::filesystem::rename(tmpFilename, filename);
++  if (atomic) {
++    sync();
++  }
+ }
+ 
+-void Utils::writeFile(const boost::filesystem::path &filename, const Json::Value &content, bool create_directories) {
+-  Utils::writeFile(filename, jsonToStr(content), create_directories);
++void Utils::writeFile(const boost::filesystem::path &filename, const Json::Value &content, bool create_directories,
++                      bool atomic) {
++  Utils::writeFile(filename, jsonToStr(content), create_directories, atomic);
+ }
+ 
+ std::string Utils::jsonToStr(const Json::Value &json) {
+diff --git a/src/libaktualizr/utilities/utils.h b/src/libaktualizr/utilities/utils.h
+index 28596a428..b0298b02b 100644
+--- a/src/libaktualizr/utilities/utils.h
++++ b/src/libaktualizr/utilities/utils.h
+@@ -24,9 +24,9 @@ struct Utils {
+   static std::string genPrettyName();
+   static std::string readFile(const boost::filesystem::path &filename, bool trim = false);
+   static void writeFile(const boost::filesystem::path &filename, const std::string &content,
+-                        bool create_directories = true);
++                        bool create_directories = true, bool atomic = false);
+   static void writeFile(const boost::filesystem::path &filename, const Json::Value &content,
+-                        bool create_directories = true);
++                        bool create_directories = true, bool atomic = false);
+   static void copyDir(const boost::filesystem::path &from, const boost::filesystem::path &to);
+   static std::string readFileFromArchive(std::istream &as, const std::string &filename, bool trim = false);
+   static void writeArchive(const std::map<std::string, std::string> &entries, std::ostream &as);
