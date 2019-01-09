@@ -22,8 +22,19 @@ setenv bootcmd_otenv 'ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum
 setenv bootcmd_args 'env set bootargs ubi.mtd=UBI root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}'
 fi
 
+run bootcmd_otenv
+
+if test -n ${rollback} && test ${rollback} = 1
+then
+    echo "Roolback enabled. Booting old version."
+    setenv kernel_image ${kernel_image2}
+    setenv ramdisk_image ${ramdisk_image2}
+    setenv bootargs ${bootargs2}
+    setenv fdt_path ${fdt_path2}
+fi
+
 setenv bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot"${fdt_path}devicetree-${fdtfile}; if test -e ${devtype} ${devnum}:1 ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
 setenv bootcmd_run '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
-setenv bootcmd 'run bootcmd_otenv && run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_load_r && run bootcmd_run'
+setenv bootcmd 'run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_load_r && run bootcmd_run'
 run bootcmd
 
