@@ -6,7 +6,7 @@ DOCKER_PID_FILE ?= "/var/run/docker.pid"
 def connected(d):
     import socket
 
-    REMOTE_SERVER = d.getVar('RESIN_CHECK_CONN_URL', True)
+    REMOTE_SERVER = d.getVar('RESIN_CHECK_CONN_URL')
     try:
         host = socket.gethostbyname(REMOTE_SERVER)
         testSocket = socket.create_connection((host, 80), 2)
@@ -21,7 +21,7 @@ def usable_docker(d):
     import os, subprocess
 
     # Check docker is running
-    pid_file = d.getVar('DOCKER_PID_FILE', True)
+    pid_file = d.getVar('DOCKER_PID_FILE')
     try:
         f = open(pid_file, 'r')
     except:
