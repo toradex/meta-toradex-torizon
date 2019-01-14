@@ -38,9 +38,9 @@ do_kernel_configme[depends] += "bison-native:do_populate_sysroot"
 
 python __anonymous () {
     import bb
-    devicetree = d.getVar('KERNEL_DEVICETREE', True) or ''
+    devicetree = d.getVar('KERNEL_DEVICETREE') or ''
     if devicetree:
-        depends = d.getVar("DEPENDS", True)
+        depends = d.getVar("DEPENDS")
         d.setVar("DEPENDS", "%s dtc-native" % depends)
 }
 
