@@ -4,7 +4,7 @@ LINUX_VERSION ?= "4.19.10"
 LINUX_KERNEL_TYPE = "preempt-rt"
 
 SRCREV_machine = "e9dcc568b2e968af848bbdb4267ba6cde5457b9e"
-SRCREV_meta ="7f04d953fdf6c7a583cd258e5fe7127e5548a348"
+SRCREV_meta ="10130530d720014fb96ab0d4f4ddbb364403b01f"
 
 KBRANCH = "toradex_4.19.y-rt"
 
