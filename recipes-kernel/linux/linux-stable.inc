@@ -19,7 +19,7 @@ KMETA = "kernel-meta"
 
 SRC_URI += " \
 	git://git.toradex.com/linux-toradex.git;protocol=https;branch=${KBRANCH};name=machine \
-	git:///home/ags/torizon-kernel-cache;protocol=file;type=kmeta;name=meta;branch=${KMETABRANCH};destsuffix=${KMETA} \
+	git://github.com/toradex/toradex-kernel-cache.git;protocol=file;type=kmeta;name=meta;branch=${KMETABRANCH};destsuffix=${KMETA} \
 "
 
 # You can define CMDLINE_DEBUG as "debug" in your local.conf or distro.conf
