@@ -6,6 +6,7 @@ require torizon-core-container.inc
 
 CORE_IMAGE_BASE_INSTALL += " \
     docker \
+    python3-docker-compose \
 "
 
 EXTRA_USERS_PARAMS += "\

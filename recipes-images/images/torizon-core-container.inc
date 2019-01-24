@@ -31,7 +31,6 @@ CORE_IMAGE_BASE_INSTALL += " \
     python3-compression \
     python3-distutils \
     python3-docker \
-    python3-docker-compose \
     python3-json \
     python3-netclient \
     python3-pkgutil \
