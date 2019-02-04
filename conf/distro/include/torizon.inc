@@ -40,6 +40,8 @@ BBMASK += " \
     /meta-lmp/recipes-bsp/96boards-tools/ \
     /meta-lmp/recipes-devtools/riscv-tools/ \
     /meta-lmp/recipes-sota/aktualizr/aktualizr_%.bbappend \
+    /meta-lmp/recipes-connectivity/pi-bluetooth \
+    /meta-lmp/recipes-kernel/bluez-firmware-rpidistro \
 "
 
 hostname_pn-base-files = ""
