@@ -127,7 +127,8 @@ do_install() {
 	ln -sf balena ${D}/${bindir}/balena-proxy
 
 	install -d ${D}${systemd_unitdir}/system
-	install -m 0644 ${S}/src/import/contrib/init/systemd/balena.* ${D}/${systemd_unitdir}/system
+	install -m 0644 ${S}/src/import/contrib/init/systemd/balena.service ${D}/${systemd_unitdir}/system
+	install -m 0644 ${S}/src/import/contrib/init/systemd/balena.socket ${D}/${systemd_unitdir}/system
 
 	install -d ${D}/home/root/.docker
 	ln -sf .docker ${D}/home/root/.balena
