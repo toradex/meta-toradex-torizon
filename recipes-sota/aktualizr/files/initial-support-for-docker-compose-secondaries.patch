@@ -3,19 +3,22 @@ From: Phil Wise <phil@phil-wise.com>
 Date: Thu, 3 Jan 2019 11:48:22 +0000
 Subject: [PATCH] Initial support for docker-compose secondaries
 
+Upstream-Status: Inappropriate [Torizon specific]
+
 Signed-off-by: Phil Wise <phil@phil-wise.com>
+Signed-off-by: Ming Liu <liu.ming50@gmail.com>
 ---
- .../docker-compose.json                       | 11 ++++++
- .../example-redis.yml                         |  5 +++
- src/libaktualizr/uptane/CMakeLists.txt        |  6 ++-
- src/libaktualizr/uptane/dockersecondary.cc    | 38 +++++++++++++++++++
- src/libaktualizr/uptane/dockersecondary.h     | 26 +++++++++++++
- src/libaktualizr/uptane/secondaryconfig.cc    |  2 +
- src/libaktualizr/uptane/secondaryconfig.h     |  2 +
- src/libaktualizr/uptane/secondaryfactory.h    |  3 ++
- src/libaktualizr/utilities/utils.cc           | 15 ++++++--
- src/libaktualizr/utilities/utils.h            |  4 +-
- 10 files changed, 104 insertions(+), 8 deletions(-)
+ .../docker-compose-secondaries/docker-compose.json | 11 +++++++
+ .../docker-compose-secondaries/example-redis.yml   |  5 +++
+ src/libaktualizr/uptane/CMakeLists.txt             |  6 ++--
+ src/libaktualizr/uptane/dockersecondary.cc         | 38 ++++++++++++++++++++++
+ src/libaktualizr/uptane/dockersecondary.h          | 26 +++++++++++++++
+ src/libaktualizr/uptane/secondaryconfig.cc         |  2 ++
+ src/libaktualizr/uptane/secondaryconfig.h          |  2 ++
+ src/libaktualizr/uptane/secondaryfactory.h         |  3 ++
+ src/libaktualizr/utilities/utils.cc                | 18 +++++++---
+ src/libaktualizr/utilities/utils.h                 |  7 ++--
+ 10 files changed, 108 insertions(+), 10 deletions(-)
  create mode 100644 config/docker-compose-secondaries/docker-compose.json
  create mode 100644 config/docker-compose-secondaries/example-redis.yml
  create mode 100644 src/libaktualizr/uptane/dockersecondary.cc
@@ -23,7 +26,7 @@ Signed-off-by: Phil Wise <phil@phil-wise.com>
 
 diff --git a/config/docker-compose-secondaries/docker-compose.json b/config/docker-compose-secondaries/docker-compose.json
 new file mode 100644
-index 000000000..1cba840ce
+index 0000000..1cba840
 --- /dev/null
 +++ b/config/docker-compose-secondaries/docker-compose.json
 @@ -0,0 +1,11 @@
@@ -40,7 +43,7 @@ index 000000000..1cba840ce
 +}
 diff --git a/config/docker-compose-secondaries/example-redis.yml b/config/docker-compose-secondaries/example-redis.yml
 new file mode 100644
-index 000000000..c9d8d5545
+index 0000000..c9d8d55
 --- /dev/null
 +++ b/config/docker-compose-secondaries/example-redis.yml
 @@ -0,0 +1,5 @@
@@ -51,7 +54,7 @@ index 000000000..c9d8d5545
 +    restart: always
 \ No newline at end of file
 diff --git a/src/libaktualizr/uptane/CMakeLists.txt b/src/libaktualizr/uptane/CMakeLists.txt
-index dda461eed..2571c93de 100644
+index e2a3d16..b079d88 100644
 --- a/src/libaktualizr/uptane/CMakeLists.txt
 +++ b/src/libaktualizr/uptane/CMakeLists.txt
 @@ -1,4 +1,5 @@
@@ -73,7 +76,7 @@ index dda461eed..2571c93de 100644
      ipuptanesecondary.h
 diff --git a/src/libaktualizr/uptane/dockersecondary.cc b/src/libaktualizr/uptane/dockersecondary.cc
 new file mode 100644
-index 000000000..6dc954a1f
+index 0000000..6dc954a
 --- /dev/null
 +++ b/src/libaktualizr/uptane/dockersecondary.cc
 @@ -0,0 +1,38 @@
@@ -118,7 +121,7 @@ index 000000000..6dc954a1f
 \ No newline at end of file
 diff --git a/src/libaktualizr/uptane/dockersecondary.h b/src/libaktualizr/uptane/dockersecondary.h
 new file mode 100644
-index 000000000..ecd39735b
+index 0000000..ecd3973
 --- /dev/null
 +++ b/src/libaktualizr/uptane/dockersecondary.h
 @@ -0,0 +1,26 @@
@@ -149,7 +152,7 @@ index 000000000..ecd39735b
 +
 +#endif  // UPTANE_DOCKERSECONDARY_H_
 diff --git a/src/libaktualizr/uptane/secondaryconfig.cc b/src/libaktualizr/uptane/secondaryconfig.cc
-index c974e4630..b027bc59d 100644
+index c974e46..b027bc5 100644
 --- a/src/libaktualizr/uptane/secondaryconfig.cc
 +++ b/src/libaktualizr/uptane/secondaryconfig.cc
 @@ -16,6 +16,8 @@ SecondaryConfig::SecondaryConfig(const boost::filesystem::path &config_file) {
@@ -162,7 +165,7 @@ index c974e4630..b027bc59d 100644
      LOG_ERROR << "Unrecognized secondary type: " << stype;
    }
 diff --git a/src/libaktualizr/uptane/secondaryconfig.h b/src/libaktualizr/uptane/secondaryconfig.h
-index 41048147c..c2518db55 100644
+index 4104814..c2518db 100644
 --- a/src/libaktualizr/uptane/secondaryconfig.h
 +++ b/src/libaktualizr/uptane/secondaryconfig.h
 @@ -23,6 +23,8 @@ enum class SecondaryType {
@@ -175,7 +178,7 @@ index 41048147c..c2518db55 100644
  
  class SecondaryConfig {
 diff --git a/src/libaktualizr/uptane/secondaryfactory.h b/src/libaktualizr/uptane/secondaryfactory.h
-index 3da7a795a..077ceab73 100644
+index 3da7a79..077ceab 100644
 --- a/src/libaktualizr/uptane/secondaryfactory.h
 +++ b/src/libaktualizr/uptane/secondaryfactory.h
 @@ -2,6 +2,7 @@
@@ -196,28 +199,37 @@ index 3da7a795a..077ceab73 100644
          LOG_ERROR << "Unrecognized secondary type: " << static_cast<int>(sconfig.secondary_type);
          return std::shared_ptr<SecondaryInterface>();  // NULL-equivalent
 diff --git a/src/libaktualizr/utilities/utils.cc b/src/libaktualizr/utilities/utils.cc
-index 2bd7c1c84..30dad4304 100644
+index fbd0e48..e2c0258 100644
 --- a/src/libaktualizr/utilities/utils.cc
 +++ b/src/libaktualizr/utilities/utils.cc
-@@ -313,7 +313,8 @@ static ssize_t read_cb(struct archive *a, void *client_data, const void **buffer
+@@ -313,14 +313,15 @@ static ssize_t read_cb(struct archive *a, void *client_data, const void **buffer
    return s->is.gcount();
  }
  
 -void Utils::writeFile(const boost::filesystem::path &filename, const std::string &content, bool create_directories) {
 +void Utils::writeFile(const boost::filesystem::path &filename, const std::string &content, bool create_directories,
 +                      bool atomic) {
+   if (create_directories) {
+     boost::filesystem::create_directories(filename.parent_path());
+   }
+-  Utils::writeFile(filename, content.c_str(), content.size());
++  Utils::writeFile(filename, content.c_str(), content.size(), atomic);
+ }
+ 
+-void Utils::writeFile(const boost::filesystem::path &filename, const char *content, size_t size) {
++void Utils::writeFile(const boost::filesystem::path &filename, const char *content, size_t size, bool atomic) {
    // also replace the target file atomically by creating filename.new and
    // renaming it to the target file name
    boost::filesystem::path tmpFilename = filename;
-@@ -327,13 +328,19 @@ void Utils::writeFile(const boost::filesystem::path &filename, const std::string
+@@ -331,13 +332,20 @@ void Utils::writeFile(const boost::filesystem::path &filename, const char *conte
      throw std::runtime_error(std::string("Error opening file ") + tmpFilename.string());
    }
-   file << content;
+   file.write(content, static_cast<std::streamsize>(size));
 +  if (atomic) {
 +    sync();
 +  }
    file.close();
--
+ 
    boost::filesystem::rename(tmpFilename, filename);
 +  if (atomic) {
 +    sync();
@@ -233,12 +245,16 @@ index 2bd7c1c84..30dad4304 100644
  
  std::string Utils::jsonToStr(const Json::Value &json) {
 diff --git a/src/libaktualizr/utilities/utils.h b/src/libaktualizr/utilities/utils.h
-index 28596a428..b0298b02b 100644
+index 5836223..7e8d523 100644
 --- a/src/libaktualizr/utilities/utils.h
 +++ b/src/libaktualizr/utilities/utils.h
-@@ -24,9 +24,9 @@ struct Utils {
+@@ -24,11 +24,12 @@ struct Utils {
    static std::string genPrettyName();
    static std::string readFile(const boost::filesystem::path &filename, bool trim = false);
+ 
+-  static void writeFile(const boost::filesystem::path &filename, const char *content, size_t size);
++  static void writeFile(const boost::filesystem::path &filename, const char *content, size_t size,
++                        bool atomic = false);
    static void writeFile(const boost::filesystem::path &filename, const std::string &content,
 -                        bool create_directories = true);
 +                        bool create_directories = true, bool atomic = false);
@@ -248,3 +264,6 @@ index 28596a428..b0298b02b 100644
    static void copyDir(const boost::filesystem::path &from, const boost::filesystem::path &to);
    static std::string readFileFromArchive(std::istream &as, const std::string &filename, bool trim = false);
    static void writeArchive(const std::map<std::string, std::string> &entries, std::ostream &as);
+-- 
+2.7.4
+
