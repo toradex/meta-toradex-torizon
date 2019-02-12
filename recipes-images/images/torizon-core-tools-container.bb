@@ -6,7 +6,6 @@ require image-common.inc
 # Extras (for development)
 CORE_IMAGE_BASE_INSTALL += " \
     bash \
-    dtc \
     util-linux-mountpoint \
     kernel-devicetree-source \
     dtc \
@@ -15,6 +14,8 @@ CORE_IMAGE_BASE_INSTALL += " \
     libdrm-tests \
     dbus \
     systemd \
+    python3 \
+    python3-pip \
 "
 
 IMAGE_INSTALL_remove = " \
