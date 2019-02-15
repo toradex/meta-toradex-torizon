@@ -11,7 +11,7 @@ RDEPENDS_${PN} = "aktualizr"
 do_install() {
     install -d ${D}${libdir}/sota
 
-    AKTUALIZR_PARAMETERS_CONFIGFILE="--loglevel 2 -c /var/sota/ --secondary-configs-dir /var/sota/secondary/ --running-mode once"
+    AKTUALIZR_PARAMETERS_CONFIGFILE="--loglevel 2 -c /var/sota/ --secondary-configs-dir /var/sota/secondary/ --run-mode once"
     echo "AKTUALIZR_CMDLINE_PARAMETERS=${AKTUALIZR_PARAMETERS_CONFIGFILE}" > ${D}${libdir}/sota/sota.env
 }
 
