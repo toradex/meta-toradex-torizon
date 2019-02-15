@@ -42,7 +42,7 @@ def get_layer_revision_information(d):
             res.append(name + " " + branch.rstrip() + ":\"" + rev.rstrip()+ "\"" + modified)
     except:
         e = sys.exc_info()[0]
-        bb.warn("Failed to get layers information. Exception: %s",e)
+        bb.warn("Failed to get layers information. Exception: {}".format(e))
     return '\n'.join(res)
 
 # Add layers revision information to ostree body
