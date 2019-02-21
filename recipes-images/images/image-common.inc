@@ -8,13 +8,14 @@ PV = "${DISTRO_VERSION}${TDX_BUILDNB}"
 # Always create vmdk and vdi images for the compatible targets
 IMAGE_FSTYPES_append_intel-corei7-64 = " wic.vmdk wic.vdi"
 
-inherit core-image distro_features_check extrausers
+inherit core-image distro_features_check extrausers systemd
 
 SRC_URI = "\
     file://sysctl-panic.conf \
     file://path-sbin.sh \
     file://sudoers \
     file://ostree-pending-reboot.service \
+    file://ostree-pending-reboot.path \
 "
 
 # let's make sure we have a good image..
@@ -31,6 +32,7 @@ fakeroot do_populate_rootfs_common_src () {
 
     # Systemd service files
     install -m 0644 ${WORKDIR}/ostree-pending-reboot.service ${IMAGE_ROOTFS}${systemd_system_unitdir}/
+    install -m 0644 ${WORKDIR}/ostree-pending-reboot.path ${IMAGE_ROOTFS}${systemd_system_unitdir}/
 
     # Configs that are specific to this image
     install -m 0644 ${WORKDIR}/sysctl-panic.conf ${IMAGE_ROOTFS}${exec_prefix}/lib/sysctl.d/60-panic.conf
@@ -39,6 +41,8 @@ fakeroot do_populate_rootfs_common_src () {
     install -d ${IMAGE_ROOTFS}${sysconfdir}/profile.d
     install -m 0644 ${WORKDIR}/path-sbin.sh ${IMAGE_ROOTFS}${sysconfdir}/profile.d/path-sbin.sh
 }
+
+SYSTEMD_SERVICE = "ostree-pending-reboot.path"
 
 IMAGE_PREPROCESS_COMMAND += "do_populate_rootfs_common_src; "
 
