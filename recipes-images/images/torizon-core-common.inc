@@ -1,3 +1,5 @@
+IMAGE_FEATURES += "splash"
+
 IMAGE_INSTALL_append = " \
     udev-toradex-rules \
     networkmanager \
