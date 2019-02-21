@@ -1,0 +1,78 @@
+From 67d9c2e323ee99ce83d9046744a402d0a8104622 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Tue, 19 Feb 2019 14:33:39 +0100
+Subject: [PATCH 1/3] use /run for communication fifo
+
+Use /run for communication fifo which is typically preserved
+between initramfs and regular root file system.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ psplash-write.c | 10 +++++-----
+ psplash.c       | 10 +++++-----
+ 2 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/psplash-write.c b/psplash-write.c
+index 3fdba95..f0aeda1 100644
+--- a/psplash-write.c
++++ b/psplash-write.c
+@@ -29,13 +29,13 @@
+ 
+ int main(int argc, char **argv) 
+ {
+-  char *tmpdir;
++  char *rundir;
+   int   pipe_fd;
+ 
+-  tmpdir = getenv("TMPDIR");
++  rundir = getenv("PSPLASH_FIFO_DIR");
+ 
+-  if (!tmpdir)
+-    tmpdir = "/tmp";
++  if (!rundir)
++    rundir = "/run";
+ 
+   if (argc!=2) 
+     {
+@@ -43,7 +43,7 @@ int main(int argc, char **argv)
+       exit(-1);
+     }
+   
+-  chdir(tmpdir);
++  chdir(rundir);
+   
+   if ((pipe_fd = open (PSPLASH_FIFO,O_WRONLY|O_NONBLOCK)) == -1)
+     {
+diff --git a/psplash.c b/psplash.c
+index 992e199..169f9c1 100644
+--- a/psplash.c
++++ b/psplash.c
+@@ -204,7 +204,7 @@ psplash_main (PSplashFB *fb, int pipe_fd, int timeout)
+ int 
+ main (int argc, char** argv) 
+ {
+-  char      *tmpdir;
++  char      *rundir;
+   int        pipe_fd, i = 0, angle = 0, fbdev_id = 0, ret = 0;
+   PSplashFB *fb;
+   bool       disable_console_switch = FALSE;
+@@ -241,12 +241,12 @@ main (int argc, char** argv)
+       exit(-1);
+   }
+ 
+-  tmpdir = getenv("TMPDIR");
++  rundir = getenv("PSPLASH_FIFO_DIR");
+ 
+-  if (!tmpdir)
+-    tmpdir = "/tmp";
++  if (!rundir)
++    rundir = "/run";
+ 
+-  chdir(tmpdir);
++  chdir(rundir);
+ 
+   if (mkfifo(PSPLASH_FIFO, S_IRUSR | S_IWUSR | S_IRGRP | S_IWGRP))
+     {
+-- 
+2.20.1
+
