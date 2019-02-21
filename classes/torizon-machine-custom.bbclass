@@ -1,17 +1,25 @@
 # Torizon configuration
 
+# Additional boot arguments are prepended by the U-Boot distro boot
+# boot flow in boot.cmd.
+#
+# This boot arguments are supplied to OSTree deploy command. To
+# change kernel boot arguments in a deployed OSTree use:
+# ostree admin deploy --karg-none --karg="newargs" ...
+OSTREE_KERNEL_ARGS = "quiet logo.nologo"
+
 # Toradex (support both NAND and eMMC targets with one single image)
-OSTREE_KERNEL_ARGS_append_colibri-imx7 = " console=tty1 console=ttymxc0,115200"
+OSTREE_KERNEL_ARGS_append_colibri-imx7 = " console=ttymxc0,115200"
 EXTRA_IMAGEDEPENDS_append_colibri-imx7 = " u-boot-script-toradex"
 IMAGE_BOOT_FILES_append_colibri-imx7 = " boot.scr uEnv.txt u-boot-colibri-imx7.imx;u-boot-nand.imx u-boot-colibri-imx7.imx-sd;u-boot-emmc.imx ${MACHINE_ARCH}/*;${MACHINE_ARCH}"
 
-OSTREE_KERNEL_ARGS_append_colibri-imx6 = " console=tty1 console=ttymxc0,115200"
+OSTREE_KERNEL_ARGS_append_colibri-imx6 = " console=ttymxc0,115200"
 IMAGE_BOOT_FILES_append_colibri-imx6 = " boot.scr uEnv.txt u-boot-colibri-imx6.imx;u-boot.imx ${MACHINE_ARCH}/*;${MACHINE_ARCH}"
 
-OSTREE_KERNEL_ARGS_append_apalis-imx6 = " console=tty1 console=ttymxc0,115200"
+OSTREE_KERNEL_ARGS_append_apalis-imx6 = " console=ttymxc0,115200"
 IMAGE_BOOT_FILES_append_apalis-imx6 = " boot.scr uEnv.txt u-boot-apalis-imx6.imx;u-boot.imx ${MACHINE_ARCH}/*;${MACHINE_ARCH}"
 
-OSTREE_KERNEL_ARGS_append_colibri_imx6ull = " console=tty1 console=ttymxc0,115200"
+OSTREE_KERNEL_ARGS_append_colibri_imx6ull = " console=ttymxc0,115200"
 IMAGE_BOOT_FILES_append_colibri_imx6ull = " boot.scr uEnv.txt u-boot-colibri-imx6ull.imx;u-boot-nand.imx ${MACHINE_ARCH}/*;${MACHINE_ARCH}"
 
 # Cross machines / BSPs
