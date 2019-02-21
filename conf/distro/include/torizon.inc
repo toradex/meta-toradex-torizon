@@ -21,8 +21,9 @@ BUILD_OSTREE_TARBALL = "0"
 IMAGE_FSTYPES_remove_sota = "ota-ext4 wic"
 ## No need to install the kernel image into the boot partition
 IMAGE_BOOT_FILES_remove_sota = " ${KERNEL_IMAGETYPE}"
-## Runtime prov by default to allow runtime configuration
-SOTA_CLIENT_PROV ?= "aktualizr-runtime-prov"
+
+# No automatic provisioning, will be part of Toradex Easy Installer
+SOTA_CLIENT_PROV ?= ""
 
 # No graphical feature as part of the base platform
 DISTRO_FEATURES_remove = "wayland x11"
