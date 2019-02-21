@@ -1,0 +1,33 @@
+#!/bin/sh
+# Copyright (C) 2018 Toradex
+# Licensed on MIT
+
+psplash_enabled() {
+	if [ ! -e /usr/bin/psplash ]; then
+		debug "/usr/bin/psplash doesn't exist"
+		return 1
+	fi
+
+	return 0
+}
+
+psplash_hook_handler() {
+	status=$1
+	module=$2
+
+	if [ "$module" = "finish" ]; then
+		psplash-write "PROGRESS 15"
+	fi
+}
+
+psplash_run() {
+	if [ "$bootparam_nosplash" = "true" ]; then
+		return 0
+	fi
+	ANGLE=0
+	if [ -n "$bootparam_splashangle" ]; then
+		ANGLE=$bootparam_splashangle
+	fi
+	psplash --angle $ANGLE &
+	add_module_pre_hook "psplash_hook_handler"
+}
