@@ -12,7 +12,7 @@ SRC_URI += " \
     file://0003-add-systemd-support.patch \
 "
 
-SPLASH_IMAGES = "file://torizon-blue-img.h;outsuffix=default"
+SPLASH_IMAGES = "file://torizon-blue.png;outsuffix=default"
 
 SYSTEMD_PACKAGES = "${@bb.utils.contains('DISTRO_FEATURES','systemd','${PN}','',d)}"
 SYSTEMD_SERVICE_${PN} += "${@bb.utils.contains('DISTRO_FEATURES','systemd','psplash-start.service','',d)}"
