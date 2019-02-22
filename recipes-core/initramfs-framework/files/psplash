@@ -2,6 +2,14 @@
 # Copyright (C) 2018 Toradex
 # Licensed on MIT
 
+#
+# Starts psplash early in initramfs
+# Three kernel command-line parameters are supported:
+# - nosplash (disables psplash support)
+# - splash.angle=[0,90,180,270] (rotates splash)
+# - splash.novtswitch (does not do any console switch)
+#
+
 psplash_enabled() {
 	if [ ! -e /usr/bin/psplash ]; then
 		debug "/usr/bin/psplash doesn't exist"
@@ -24,10 +32,12 @@ psplash_run() {
 	if [ "$bootparam_nosplash" = "true" ]; then
 		return 0
 	fi
-	ANGLE=0
-	if [ -n "$bootparam_splashangle" ]; then
-		ANGLE=$bootparam_splashangle
+	if [ -n "$bootparam_splash_angle" ]; then
+		PSPLASH_ARGS="--angle $bootparam_splash_angle"
 	fi
-	psplash --angle $ANGLE &
+	if [ "$bootparam_splash_novtswitch" = "true" ]; then
+		PSPLASH_ARGS="${PSPLASH_ARGS} -n"
+	fi
+	psplash $PSPLASH_ARGS &
 	add_module_pre_hook "psplash_hook_handler"
 }
