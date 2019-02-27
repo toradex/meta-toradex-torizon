@@ -22,8 +22,10 @@ IMAGE_FSTYPES_remove_sota = "ota-ext4 wic"
 ## No need to install the kernel image into the boot partition
 IMAGE_BOOT_FILES_remove_sota = " ${KERNEL_IMAGETYPE}"
 
-# No automatic provisioning, will be part of Toradex Easy Installer
-SOTA_CLIENT_PROV ?= ""
+# Use implicit provisioning. The signed device certificate will be stored
+# on the rootfs by aktualizr-cert-provider running in Toradex Easy Installer
+SOTA_CLIENT_PROV ?= "aktualizr-ca-implicit-prov"
+SOTA_DEPLOY_CREDENTIALS ?= "0"
 
 # No graphical feature as part of the base platform
 DISTRO_FEATURES_remove = "wayland x11"
