@@ -42,8 +42,6 @@ fakeroot do_populate_rootfs_common_src () {
     install -m 0644 ${WORKDIR}/path-sbin.sh ${IMAGE_ROOTFS}${sysconfdir}/profile.d/path-sbin.sh
 }
 
-SYSTEMD_SERVICE = "ostree-pending-reboot.path"
-
 IMAGE_PREPROCESS_COMMAND += "do_populate_rootfs_common_src; "
 
 addtask rootfs after do_unpack
