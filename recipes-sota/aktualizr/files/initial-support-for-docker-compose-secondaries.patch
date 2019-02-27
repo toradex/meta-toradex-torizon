@@ -1,4 +1,4 @@
-From 0c1969351e7bb5102bdec7409d1c2f8974dfe2b9 Mon Sep 17 00:00:00 2001
+From 841547841e337b80e9eaa406cbf2c47ab671cfa9 Mon Sep 17 00:00:00 2001
 From: Phil Wise <phil@phil-wise.com>
 Date: Thu, 3 Jan 2019 11:48:22 +0000
 Subject: [PATCH] Initial support for docker-compose secondaries
@@ -7,18 +7,19 @@ Upstream-Status: Inappropriate [Torizon specific]
 
 Signed-off-by: Phil Wise <phil@phil-wise.com>
 Signed-off-by: Ming Liu <liu.ming50@gmail.com>
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
- .../docker-compose-secondaries/docker-compose.json | 11 +++++++
- .../docker-compose-secondaries/example-redis.yml   |  5 +++
- src/libaktualizr/uptane/CMakeLists.txt             |  6 ++--
- src/libaktualizr/uptane/dockersecondary.cc         | 38 ++++++++++++++++++++++
- src/libaktualizr/uptane/dockersecondary.h          | 26 +++++++++++++++
- src/libaktualizr/uptane/secondaryconfig.cc         |  2 ++
- src/libaktualizr/uptane/secondaryconfig.h          |  2 ++
- src/libaktualizr/uptane/secondaryfactory.h         |  3 ++
- src/libaktualizr/utilities/utils.cc                | 18 +++++++---
- src/libaktualizr/utilities/utils.h                 |  7 ++--
- 10 files changed, 108 insertions(+), 10 deletions(-)
+ .../docker-compose.json                       | 11 ++++++
+ .../example-redis.yml                         |  5 +++
+ src/libaktualizr/uptane/CMakeLists.txt        |  2 +
+ src/libaktualizr/uptane/dockersecondary.cc    | 38 +++++++++++++++++++
+ src/libaktualizr/uptane/dockersecondary.h     | 26 +++++++++++++
+ src/libaktualizr/uptane/secondaryconfig.cc    |  2 +
+ src/libaktualizr/uptane/secondaryconfig.h     |  1 +
+ src/libaktualizr/uptane/secondaryfactory.h    |  3 ++
+ src/libaktualizr/utilities/utils.cc           | 18 ++++++---
+ src/libaktualizr/utilities/utils.h            |  7 ++--
+ 10 files changed, 105 insertions(+), 8 deletions(-)
  create mode 100644 config/docker-compose-secondaries/docker-compose.json
  create mode 100644 config/docker-compose-secondaries/example-redis.yml
  create mode 100644 src/libaktualizr/uptane/dockersecondary.cc
@@ -26,7 +27,7 @@ Signed-off-by: Ming Liu <liu.ming50@gmail.com>
 
 diff --git a/config/docker-compose-secondaries/docker-compose.json b/config/docker-compose-secondaries/docker-compose.json
 new file mode 100644
-index 0000000..1cba840
+index 00000000..1cba840c
 --- /dev/null
 +++ b/config/docker-compose-secondaries/docker-compose.json
 @@ -0,0 +1,11 @@
@@ -43,7 +44,7 @@ index 0000000..1cba840
 +}
 diff --git a/config/docker-compose-secondaries/example-redis.yml b/config/docker-compose-secondaries/example-redis.yml
 new file mode 100644
-index 0000000..c9d8d55
+index 00000000..c9d8d554
 --- /dev/null
 +++ b/config/docker-compose-secondaries/example-redis.yml
 @@ -0,0 +1,5 @@
@@ -54,29 +55,26 @@ index 0000000..c9d8d55
 +    restart: always
 \ No newline at end of file
 diff --git a/src/libaktualizr/uptane/CMakeLists.txt b/src/libaktualizr/uptane/CMakeLists.txt
-index e2a3d16..b079d88 100644
+index 4737b24f..f288944d 100644
 --- a/src/libaktualizr/uptane/CMakeLists.txt
 +++ b/src/libaktualizr/uptane/CMakeLists.txt
 @@ -1,4 +1,5 @@
--set(SOURCES fetcher.cc
-+set(SOURCES dockersecondary.cc
-+    fetcher.cc
+ set(SOURCES
++    dockersecondary.cc
+     fetcher.cc
      ipsecondarydiscovery.cc
      ipuptanesecondary.cc
-     managedsecondary.cc
-@@ -12,7 +13,8 @@ set(SOURCES fetcher.cc
-     imagesrepository.cc
+@@ -15,6 +16,7 @@ set(SOURCES
      virtualsecondary.cc)
  
--set(HEADERS exceptions.h
-+set(HEADERS dockersecondary.h
-+    exceptions.h
+ set(HEADERS
++    dockersecondary.h
+     exceptions.h
      fetcher.h
      ipsecondarydiscovery.h
-     ipuptanesecondary.h
 diff --git a/src/libaktualizr/uptane/dockersecondary.cc b/src/libaktualizr/uptane/dockersecondary.cc
 new file mode 100644
-index 0000000..6dc954a
+index 00000000..6dc954a1
 --- /dev/null
 +++ b/src/libaktualizr/uptane/dockersecondary.cc
 @@ -0,0 +1,38 @@
@@ -121,7 +119,7 @@ index 0000000..6dc954a
 \ No newline at end of file
 diff --git a/src/libaktualizr/uptane/dockersecondary.h b/src/libaktualizr/uptane/dockersecondary.h
 new file mode 100644
-index 0000000..ecd3973
+index 00000000..ecd39735
 --- /dev/null
 +++ b/src/libaktualizr/uptane/dockersecondary.h
 @@ -0,0 +1,26 @@
@@ -152,44 +150,43 @@ index 0000000..ecd3973
 +
 +#endif  // UPTANE_DOCKERSECONDARY_H_
 diff --git a/src/libaktualizr/uptane/secondaryconfig.cc b/src/libaktualizr/uptane/secondaryconfig.cc
-index c974e46..b027bc5 100644
+index 3db57188..80382b26 100644
 --- a/src/libaktualizr/uptane/secondaryconfig.cc
 +++ b/src/libaktualizr/uptane/secondaryconfig.cc
-@@ -16,6 +16,8 @@ SecondaryConfig::SecondaryConfig(const boost::filesystem::path &config_file) {
-     secondary_type = Uptane::SecondaryType::kIpUptane;
-   } else if (stype == "opcua_uptane") {
+@@ -18,6 +18,8 @@ SecondaryConfig::SecondaryConfig(const boost::filesystem::path &config_file) {
      secondary_type = Uptane::SecondaryType::kOpcuaUptane;
+   } else if (stype == "isotp_uptane") {
+     secondary_type = Uptane::SecondaryType::kIsoTpUptane;
 +  } else if (stype == "docker_compose") {
 +    secondary_type = Uptane::SecondaryType::kDockerCompose;
    } else {
      LOG_ERROR << "Unrecognized secondary type: " << stype;
    }
 diff --git a/src/libaktualizr/uptane/secondaryconfig.h b/src/libaktualizr/uptane/secondaryconfig.h
-index 4104814..c2518db 100644
+index 63075c35..0414601a 100644
 --- a/src/libaktualizr/uptane/secondaryconfig.h
 +++ b/src/libaktualizr/uptane/secondaryconfig.h
-@@ -23,6 +23,8 @@ enum class SecondaryType {
-   kIpUptane,  // Custom Uptane protocol over TCP/IP network
- 
+@@ -25,6 +25,7 @@ enum class SecondaryType {
    kVirtualUptane,  // Partial UPTANE secondary implemented inside primary
-+
+   kIsoTpUptane,    // Custom Uptane protocol over ISO/TP network
+ 
 +  kDockerCompose,  // Secondary 'firmware' is a docker-compose image
  };
  
  class SecondaryConfig {
 diff --git a/src/libaktualizr/uptane/secondaryfactory.h b/src/libaktualizr/uptane/secondaryfactory.h
-index 3da7a79..077ceab 100644
+index 8bb7f7f2..1c2baf0b 100644
 --- a/src/libaktualizr/uptane/secondaryfactory.h
 +++ b/src/libaktualizr/uptane/secondaryfactory.h
-@@ -2,6 +2,7 @@
- #define UPTANE_SECONDARYFACTORY_H_
- 
+@@ -4,6 +4,7 @@
+ #include "ipuptanesecondary.h"
+ #include "isotpsecondary.h"
  #include "logging/logging.h"
 +#include "uptane/dockersecondary.h"
  #include "uptane/ipuptanesecondary.h"
  #include "uptane/opcuasecondary.h"
  #include "uptane/secondaryconfig.h"
-@@ -28,6 +29,8 @@ class SecondaryFactory {
+@@ -37,6 +38,8 @@ class SecondaryFactory {
          LOG_ERROR << "libaktualizr was built without OPC-UA secondary support.";
          return std::shared_ptr<SecondaryInterface>();  // NULL-equivalent
  #endif
@@ -199,10 +196,10 @@ index 3da7a79..077ceab 100644
          LOG_ERROR << "Unrecognized secondary type: " << static_cast<int>(sconfig.secondary_type);
          return std::shared_ptr<SecondaryInterface>();  // NULL-equivalent
 diff --git a/src/libaktualizr/utilities/utils.cc b/src/libaktualizr/utilities/utils.cc
-index fbd0e48..e2c0258 100644
+index 964c45f2..94a01743 100644
 --- a/src/libaktualizr/utilities/utils.cc
 +++ b/src/libaktualizr/utilities/utils.cc
-@@ -313,14 +313,15 @@ static ssize_t read_cb(struct archive *a, void *client_data, const void **buffer
+@@ -314,14 +314,15 @@ static ssize_t read_cb(struct archive *a, void *client_data, const void **buffer
    return s->is.gcount();
  }
  
@@ -221,7 +218,7 @@ index fbd0e48..e2c0258 100644
    // also replace the target file atomically by creating filename.new and
    // renaming it to the target file name
    boost::filesystem::path tmpFilename = filename;
-@@ -331,13 +332,20 @@ void Utils::writeFile(const boost::filesystem::path &filename, const char *conte
+@@ -332,13 +333,20 @@ void Utils::writeFile(const boost::filesystem::path &filename, const char *conte
      throw std::runtime_error(std::string("Error opening file ") + tmpFilename.string());
    }
    file.write(content, static_cast<std::streamsize>(size));
@@ -245,7 +242,7 @@ index fbd0e48..e2c0258 100644
  
  std::string Utils::jsonToStr(const Json::Value &json) {
 diff --git a/src/libaktualizr/utilities/utils.h b/src/libaktualizr/utilities/utils.h
-index 5836223..7e8d523 100644
+index 58362230..7e8d523c 100644
 --- a/src/libaktualizr/utilities/utils.h
 +++ b/src/libaktualizr/utilities/utils.h
 @@ -24,11 +24,12 @@ struct Utils {
@@ -265,5 +262,5 @@ index 5836223..7e8d523 100644
    static std::string readFileFromArchive(std::istream &as, const std::string &filename, bool trim = false);
    static void writeArchive(const std::map<std::string, std::string> &entries, std::ostream &as);
 -- 
-2.7.4
+2.21.0
 
