@@ -1,0 +1,8 @@
+[Unit]
+Description=Aktualizr OSTree Update Automatic Reboot
+
+[Path]
+PathExists=/run/aktualizr-session/need_reboot
+
+[Install]
+WantedBy=multi-user.target
