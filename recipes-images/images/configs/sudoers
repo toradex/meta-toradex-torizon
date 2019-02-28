@@ -1,2 +1,0 @@
-# members of group sudo can execute any command
-%sudo	ALL=(ALL) ALL
