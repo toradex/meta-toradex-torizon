@@ -18,7 +18,4 @@ CORE_IMAGE_BASE_INSTALL += " \
     python3-pip \
 "
 
-IMAGE_INSTALL_remove = " \
-                        aktualizr \
-                        aktualizr-native \
-"
+IMAGE_INSTALL_remove = "${SOTA_CLIENT}"
