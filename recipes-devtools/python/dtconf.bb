@@ -5,7 +5,7 @@ LIC_FILES_CHKSUM = "file://${COREBASE}/meta/COPYING.MIT;md5=3da9cfbcb788c80a0384
 PR = "r2"
 
 SRC_URI = "git://github.com/toradex/device-tree-conf.git;branch=master;protocol=git"
-SRCREV = "99083e377bd5806a6d6ffa878c8dd161df11cf29"
+SRCREV = "c823c9f82ec60dd98f16efd673a98eebf4a38580"
 
 RDEPENDS_${PN} = " \
         python3 \
