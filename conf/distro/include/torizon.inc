@@ -39,7 +39,7 @@ WKS_FILE_sota_remove = "efiimage-sota.wks"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-lmp/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
-    /meta-lmp/recipes-bsp/uefi/edk2-hikey_git.bbappend \
+    /meta-lmp/recipes-bsp/uefi/ \
     /meta-lmp/recipes-bsp/96boards-tools/ \
     /meta-lmp/recipes-devtools/riscv-tools/ \
     /meta-lmp/recipes-sota/aktualizr/aktualizr_%.bbappend \
