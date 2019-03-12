@@ -32,7 +32,7 @@ GO_IMPORT = "import"
 USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "-r balena"
 
-DEPENDS_append_class-target = " systemd"
+DEPENDS_append_class-target = " systemd libdevmapper"
 RDEPENDS_${PN}_class-target = "curl util-linux iptables tini systemd"
 RRECOMMENDS_${PN} += "kernel-module-nf-nat"
 
