@@ -1,6 +1,6 @@
 require conf/distro/include/arm-defaults.inc
 
-DISTRO_VERSION := "0.3a1"
+DISTRO_VERSION := "1.0b1"
 TDX_BUILDNB ?= ""
 
 # These default to 'oecore' and 'nodistro'
@@ -27,5 +27,3 @@ DISTRO_FEATURES_NATIVE_remove = "x11"
 DISTRO_FEATURES_NATIVESDK_remove = "x11"
 
 PREFERRED_PROVIDER_iasl-native = "acpica-native"
-
-
