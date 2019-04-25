@@ -1,6 +1,6 @@
 require conf/distro/include/arm-defaults.inc
 
-DISTRO_VERSION := "1.0b1"
+DISTRO_VERSION := "1.1b1"
 TDX_BUILDNB ?= ""
 
 # These default to 'oecore' and 'nodistro'
