@@ -1,0 +1,11 @@
+[Unit]
+ConditionPathExists=|!/run/media
+RequiresMountFor=/run
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash -c "mediamountpoint.sh"
+RemainAfterExit=yes
+
+[Install]
+WantedBy=local-fs.target

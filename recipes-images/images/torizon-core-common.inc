@@ -7,6 +7,7 @@ IMAGE_INSTALL_append = " \
     linux-firmware-rtl8192cu \
     kernel-modules \
     set-hostname \
+    media-mountpoint \
 "
 
 IMAGE_INSTALL_append_colibri-imx6ull = " \
