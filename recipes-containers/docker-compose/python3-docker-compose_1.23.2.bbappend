@@ -1,1 +1,0 @@
-PREFERRED_VERSION_${PYTHON_PN}-idna = "2.5"
