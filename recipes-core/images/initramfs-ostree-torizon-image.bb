@@ -17,9 +17,6 @@ LICENSE = "MIT"
 IMAGE_FSTYPES = "cpio.gz"
 IMAGE_FSTYPES_remove = "wic wic.gz wic.bmap ext4 ext4.gz teziimg-distro"
 
-PREFERRED_PROVIDER_udev = "busybox"
-VIRTUAL-RUNTIME_init_manager = "busybox"
-
 # avoid circular dependencies
 EXTRA_IMAGEDEPENDS = ""
 
