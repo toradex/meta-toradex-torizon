@@ -2,6 +2,10 @@ TEZI_ROOT_LABEL = "otaroot"
 TEZI_ROOT_SUFFIX = "ota.tar.xz"
 TEZI_KERNEL_DEVICETREE = ""
 TEZI_KERNEL_IMAGETYPE = ""
+# HACK: Force inclusion of HDMI firmware. Once we use IMAGE_BOOT_FILES to
+# generate Tezi image we can get rid of this.
+TEZI_KERNEL_IMAGETYPE_apalis-imx8 = "hdmitxfw.bin"
+
 do_image_teziimg_distro[depends] += "u-boot-distro-boot-ostree:do_deploy"
 
 SUMMARY_append_torizon-rt = " (PREEMPT_RT)"
