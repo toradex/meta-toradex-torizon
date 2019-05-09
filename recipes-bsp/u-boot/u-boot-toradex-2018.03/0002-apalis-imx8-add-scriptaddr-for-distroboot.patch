@@ -1,0 +1,30 @@
+From dc68002daf9a0156dab50154f9aa9ed0d3aa917b Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 9 May 2019 17:30:09 +0200
+Subject: [PATCH 2/3] apalis-imx8: add scriptaddr for distroboot
+
+Distro boot scripts require scriptaddr. Make sure it is defined to
+a sensible address.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ include/configs/apalis-imx8.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/include/configs/apalis-imx8.h b/include/configs/apalis-imx8.h
+index bb35d2f627..0590240510 100644
+--- a/include/configs/apalis-imx8.h
++++ b/include/configs/apalis-imx8.h
+@@ -80,7 +80,8 @@
+ #define MEM_LAYOUT_ENV_SETTINGS \
+ 	"fdt_addr_r=0x84000000\0" \
+ 	"kernel_addr_r=0x82000000\0" \
+-	"ramdisk_addr_r=0x94400000\0"
++	"ramdisk_addr_r=0x94400000\0" \
++	"scriptaddr=0x87000000\0"
+ 
+ /* Boot M4 */
+ #define M4_BOOT_ENV \
+-- 
+2.21.0
+

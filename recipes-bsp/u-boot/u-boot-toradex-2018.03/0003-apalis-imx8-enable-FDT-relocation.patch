@@ -1,0 +1,28 @@
+From 1e7ce3c775f4a0bc3d8d3f922b5a4ee0d1fb9a12 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 9 May 2019 17:30:36 +0200
+Subject: [PATCH 3/3] apalis-imx8: enable FDT relocation
+
+FDT relocation disabled seems to cause issues when using TorizonCore,
+probably related to ramdisk.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ include/configs/apalis-imx8.h | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/include/configs/apalis-imx8.h b/include/configs/apalis-imx8.h
+index 0590240510..52572bd5ab 100644
+--- a/include/configs/apalis-imx8.h
++++ b/include/configs/apalis-imx8.h
+@@ -116,7 +116,6 @@
+ 	"panel=NULL\0" \
+ 	"console=ttyLP1,115200 earlycon=lpuart32,0x5a070000,115200\0" \
+ 	"fdt_addr=0x83000000\0"			\
+-	"fdt_high=0xffffffffffffffff\0"		\
+ 	"boot_fdt=try\0" \
+ 	"fdt_file=fsl-imx8qm-apalis.dtb\0" \
+ 	"fdtfile=fsl-imx8qm-apalis.dtb\0" \
+-- 
+2.21.0
+
