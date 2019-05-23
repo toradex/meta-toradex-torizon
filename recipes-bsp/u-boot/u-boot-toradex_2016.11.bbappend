@@ -1,5 +1,3 @@
-require recipes-bsp/u-boot/u-boot-toradex-env.inc
-
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 LOCALVERSION = "-${DISTRO_VERSION}"
