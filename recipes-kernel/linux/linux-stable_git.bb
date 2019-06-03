@@ -1,6 +1,6 @@
-LINUX_VERSION ?= "5.0.8"
+LINUX_VERSION ?= "5.0.19"
 
-SRCREV_machine = "2136d9515afb95a10fe9c2a2da1b54d31caa2e42"
+SRCREV_machine = "2115c1bc6e396d5ffe9ecbe394d1c50a6e25c404"
 SRCREV_meta = "fc66c71607f5ce340a72c8e3df2548684dd46631"
 
 KBRANCH = "toradex_5.0.y"
