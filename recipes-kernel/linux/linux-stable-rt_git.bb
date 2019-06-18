@@ -1,9 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-stable:"
 
-LINUX_VERSION ?= "4.19.10"
+LINUX_VERSION ?= "4.19.50"
 LINUX_KERNEL_TYPE = "preempt-rt"
 
-SRCREV_machine = "e9dcc568b2e968af848bbdb4267ba6cde5457b9e"
+SRCREV_machine = "d15d0b7a9f89cf5a905ad6802eb23100c8063939"
 SRCREV_meta = "539ccdbf257b46e74a5be9bcb80c4a756a69f018"
 
 KBRANCH = "toradex_4.19.y-rt"
