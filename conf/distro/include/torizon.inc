@@ -35,6 +35,9 @@ WKS_FILE_DEPENDS_BOOTLOADERS_remove = "syslinux systemd-boot"
 ## We don't use the default efi sota wks file
 WKS_FILE_sota_remove = "efiimage-sota.wks"
 
+PREFERRED_VERSION_u-boot-toradex ?= "2016.11%"
+PREFERRED_VERSION_u-boot-toradex-fw-utils = "2016.11%"
+
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
