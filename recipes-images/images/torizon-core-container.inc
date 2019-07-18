@@ -20,6 +20,8 @@ CORE_IMAGE_BASE_INSTALL += " \
     sshfs-fuse \
     aktualizr-host-tools \
     haveged \
+    curl \
+    jq \
 "
 
 CORE_IMAGE_BASE_INSTALL += " \
