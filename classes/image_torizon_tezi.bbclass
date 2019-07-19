@@ -6,8 +6,6 @@ TEZI_KERNEL_IMAGETYPE = ""
 # generate Tezi image we can get rid of this.
 TEZI_KERNEL_IMAGETYPE_apalis-imx8 = "hdmitxfw.bin"
 
-do_image_teziimg_distro[depends] += "u-boot-distro-boot-ostree:do_deploy"
-
 SUMMARY_append_torizon-rt = " (PREEMPT_RT)"
 DESCRIPTION_append_torizon-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
 
