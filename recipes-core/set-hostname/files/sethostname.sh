@@ -22,6 +22,9 @@ case "${product_id}" in
         "0037"|"0047"|"0048"|"0049")
             machine="apalis-imx8"
         ;;
+	"0038"|"0050"|"0051"|"0052")
+            machine="colibri-imx8x"
+        ;;
         *)
             machine="unsupported-device"
         ;;
