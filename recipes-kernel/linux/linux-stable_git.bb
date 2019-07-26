@@ -1,10 +1,10 @@
-LINUX_VERSION ?= "5.0.19"
+LINUX_VERSION ?= "5.2.3"
 
-SRCREV_machine = "2115c1bc6e396d5ffe9ecbe394d1c50a6e25c404"
-SRCREV_meta = "fc66c71607f5ce340a72c8e3df2548684dd46631"
+SRCREV_machine = "e1bfc3ddb9e2be45055e8e4835e22c48a1030103"
+SRCREV_meta = "8592467f9c82b7e5657d50aba0e2e14942c99bcf"
 
-KBRANCH = "toradex_5.0.y"
-KMETABRANCH = "toradex_5.0.y"
+KBRANCH = "toradex_5.2.y"
+KMETABRANCH = "toradex_5.2.y"
 
 COMPATIBLE_MACHINE = "(apalis-imx6|colibri-imx7|colibri-imx6)"
 
