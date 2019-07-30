@@ -1,6 +1,6 @@
 [Unit]
 ConditionPathExists=|!/run/media
-RequiresMountFor=/run
+RequiresMountsFor=/run
 
 [Service]
 Type=oneshot
