@@ -22,11 +22,6 @@ SRC_URI += " \
 	git://github.com/toradex/toradex-kernel-cache.git;protocol=https;type=kmeta;name=meta;branch=${KMETABRANCH};destsuffix=${KMETA} \
 "
 
-# You can define CMDLINE_DEBUG as "debug" in your local.conf or distro.conf
-# to enable kernel debugging.
-CMDLINE_DEBUG ?= ""
-CMDLINE_append = " ${CMDLINE_DEBUG}"
-
 KERNEL_INITRAMFS ?= '${@oe.utils.conditional("INITRAMFS_IMAGE_BUNDLE", "1", "1", "", d)}'
 
 # Always have a package to allow forcing package dependency
@@ -42,33 +37,6 @@ python __anonymous () {
     if devicetree:
         depends = d.getVar("DEPENDS")
         d.setVar("DEPENDS", "%s dtc-native" % depends)
-}
-
-# Set a variable in .configure
-# $1 - Configure variable to be set
-# $2 - value [n/y/value]
-kernel_configure_variable() {
-    # Remove the config
-    CONF_SED_SCRIPT="$CONF_SED_SCRIPT /CONFIG_$1[ =]/d;"
-    if test "$2" = "n"
-    then
-        echo "# CONFIG_$1 is not set" >> ${B}/.config
-    else
-        echo "CONFIG_$1=$2" >> ${B}/.config
-    fi
-}
-
-do_configure_prepend() {
-    mv -f ${B}/.config ${B}/.config.patched
-    CONF_SED_SCRIPT=""
-
-    # Set cmdline
-    kernel_configure_variable CMDLINE "\"${CMDLINE}\""
-
-    # Keep this the last line
-    # Remove all modified configs and add the rest to .config
-    sed -e "${CONF_SED_SCRIPT}" < '${B}/.config.patched' >> '${B}/.config'
-    rm -f ${B}/.config.patched
 }
 
 do_install_append() {
