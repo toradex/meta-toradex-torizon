@@ -1,4 +1,4 @@
-require conf/distro/include/arm-defaults.inc
+require conf/distro/include/tdx-base.inc
 
 DISTRO_VERSION := "1.1b1"
 TDX_BUILDNB ?= ""
@@ -7,20 +7,12 @@ TDX_BUILDNB ?= ""
 SDK_NAME_PREFIX = "${DISTRO}"
 SDK_VERSION = "${DISTRO_VERSION}"
 
-MAINTAINER = "Toradex <support.arm@toradex.com>"
-
-TARGET_VENDOR = "-torizon"
+MAINTAINER = "Toradex TorizonCore Team <torizoncore@toradex.com>"
 
 TCLIBCAPPEND = ""
 
 # Torizon machine specific overrides
 INHERIT += "torizon"
-
-INHERIT += "buildhistory"
-INHERIT += "image-buildinfo"
-BUILDHISTORY_COMMIT = "1"
-
-IMAGE_LINGUAS ?= "en-us"
 
 # No need for x11 even for native
 DISTRO_FEATURES_NATIVE_remove = "x11"

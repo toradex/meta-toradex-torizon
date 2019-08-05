@@ -1,11 +1,6 @@
 require conf/distro/include/torizon-common.inc
 
-# TODO: review default distro features
-DISTRO_FEATURES_append = " pam systemd virtualization"
-DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc pulseaudio sysvinit"
-VIRTUAL-RUNTIME_init_manager = "systemd"
 PACKAGECONFIG_append_pn-systemd = " resolved networkd"
-PACKAGECONFIG_append_pn-qemu-native = " libusb"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
@@ -27,8 +22,8 @@ IMAGE_BOOT_FILES_remove_sota = " ${KERNEL_IMAGETYPE}"
 SOTA_CLIENT_PROV ?= "aktualizr-device-prov"
 SOTA_DEPLOY_CREDENTIALS ?= "0"
 
-# No graphical feature as part of the base platform
-DISTRO_FEATURES_remove = "wayland x11"
+DISTRO_FEATURES_append = " virtualization"
+DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc pulseaudio wayland x11 ptest multiarch opengl vulkan"
 
 # General
 WKS_FILE_DEPENDS_BOOTLOADERS_remove = "syslinux systemd-boot"
