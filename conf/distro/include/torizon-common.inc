@@ -1,5 +1,7 @@
 require conf/distro/include/tdx-base.inc
 
+IMAGE_CLASSES += "image_type_torizon"
+
 DISTRO_VERSION := "1.1b1"
 TDX_BUILDNB ?= ""
 

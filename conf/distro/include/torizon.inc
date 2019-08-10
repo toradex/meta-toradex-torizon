@@ -4,7 +4,6 @@ PACKAGECONFIG_append_pn-systemd = " resolved networkd"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
-IMAGE_CLASSES += "image_type_tezi image_torizon_tezi image_torizon_ostree"
 
 # SOTA
 OSTREE_OSNAME = "torizon"
@@ -14,8 +13,9 @@ BUILD_OTA_TARBALL = "1"
 BUILD_OSTREE_TARBALL = "0"
 # We do not need wic or ext4 images
 IMAGE_FSTYPES_remove_sota = "ota-ext4 wic"
-## No need to install the kernel image into the boot partition
-IMAGE_BOOT_FILES_remove_sota = " ${KERNEL_IMAGETYPE}"
+
+# No need to install kernel image/devicetrees into the boot partition
+IMAGE_BOOT_FILES = ""
 
 # Use device provisioning. The signed device certificate will be stored on
 # the rootfs by aktualizr-cert-provider running in Toradex Easy Installer
