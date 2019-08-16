@@ -1,7 +1,7 @@
-LINUX_VERSION ?= "5.2.3"
+LINUX_VERSION ?= "5.2.7"
 
-SRCREV_machine = "e1bfc3ddb9e2be45055e8e4835e22c48a1030103"
-SRCREV_meta = "8592467f9c82b7e5657d50aba0e2e14942c99bcf"
+SRCREV_machine = "74e785ce1024471e77b6fb9da83ffd60762c8cac"
+SRCREV_meta = "6fdf802cedc5a4915dcfb6885389fcdc1d843a3b"
 
 KBRANCH = "toradex_5.2.y"
 KMETABRANCH = "toradex_5.2.y"
