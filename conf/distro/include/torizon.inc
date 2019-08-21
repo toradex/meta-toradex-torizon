@@ -33,6 +33,9 @@ WKS_FILE_sota_remove = "efiimage-sota.wks"
 PREFERRED_VERSION_u-boot-toradex ?= "2016.11%"
 PREFERRED_VERSION_u-boot-toradex-fw-utils = "2016.11%"
 
+ERROR_QA_remove = "version-going-backwards"
+WARN_QA_append = " version-going-backwards"
+
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
