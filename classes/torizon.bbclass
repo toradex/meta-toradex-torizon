@@ -7,5 +7,4 @@ sota_fstab_update() {
 	fi
 }
 
-ROOTFS_POSTPROCESS_COMMAND_sota += "sota_fstab_update; "
-
+ROOTFS_POSTPROCESS_COMMAND_append_sota = " sota_fstab_update; "
