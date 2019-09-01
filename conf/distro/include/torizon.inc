@@ -1,6 +1,6 @@
 require conf/distro/include/torizon-common.inc
 
-PACKAGECONFIG_append_pn-systemd = " resolved networkd"
+PACKAGECONFIG_append_pn-systemd = " resolved networkd seccomp"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
