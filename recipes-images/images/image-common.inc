@@ -13,8 +13,3 @@ CORE_IMAGE_BASE_INSTALL += " \
     sudo \
     torizon-conf \
 "
-
-EXTRA_USERS_PARAMS = " \
-useradd -P torizon torizon; \
-usermod -a -G sudo,users,plugdev torizon; \
-"
