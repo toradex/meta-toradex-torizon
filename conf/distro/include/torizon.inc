@@ -2,6 +2,12 @@ require conf/distro/include/torizon-common.inc
 
 PACKAGECONFIG_append_pn-systemd = " resolved networkd seccomp"
 
+# This also disables the static packageconfig. runc needs to be dynamically
+# linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
+PACKAGECONFIG_pn-${PREFERRED_PROVIDER_virtual/runc} = "seccomp"
+
+PACKAGECONFIG_append_pn-docker = " seccomp"
+
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
 
