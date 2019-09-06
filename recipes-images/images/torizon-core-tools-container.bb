@@ -7,7 +7,6 @@ require image-common.inc
 CORE_IMAGE_BASE_INSTALL += " \
     bash \
     util-linux-mountpoint \
-    kernel-devicetree-source \
     dtc \
     cpp \
     make \
