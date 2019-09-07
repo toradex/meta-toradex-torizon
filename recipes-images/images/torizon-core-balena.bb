@@ -6,7 +6,6 @@ require torizon-core-container.inc
 
 CORE_IMAGE_BASE_INSTALL += " \
     balena \
-    tini-balena \
 "
 
 EXTRA_USERS_PARAMS += "\

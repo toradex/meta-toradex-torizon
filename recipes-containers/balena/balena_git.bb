@@ -33,7 +33,7 @@ USERADD_PACKAGES = "${PN}"
 GROUPADD_PARAM_${PN} = "-r balena"
 
 DEPENDS_append_class-target = " systemd libdevmapper"
-RDEPENDS_${PN}_class-target = "curl util-linux iptables tini systemd"
+RDEPENDS_${PN}_class-target = "curl util-linux iptables tini-balena systemd"
 RRECOMMENDS_${PN} += "kernel-module-nf-nat"
 
 # oe-meta-go recipes try to build go-cross-native
