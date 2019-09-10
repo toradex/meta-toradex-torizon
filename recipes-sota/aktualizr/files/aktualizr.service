@@ -1,6 +1,9 @@
 [Unit]
 Description=Aktualizr SOTA Client
 After=network.target
+ConditionPathExists=|/var/sota/import/{root.crt,client.pem,pkey.pem}
+ConditionPathExists=|/var/sota/sql.db
+ConditionPathExists=/var/sota/import/gateway.url
 
 [Service]
 RestartSec=10
