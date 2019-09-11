@@ -7,7 +7,7 @@ require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 
 SRCREV_machine = "74e785ce1024471e77b6fb9da83ffd60762c8cac"
-SRCREV_meta = "6fdf802cedc5a4915dcfb6885389fcdc1d843a3b"
+SRCREV_meta = "93e83b9795f8f4721dbab575426c4564236d2767"
 
 KBRANCH = "toradex_5.2.y"
 KMETABRANCH = "toradex_5.2.y"
