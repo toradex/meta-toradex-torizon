@@ -1,6 +1,0 @@
-TORADEX_PRODUCT_IDS = "0036 0040 0044 0045"
-TORADEX_PRODUCT_IDS[0036] = "imx6ull-colibri-eval-v3.dtb"
-TORADEX_PRODUCT_IDS[0040] = "imx6ull-colibri-wifi-eval-v3.dtb"
-TORADEX_PRODUCT_IDS[0044] = "imx6ull-colibri-eval-v3.dtb"
-TORADEX_PRODUCT_IDS[0045] = "imx6ull-colibri-wifi-eval-v3.dtb"
-TORADEX_FLASH_TYPE = "rawnand"
