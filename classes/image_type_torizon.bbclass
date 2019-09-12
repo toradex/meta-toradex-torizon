@@ -10,7 +10,7 @@ DESCRIPTION_append_torizon-rt = " Using a Linux kernel with PREEMPT_RT real-time
 CONVERSION_CMD_tar_append = "; echo $(du -ks ${IMGDEPLOYDIR}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.${type}.tar| cut -f 1) > ${T}/image-size.${type}.tar"
 
 #Name an ostree branch after image basename, this allows having multiple images in one repo
-OSTREE_BRANCHNAME = "${DISTRO}/${IMAGE_BASENAME}"
+OSTREE_BRANCHNAME = "${MACHINE}/${DISTRO}/${IMAGE_BASENAME}"
 
 #Force ostree summary to be updated
 OSTREE_UPDATE_SUMMARY = "1"
