@@ -1,5 +1,8 @@
 require conf/distro/include/torizon-common.inc
 
+# Distro override for all torizon Distros
+DISTROOVERRIDES = "torizon:use-mainline-bsp"
+
 PACKAGECONFIG_append_pn-systemd = " resolved networkd seccomp"
 
 # This also disables the static packageconfig. runc needs to be dynamically
