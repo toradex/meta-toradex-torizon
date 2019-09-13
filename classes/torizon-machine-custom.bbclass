@@ -23,3 +23,5 @@ MACHINE_ESSENTIAL_EXTRA_RDEPENDS_remove_imx = "u-boot-fslc"
 UBOOT_MAKE_TARGET_colibri-imx6ull = "u-boot-nand.imx"
 
 KERNEL_DEVICETREE_colibri-imx6ull = "imx6ull-colibri-eval-v3.dtb imx6ull-colibri-wifi-eval-v3.dtb"
+
+UBOOT_BINARY_colibri-imx7 = "u-boot.imx"
