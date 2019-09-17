@@ -48,6 +48,12 @@ WARN_QA_append = " version-going-backwards"
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
+    /meta-toradex-nxp/recipes-kernel/linux/linux-imx-headers_4.9.123.bbappend \
+    /meta-toradex-nxp/recipes-multimedia/imx-codec/imx-codec_4.4.2.bbappend \
+    /meta-toradex-nxp/recipes-multimedia/imx-parser/imx-parser_4.4.2.bbappend \
+    /meta-toradex-nxp/recipes-multimedia/gstreamer/imx-gst1.0-plugin_4.4.2.bbappend \
+    /meta-toradex-nxp/recipes-graphics/wayland/wayland-protocols_1.13.imx.bbappend \
+    /meta-freescale/recipes-kernel/linux/linux-imx-mfgtool_4.14.98.bb \
     /meta-lmp/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
     /meta-lmp/recipes-bsp/uefi/ \
     /meta-lmp/recipes-bsp/96boards-tools/ \
