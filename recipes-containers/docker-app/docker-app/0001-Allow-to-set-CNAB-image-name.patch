@@ -1,0 +1,47 @@
+From b44a5157f9e48ada95aaa0dc598c51e04a955d0b Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Fri, 13 Sep 2019 16:57:48 +0800
+Subject: [PATCH] Allow to set CNAB image name
+
+Currently only amd64 CNAB image is supported on docker hub, to be able
+to support arm CNAB images, we introduce a compiling option CNABIMAGE,
+that the users could choose to set up their own images.
+
+Upstream-Status: Inappropriate [Toradex specific]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ internal/config.go           | 2 ++
+ internal/packager/packing.go | 4 ++--
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/internal/config.go b/internal/config.go
+index 9d0623f..98f9f35 100644
+--- a/internal/config.go
++++ b/internal/config.go
+@@ -5,4 +5,6 @@ var (
+ 	Experimental = "on"
+ 	// MetadataVersion defines the current schema version
+ 	MetadataVersion = "v0.2"
++	// Default cnab-app-base image
++	CnabImage = "docker/cnab-app-base"
+ )
+diff --git a/internal/packager/packing.go b/internal/packager/packing.go
+index 24ae89c..f8350fd 100644
+--- a/internal/packager/packing.go
++++ b/internal/packager/packing.go
+@@ -15,9 +15,9 @@ import (
+ 	"github.com/pkg/errors"
+ )
+ 
+-const (
++var (
+ 	// DefaultCNABBaseImageName is the name of the default base invocation image.
+-	DefaultCNABBaseImageName = "docker/cnab-app-base"
++	DefaultCNABBaseImageName = internal.CnabImage
+ 
+ 	dockerIgnore = "Dockerfile"
+ )
+-- 
+2.7.4
+
