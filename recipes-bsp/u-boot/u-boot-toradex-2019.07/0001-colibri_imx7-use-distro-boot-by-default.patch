@@ -1,0 +1,58 @@
+From a15004ee193d91d8e04225d91985d1febf7c1c48 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 19 Sep 2019 10:44:18 +0200
+Subject: [PATCH] colibri_imx7: use distro boot by default
+
+Use distro boot for eMMC as well as raw NAND modules by default. This
+is required for TorizonCore.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ configs/colibri_imx7_defconfig | 2 +-
+ include/configs/colibri_imx7.h | 5 +++--
+ 2 files changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/configs/colibri_imx7_defconfig b/configs/colibri_imx7_defconfig
+index 579b444b28..47b65ec6c8 100644
+--- a/configs/colibri_imx7_defconfig
++++ b/configs/colibri_imx7_defconfig
+@@ -35,7 +35,7 @@ CONFIG_CMD_BMP=y
+ CONFIG_CMD_CACHE=y
+ CONFIG_CMD_MTDPARTS=y
+ CONFIG_MTDIDS_DEFAULT="nand0=gpmi-nand"
+-CONFIG_MTDPARTS_DEFAULT="mtdparts=gpmi-nand:512k(mx7-bcb),1536k(u-boot1)ro,1536k(u-boot2)ro,512k(u-boot-env),-(ubi)"
++CONFIG_MTDPARTS_DEFAULT="mtdparts=gpmi-nand:512k(mx7-bcb),1536k(u-boot1)ro,1536k(u-boot2)ro,512k(u-boot-env),-(UBI)"
+ CONFIG_CMD_UBI=y
+ # CONFIG_ISO_PARTITION is not set
+ CONFIG_OF_CONTROL=y
+diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
+index 5408577661..5c19fa0e84 100644
+--- a/include/configs/colibri_imx7.h
++++ b/include/configs/colibri_imx7.h
+@@ -115,13 +115,13 @@
+ 		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
+ 
+ #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
+-#define CONFIG_BOOTCOMMAND "run ubiboot ; echo ; echo ubiboot failed ; " \
++#define CONFIG_BOOTCOMMAND \
+ 	"setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && run distro_bootcmd;"
+ #define MODULE_EXTRA_ENV_SETTINGS \
+ 	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0" \
+ 	UBI_BOOTCMD
+ #elif defined(CONFIG_TARGET_COLIBRI_IMX7_EMMC)
+-#define CONFIG_BOOTCOMMAND "run emmcboot ; echo ; echo emmcboot failed ; " \
++#define CONFIG_BOOTCOMMAND \
+ 	"setenv fdtfile ${soc}-colibri-emmc-${fdt_board}.dtb && run distro_bootcmd;"
+ #define MODULE_EXTRA_ENV_SETTINGS \
+ 	"variant=-emmc\0" \
+@@ -130,6 +130,7 @@
+ 
+ #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
+ #define BOOT_TARGET_DEVICES(func) \
++	func(UBIFS, ubifs, 0) \
+ 	func(MMC, mmc, 0) \
+ 	func(USB, usb, 0) \
+ 	func(DHCP, dhcp, na)
+-- 
+2.23.0
+

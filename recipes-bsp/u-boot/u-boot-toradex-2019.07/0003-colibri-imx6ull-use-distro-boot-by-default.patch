@@ -1,0 +1,47 @@
+From 7e61da7bfb7bce5c216dae76ccfd7a2e67a53b9c Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 19 Sep 2019 17:09:58 +0200
+Subject: [PATCH 3/3] colibri-imx6ull: use distro boot by default
+
+Use distro boot for raw NAND modules by default. This is required
+for TorizonCore.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ configs/colibri-imx6ull_defconfig | 2 +-
+ include/configs/colibri-imx6ull.h | 3 ++-
+ 2 files changed, 3 insertions(+), 2 deletions(-)
+
+diff --git a/configs/colibri-imx6ull_defconfig b/configs/colibri-imx6ull_defconfig
+index a0ba71d0f5..0013a665b7 100644
+--- a/configs/colibri-imx6ull_defconfig
++++ b/configs/colibri-imx6ull_defconfig
+@@ -38,7 +38,7 @@ CONFIG_CMD_CACHE=y
+ CONFIG_CMD_REGULATOR=y
+ CONFIG_CMD_MTDPARTS=y
+ CONFIG_MTDIDS_DEFAULT="nand0=gpmi-nand"
+-CONFIG_MTDPARTS_DEFAULT="mtdparts=gpmi-nand:512k(mx6ull-bcb),1536k(u-boot1)ro,1536k(u-boot2)ro,512k(u-boot-env),-(ubi)"
++CONFIG_MTDPARTS_DEFAULT="mtdparts=gpmi-nand:512k(mx6ull-bcb),1536k(u-boot1)ro,1536k(u-boot2)ro,512k(u-boot-env),-(UBI)"
+ CONFIG_CMD_UBI=y
+ # CONFIG_ISO_PARTITION is not set
+ CONFIG_OF_CONTROL=y
+diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
+index 05af222a1f..ad1d7d4bc4 100644
+--- a/include/configs/colibri-imx6ull.h
++++ b/include/configs/colibri-imx6ull.h
+@@ -83,10 +83,11 @@
+ 		"ubi read ${fdt_addr_r} dtb && " \
+ 		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
+ 
+-#define CONFIG_BOOTCOMMAND "run ubiboot; " \
++#define CONFIG_BOOTCOMMAND \
+ 	"setenv fdtfile " FDT_FILE " && run distro_bootcmd;"
+ 
+ #define BOOT_TARGET_DEVICES(func) \
++	func(UBIFS, ubifs, 0) \
+ 	func(MMC, mmc, 0) \
+ 	func(USB, usb, 0) \
+ 	func(DHCP, dhcp, na)
+-- 
+2.23.0
+
