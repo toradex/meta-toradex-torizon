@@ -22,11 +22,12 @@ MACHINE_FIRMWARE_remove = "firmware-imx-epdc"
 KERNEL_DEVICETREE_use-mainline-bsp = "imx7d-colibri-eval-v3.dtb \
 		imx7s-colibri-eval-v3.dtb imx7d-colibri-emmc-eval-v3.dtb"
 
-# U-Boot NAND binary includes 0x400 padding required for NAND boot
+# Using override to make sure to override what is set later in colibri-imx7.conf
+UBOOT_MAKE_TARGET_colibri-imx7 = "u-boot.imx"
+UBOOT_BINARY_colibri-imx7 = "u-boot.imx"
+
 UBOOT_MACHINE = ""
-UBOOT_MAKE_TARGET_remove = "u-boot-nand.imx"
-# We have to set UBOOT_BINARY in torizon-machine-custom.bbclass to take effect
 UBOOT_CONFIG ??= "sd nd"
 UBOOT_CONFIG[sd] = "colibri_imx7_emmc_defconfig,,u-boot.imx"
-UBOOT_CONFIG[nd] = "colibri_imx7_defconfig,,u-boot-nand.imx"
+UBOOT_CONFIG[nd] = "colibri_imx7_defconfig,,u-boot.imx"
 
