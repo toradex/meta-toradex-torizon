@@ -19,5 +19,4 @@ MACHINE_EXTRA_RRECOMMENDS_remove_imx = "imx-alsa-plugins"
 ## No need to install u-boot, already a WKS dependency
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS_remove_imx = "u-boot-fslc"
 
-KERNEL_DEVICETREE_colibri-imx6 = "imx6dl-colibri-eval-v3.dtb"
 KERNEL_DEVICETREE_colibri-imx6ull = "imx6ull-colibri-eval-v3.dtb imx6ull-colibri-wifi-eval-v3.dtb"
