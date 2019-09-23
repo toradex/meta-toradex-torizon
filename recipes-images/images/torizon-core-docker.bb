@@ -5,7 +5,7 @@ OTA update capabilities."
 require torizon-core-container.inc
 
 CORE_IMAGE_BASE_INSTALL += " \
-    docker \
+    docker-ce \
     python3-docker-compose \
 "
 
