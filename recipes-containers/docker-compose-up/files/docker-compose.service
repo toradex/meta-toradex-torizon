@@ -1,0 +1,14 @@
+[Unit]
+Description=Docker Compose service with docker compose
+Requires=docker.service
+After=docker.service
+ConditionPathExists=/var/sota/storage/docker-compose/docker-compose.yml
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/sota/storage/docker-compose/
+ExecStartPre=/usr/bin/docker-compose pull
+ExecStart=/usr/bin/docker-compose up -d --remove-orphans
+
+[Install]
+WantedBy=multi-user.target
