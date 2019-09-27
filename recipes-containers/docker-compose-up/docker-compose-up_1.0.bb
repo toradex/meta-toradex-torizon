@@ -17,5 +17,5 @@ SYSTEMD_SERVICE_${PN} = " docker-compose.service"
 
 do_install() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system
-	install -m 0755 ${WORKDIR}/docker-compose.service ${D}${nonarch_base_libdir}/systemd/system
+	install -m 0644 ${WORKDIR}/docker-compose.service ${D}${nonarch_base_libdir}/systemd/system
 }
