@@ -1,4 +1,4 @@
-LINUX_VERSION ?= "5.3.2"
+LINUX_VERSION ?= "5.3.6"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 export DTC_FLAGS = "-@"
@@ -6,7 +6,7 @@ export DTC_FLAGS = "-@"
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 
-SRCREV_machine = "989c46f85cedb9f5286ebda19bf1122c7b7dcb83"
+SRCREV_machine = "f2fbbb0846d4d0737cd5bbf0e7a6a136f0334c5e"
 SRCREV_meta = "3cd61fc8011707cf9ef93a2ba6667598a2aced0c"
 
 KBRANCH = "toradex_5.3.y"
