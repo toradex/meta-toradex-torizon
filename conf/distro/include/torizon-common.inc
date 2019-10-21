@@ -43,4 +43,5 @@ BBMASK += " \
     /meta-lmp/recipes-sota/aktualizr/aktualizr_%.bbappend \
     /meta-lmp/recipes-connectivity/pi-bluetooth \
     /meta-lmp/recipes-kernel/bluez-firmware-rpidistro \
+    /meta-lmp/recipes-kernel/linux-firmware \
 "
