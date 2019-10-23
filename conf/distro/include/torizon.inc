@@ -20,8 +20,10 @@ INITRAMFS_IMAGE = "initramfs-ostree-torizon-image"
 INITRAMFS_FSTYPES = "cpio.gz"
 BUILD_OTA_TARBALL = "1"
 BUILD_OSTREE_TARBALL = "0"
-# We do not need wic or ext4 images
-IMAGE_FSTYPES_remove_sota = "ota-ext4 wic"
+# We do not need wic or ext4 images by default
+IMAGE_FSTYPES_REMOVE ?= "ota-ext4 wic"
+IMAGE_FSTYPES_REMOVE_qemuarm64 = ""
+IMAGE_FSTYPES_remove_sota = "${IMAGE_FSTYPES_REMOVE}"
 
 # No need to install kernel image/devicetrees into the boot partition
 IMAGE_BOOT_FILES = ""
