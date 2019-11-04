@@ -4,6 +4,7 @@ require conf/distro/include/torizon-common.inc
 DISTROOVERRIDES = "torizon:use-mainline-bsp"
 
 PACKAGECONFIG_append_pn-systemd = " resolved networkd seccomp"
+PACKAGECONFIG_remove_pn-networkmanager = "ifupdown dnsmasq"
 
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
