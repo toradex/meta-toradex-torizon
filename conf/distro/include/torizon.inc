@@ -19,7 +19,6 @@ IMAGE_FSTYPES = "teziimg-distro"
 OSTREE_OSNAME = "torizon"
 INITRAMFS_IMAGE = "initramfs-ostree-torizon-image"
 INITRAMFS_FSTYPES = "cpio.gz"
-BUILD_OTA_TARBALL = "1"
 BUILD_OSTREE_TARBALL = "0"
 # We do not need wic or ext4 images by default
 IMAGE_FSTYPES_REMOVE ?= "ota-ext4 wic"
