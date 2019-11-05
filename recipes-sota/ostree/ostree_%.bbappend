@@ -6,10 +6,6 @@ SRC_URI_append = " \
     file://ostree-pending-reboot.path \
 "
 
-SRC_URI_remove = " \
-    file://avoid-race-condition-tests-build.patch \
-"
-
 SYSTEMD_SERVICE_${PN} += "ostree-pending-reboot.path ostree-pending-reboot.service"
 
 do_install_append () {

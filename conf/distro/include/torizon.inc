@@ -52,6 +52,9 @@ PREFERRED_VERSION_gstreamer1.0-plugins-bad_use-mainline-bsp_torizon = "1.14.imx"
 
 PREFERRED_VERSION_wayland-protocols_mx8_torizon = "1.17.imx"
 
+PREFERRED_VERSION_ostree = "2019.4"
+PREFERRED_VERSION_ostree-native = "2019.4"
+
 ERROR_QA_remove = "version-going-backwards"
 WARN_QA_append = " version-going-backwards"
 
