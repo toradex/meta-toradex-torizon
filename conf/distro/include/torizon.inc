@@ -8,9 +8,9 @@ PACKAGECONFIG_remove_pn-networkmanager = "ifupdown dnsmasq"
 
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
-PACKAGECONFIG_pn-${PREFERRED_PROVIDER_virtual/runc} = "seccomp"
-
-PACKAGECONFIG_append_pn-docker = " seccomp"
+PACKAGECONFIG_remove_pn-${PREFERRED_PROVIDER_virtual/runc} = "static"
+PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/runc} = " seccomp"
+PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/docker} = " seccomp"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
