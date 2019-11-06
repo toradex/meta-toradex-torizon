@@ -1,0 +1,33 @@
+From 6f7808220263f8bbe996f654a032ba6885d9a7d7 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Tue, 20 Feb 2018 09:09:12 +0100
+Subject: [PATCH] ARM64: dts: fsl-imx8qm: use X2 peripheral clock on both
+ instances
+
+When pciea fails to probe, it disables X2 peripheral clock. When
+pcieb probes subsequently, the kernel crashes with a "Unhandled
+fault: synchronous external abort" in regmap_mmio_read32le.
+
+Related-to: #57415
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+(Cherry picked from commit cd8afb78947d0a0c2fbe13935b261a835b26a86a)
+---
+ arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi b/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi
+index 2b0782e111c2..80ce0c56557a 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi
+@@ -1171,7 +1171,7 @@
+ 	clocks = <&clk IMX8QM_HSIO_PCIE_B_MSTR_AXI_CLK>,
+ 		 <&clk IMX8QM_HSIO_PCIE_B_SLV_AXI_CLK>,
+ 		 <&clk IMX8QM_HSIO_PHY_X2_PCLK_1>,
+-		 <&clk IMX8QM_HSIO_PCIE_X1_PER_CLK>,
++		 <&clk IMX8QM_HSIO_PCIE_X2_PER_CLK>,
+ 		 <&clk IMX8QM_HSIO_PCIE_B_DBI_AXI_CLK>,
+ 		 <&pcie_sata_refclk_gate>;
+ 	/*clkreq-gpio = <&gpio4 30 GPIO_ACTIVE_LOW>;*/
+-- 
+2.23.0
+
