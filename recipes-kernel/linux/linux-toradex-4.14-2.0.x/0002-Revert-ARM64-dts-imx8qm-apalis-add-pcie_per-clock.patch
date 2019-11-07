@@ -1,0 +1,42 @@
+From 8f4127a5e1590711ffff753a68f652886ca0aef7 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 7 Nov 2019 10:38:25 +0100
+Subject: [PATCH 2/2] Revert "ARM64: dts: imx8qm-apalis: add pcie_per clock"
+
+This reverts commit 81d5c3f7cc7490bde7d388a1a4a23fc38c5b8cae.
+---
+ arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
+
+diff --git a/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi b/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi
+index 2b0782e111c2..83a939a9748a 100644
+--- a/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi
++++ b/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis.dtsi
+@@ -1154,10 +1154,9 @@
+ 	clocks = <&clk IMX8QM_HSIO_PCIE_A_MSTR_AXI_CLK>,
+ 		 <&clk IMX8QM_HSIO_PCIE_A_SLV_AXI_CLK>,
+ 		 <&clk IMX8QM_HSIO_PHY_X2_PCLK_0>,
+-		 <&clk IMX8QM_HSIO_PCIE_X2_PER_CLK>,
+ 		 <&clk IMX8QM_HSIO_PCIE_A_DBI_AXI_CLK>,
+ 		 <&pcie_sata_refclk_gate>;
+-	clock-names = "pcie", "pcie_bus", "pcie_phy", "pcie_per", "pcie_inbound_axi", "pcie_ext";
++	clock-names = "pcie", "pcie_bus", "pcie_phy", "pcie_inbound_axi", "pcie_ext";
+ 	ext_osc = <1>;
+ 	fsl,max-link-speed = <1>;
+ 	reset-gpio = <&gpio0 30 GPIO_ACTIVE_LOW>;
+@@ -1171,11 +1170,10 @@
+ 	clocks = <&clk IMX8QM_HSIO_PCIE_B_MSTR_AXI_CLK>,
+ 		 <&clk IMX8QM_HSIO_PCIE_B_SLV_AXI_CLK>,
+ 		 <&clk IMX8QM_HSIO_PHY_X2_PCLK_1>,
+-		 <&clk IMX8QM_HSIO_PCIE_X1_PER_CLK>,
+ 		 <&clk IMX8QM_HSIO_PCIE_B_DBI_AXI_CLK>,
+ 		 <&pcie_sata_refclk_gate>;
+ 	/*clkreq-gpio = <&gpio4 30 GPIO_ACTIVE_LOW>;*/
+-	clock-names = "pcie", "pcie_bus", "pcie_phy", "pcie_per", "pcie_inbound_axi", "pcie_ext";
++	clock-names = "pcie", "pcie_bus", "pcie_phy", "pcie_inbound_axi", "pcie_ext";
+ 	/*epdev_on-supply = <&epdev_on>;*/
+ 	ext_osc = <1>;
+ 	fsl,max-link-speed = <1>;
+-- 
+2.23.0
+
