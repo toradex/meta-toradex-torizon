@@ -14,6 +14,7 @@ PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/docker} = " seccomp"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
+IMAGE_FSTYPES_remove_intel-corei7-64 = "teziimg-distro"
 
 # SOTA
 OSTREE_OSNAME = "torizon"
@@ -23,6 +24,7 @@ BUILD_OSTREE_TARBALL = "0"
 # We do not need wic or ext4 images by default
 IMAGE_FSTYPES_REMOVE ?= "ota-ext4 wic"
 IMAGE_FSTYPES_REMOVE_qemuarm64 = ""
+IMAGE_FSTYPES_REMOVE_intel-corei7-64 = ""
 IMAGE_FSTYPES_remove_sota = "${IMAGE_FSTYPES_REMOVE}"
 
 # No need to install kernel image/devicetrees into the boot partition

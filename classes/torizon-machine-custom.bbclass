@@ -36,3 +36,11 @@ QB_MEM_qemuarm64 = "-m 1057"
 QB_DRIVE_TYPE_qemuarm64 = "/dev/vd"
 QB_OPT_APPEND_qemuarm64 = "-no-acpi -bios u-boot.bin -d unimp -semihosting-config enable,target=native"
 IMAGE_FSTYPES_remove_qemuarm64 = "teziimg-distro"
+
+# Intel X86
+OSTREE_BOOTLOADER_intel-corei7-64 ?= "grub"
+OSTREE_KERNEL_ARGS_intel-corei7-64 ?= "console=ttyS0,115200 root=LABEL=otaroot rootfstype=ext4"
+EFI_PROVIDER_intel-corei7-64 = "grub-efi"
+WKS_FILE_intel-corei7-64_sota = "efidisk-sota.wks"
+IMAGE_BOOT_FILES_intel-corei7-64 = ""
+IMAGE_FSTYPES_remove_intel-corei7-64 = "live hddimg"
