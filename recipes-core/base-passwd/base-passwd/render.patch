@@ -1,0 +1,22 @@
+Add an render group for the /dev/dri/render* devices.
+
+Upstream-Status: Inappropriate [configuration]
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+
+---
+ group.master |    1 +
+ 1 file changed, 1 insertion(+)
+
+Index: base-passwd-3.5.26/group.master
+===================================================================
+--- base-passwd-3.5.26.orig/group.master
++++ base-passwd-3.5.26/group.master
+@@ -35,6 +35,7 @@ video:*:44:
+ sasl:*:45:
+ plugdev:*:46:
+ kvm:*:47:
++render:*:48:
+ staff:*:50:
+ games:*:60:
+ shutdown:*:70:
