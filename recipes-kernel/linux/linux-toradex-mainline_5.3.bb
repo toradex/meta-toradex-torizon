@@ -16,7 +16,10 @@ LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
 
 KMETA = "kernel-meta"
 
+KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
+KMETAPROTOCOL="https"
+
 SRC_URI += " \
-    git://github.com/toradex/toradex-kernel-cache.git;protocol=https;type=kmeta;name=meta;branch=${KMETABRANCH};destsuffix=${KMETA} \
+    git://${KMETAREPOSITORY};protocol=${KMETAPROTOCOL};type=kmeta;name=meta;branch=${KMETABRANCH};destsuffix=${KMETA} \
 "
 
