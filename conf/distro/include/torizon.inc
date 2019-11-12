@@ -50,7 +50,8 @@ PREFERRED_VERSION_gstreamer1.0-plugins-base_use-mainline-bsp_torizon = "1.14.imx
 PREFERRED_VERSION_gstreamer1.0-plugins-good_use-mainline-bsp_torizon = "1.14.imx"
 PREFERRED_VERSION_gstreamer1.0-plugins-bad_use-mainline-bsp_torizon = "1.14.imx"
 
+# TorizonCore does not use runtim epackage management, so version numbers going
+# backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
-WARN_QA_append = " version-going-backwards"
 
 hostname_pn-base-files = ""
