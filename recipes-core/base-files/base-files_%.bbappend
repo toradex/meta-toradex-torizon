@@ -1,3 +1,4 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 do_install_append() {
     # remove /media because we are going to use /run/media
