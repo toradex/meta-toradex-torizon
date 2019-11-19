@@ -21,7 +21,6 @@ CORE_IMAGE_BASE_INSTALL += " \
     rsync \
     sshfs-fuse \
     aktualizr-host-tools \
-    haveged \
     curl \
     jq \
 "
