@@ -13,3 +13,12 @@ CORE_IMAGE_BASE_INSTALL += " \
     sudo \
     torizon-conf \
 "
+
+EXTRA_USERS_PARAMS = " \
+    useradd -P torizon torizon; \
+    usermod -a -G sudo,users,plugdev torizon; \
+"
+
+set_user_group_append () {
+	eval flock -x ${IMAGE_ROOTFS}${sysconfdir} -c \"$PSEUDO passwd -e -R ${IMAGE_ROOTFS} torizon\" || true
+}
