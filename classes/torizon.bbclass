@@ -7,12 +7,4 @@ sota_fstab_update() {
 	fi
 }
 
-# Create user and change password expiration
-create_user() {
-	useradd -R ${IMAGE_ROOTFS} -P torizon torizon; \
-	usermod -R ${IMAGE_ROOTFS} -a -G sudo,users,plugdev torizon; \
-	
-	passwd -e -R ${IMAGE_ROOTFS} torizon
-}
-
-ROOTFS_POSTPROCESS_COMMAND_append_sota = " sota_fstab_update; create_user; "
+ROOTFS_POSTPROCESS_COMMAND_append_sota = " sota_fstab_update; "
