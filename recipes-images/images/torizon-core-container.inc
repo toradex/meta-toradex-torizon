@@ -23,6 +23,7 @@ CORE_IMAGE_BASE_INSTALL += " \
     aktualizr-host-tools \
     curl \
     jq \
+    zram \
 "
 
 CORE_IMAGE_BASE_INSTALL += " \
