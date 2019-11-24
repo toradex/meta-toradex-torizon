@@ -5,7 +5,7 @@ SRC_URI_append = " \
 "
 
 # We explicitly require pam
-inherit distro_features_check
+inherit features_check
 
 REQUIRED_DISTRO_FEATURES = "pam"
 
