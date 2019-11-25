@@ -1,5 +1,6 @@
 inherit image_type_tezi
 
+TEZI_VERSION = "${DISTRO_VERSION}"
 TEZI_ROOT_LABEL = "otaroot"
 TEZI_ROOT_SUFFIX ??= "ota.tar.xz"
 
