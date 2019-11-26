@@ -15,10 +15,6 @@ IMAGE_INSTALL_append_colibri-imx6ull = " \
     linux-firmware-sd8997 \
 "
 
-IMAGE_INSTALL_append_apalis-imx8 = " \
-    kernel-module-imx-gpu-viv \
-"
-
-IMAGE_INSTALL_append_colibri-imx8x = " \
+IMAGE_INSTALL_append_mx8 = " \
     kernel-module-imx-gpu-viv \
 "
