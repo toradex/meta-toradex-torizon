@@ -20,6 +20,11 @@ OSTREE_CHANGE_LOG_HEADER = "Changes in version ${IMAGE_NAME}"
 OSTREE_CREATE_DIFF = "1"
 OSTREE_DEPLOY_DEVICETREE = "1"
 
+# Use full distro version only as commit subject, we have distro an image name
+# in the OSTree branch name.
+OSTREE_COMMIT_SUBJECT = "${DISTRO_VERSION}"
+OSTREE_COMMIT_SUBJECT[vardepsexclude] = "DISTRO_VERSION"
+
 # Get git hashes from all layers
 # inspiration taken from image-buildinfo
 def get_layer_revision_information(d):
@@ -57,7 +62,7 @@ def get_layer_revision_information(d):
 # Add layers revision information to ostree body
 OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
 
-IMAGE_CMD_ostreecommit[vardepsexclude] += "OSTREE_COMMIT_BODY"
+IMAGE_CMD_ostreecommit[vardepsexclude] += "OSTREE_COMMIT_BODY OSTREE_COMMIT_SUBJECT"
 
 do_image_ostreecommit[postfuncs] += " generate_diff_file"
 
