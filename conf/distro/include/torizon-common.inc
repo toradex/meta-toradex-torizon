@@ -23,12 +23,8 @@ PREFERRED_PROVIDER_iasl-native = "acpica-native"
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
-    /meta-lmp/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
-    /meta-lmp/recipes-bsp/uefi/ \
-    /meta-lmp/recipes-bsp/96boards-tools/ \
-    /meta-lmp/recipes-devtools/riscv-tools/ \
-    /meta-lmp/recipes-sota/aktualizr/aktualizr_%.bbappend \
-    /meta-lmp/recipes-connectivity/pi-bluetooth \
-    /meta-lmp/recipes-kernel/bluez-firmware-rpidistro \
-    /meta-lmp/recipes-kernel/linux-firmware \
+    /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
+    /meta-lmp/meta-lmp-bsp/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
+    /meta-lmp/meta-lmp-bsp/recipes-connectivity/pi-bluetooth \
+    /meta-lmp/meta-lmp-bsp/recipes-kernel/linux-firmware \
 "
