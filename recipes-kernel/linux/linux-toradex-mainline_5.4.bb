@@ -5,6 +5,7 @@ export DTC_FLAGS = "-@"
 
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
+inherit toradex-kernel-localversion
 
 SRCREV_machine = "0a15b6b8f63335a6ca666e355daaafc186354872"
 SRCREV_meta = "a783aeb31050d5b5b41afaf3b5ff7e4c5971e84f"
