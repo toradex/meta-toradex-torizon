@@ -3,7 +3,6 @@ require conf/distro/include/torizon-common.inc
 # Distro override for all torizon Distros
 DISTROOVERRIDES = "torizon:use-mainline-bsp"
 
-PACKAGECONFIG_append_pn-systemd = " resolved networkd seccomp"
 PACKAGECONFIG_remove_pn-networkmanager = "ifupdown dnsmasq"
 
 # This also disables the static packageconfig. runc needs to be dynamically
@@ -11,6 +10,7 @@ PACKAGECONFIG_remove_pn-networkmanager = "ifupdown dnsmasq"
 PACKAGECONFIG_remove_pn-${PREFERRED_PROVIDER_virtual/runc} = "static"
 PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/runc} = " seccomp"
 PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/docker} = " seccomp"
+PACKAGECONFIG_append_pn-systemd = " seccomp"
 
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
