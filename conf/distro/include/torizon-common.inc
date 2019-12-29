@@ -24,7 +24,4 @@ PREFERRED_PROVIDER_iasl-native = "acpica-native"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
-    /meta-lmp/meta-lmp-bsp/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
-    /meta-lmp/meta-lmp-bsp/recipes-connectivity/pi-bluetooth \
-    /meta-lmp/meta-lmp-bsp/recipes-kernel/linux-firmware \
 "
