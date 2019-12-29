@@ -5,6 +5,7 @@ SRC_URI_append = " \
     file://0001-seccomp-more-comprehensive-protection-against-libsec.patch \
 "
 
+PACKAGECONFIG_append = " resolved networkd"
 RRECOMMENDS_${PN}_remove = "os-release"
 
 do_install_append () {
