@@ -2,6 +2,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI_append = " \
     file://sysctl-panic.conf \
+    file://0001-seccomp-more-comprehensive-protection-against-libsec.patch \
 "
 
 RRECOMMENDS_${PN}_remove = "os-release"
