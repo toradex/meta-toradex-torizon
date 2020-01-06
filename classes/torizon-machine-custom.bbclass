@@ -19,8 +19,6 @@ MACHINE_EXTRA_RRECOMMENDS_remove_imx = "imx-alsa-plugins"
 ## No need to install u-boot, already a WKS dependency
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS_remove_imx = "u-boot-fslc"
 
-KERNEL_DEVICETREE_colibri-imx6ull = "imx6ull-colibri-eval-v3.dtb imx6ull-colibri-wifi-eval-v3.dtb"
-
 # qemuarm64
 PREFERRED_PROVIDER_virtual/bootloader_qemuarm64 = "u-boot-toradex"
 UBOOT_MACHINE_qemuarm64 = "qemu_arm64_defconfig"
