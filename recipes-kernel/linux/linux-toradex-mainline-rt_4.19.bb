@@ -1,8 +1,6 @@
 LINUX_VERSION ?= "4.19.59-rt24"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
-export DTC_FLAGS = "-@"
-
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 
