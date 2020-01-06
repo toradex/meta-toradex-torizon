@@ -42,3 +42,6 @@ EFI_PROVIDER_intel-corei7-64 = "grub-efi"
 WKS_FILE_intel-corei7-64_sota = "efidisk-sota.wks"
 IMAGE_BOOT_FILES_intel-corei7-64 = ""
 IMAGE_FSTYPES_remove_intel-corei7-64 = "live hddimg"
+
+# git is required by torizon to get hashes from all meta layers ()
+HOSTTOOLS += "git"
