@@ -1,0 +1,1 @@
+KERNEL=="gpiochip[0-9]*", GROUP="gpio", MODE="0664"
