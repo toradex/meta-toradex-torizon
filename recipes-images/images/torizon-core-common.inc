@@ -1,20 +1,42 @@
-IMAGE_FEATURES += "splash"
+LICENSE = "MIT"
+LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-IMAGE_INSTALL_append = " \
-    udev-toradex-rules \
-    networkmanager \
-    wireless-regdb-static \
-    linux-firmware-rtl8192cu \
-    kernel-modules \
-    set-hostname \
-    media-mountpoint \
+# Always create vmdk and vdi images for the compatible targets
+IMAGE_FSTYPES_append_intel-corei7-64 = " wic.vmdk wic.vdi"
+
+TEZI_IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}"
+
+inherit core-image extrausers
+
+EXTRA_USERS_PARAMS = " \
+    useradd -P torizon torizon; \
+    usermod -a -G sudo,users,plugdev torizon; \
 "
 
-IMAGE_INSTALL_append_colibri-imx6ull = " \
+set_user_group_append () {
+	eval flock -x ${IMAGE_ROOTFS}${sysconfdir} -c \"$PSEUDO passwd -e -R ${IMAGE_ROOTFS} torizon\" || true
+}
+
+IMAGE_FEATURES += "splash"
+
+# Base packages
+CORE_IMAGE_BASE_INSTALL_append = " \
+    kernel-modules \
+    linux-firmware-rtl8192cu \
+    media-mountpoint \
+    networkmanager \
+    set-hostname \
+    sudo \
+    torizon-conf \
+    udev-toradex-rules \
+    wireless-regdb-static \
+"
+
+CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
     linux-firmware-sd8887 \
     linux-firmware-sd8997 \
 "
 
-IMAGE_INSTALL_append_mx8 = " \
+CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
     kernel-module-imx-gpu-viv \
 "
