@@ -12,6 +12,7 @@ OSTREE_KERNEL_ARGS_append_colibri-imx7 = " console=ttymxc0,115200"
 OSTREE_KERNEL_ARGS_append_colibri-imx6 = " console=ttymxc0,115200"
 OSTREE_KERNEL_ARGS_append_apalis-imx6 = " console=ttymxc0,115200"
 OSTREE_KERNEL_ARGS_append_colibri_imx6ull = " console=ttymxc0,115200"
+OSTREE_KERNEL_ARGS_append_colibri-imx8x = " clk_ignore_unused"
 
 # Cross machines / BSPs
 ## Drop IMX BSP that is not needed
