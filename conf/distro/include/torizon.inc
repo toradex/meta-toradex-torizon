@@ -46,12 +46,6 @@ WKS_FILE_sota_remove = "efiimage-sota.wks"
 PREFERRED_VERSION_u-boot-toradex ?= "2019.07%"
 PREFERRED_VERSION_u-boot-toradex-fw-utils = "2019.07%"
 
-# Use i.MX Gstreamer Version (for PXP DMA-ENGINE Driver)
-PREFERRED_VERSION_gstreamer1.0_use-mainline-bsp_torizon = "1.14.imx"
-PREFERRED_VERSION_gstreamer1.0-plugins-base_use-mainline-bsp_torizon = "1.14.imx"
-PREFERRED_VERSION_gstreamer1.0-plugins-good_use-mainline-bsp_torizon = "1.14.imx"
-PREFERRED_VERSION_gstreamer1.0-plugins-bad_use-mainline-bsp_torizon = "1.14.imx"
-
 # TorizonCore does not use runtim epackage management, so version numbers going
 # backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
