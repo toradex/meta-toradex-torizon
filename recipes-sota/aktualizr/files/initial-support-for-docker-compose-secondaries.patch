@@ -15,9 +15,9 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
  src/aktualizr_primary/secondary_config.cc       |  7 ++
  src/aktualizr_primary/secondary_config.h        |  5 +-
  src/virtual_secondary/CMakeLists.txt            |  4 +-
- src/virtual_secondary/dockercomposesecondary.cc | 90 +++++++++++++++++++++++++
- src/virtual_secondary/dockercomposesecondary.h  | 37 ++++++++++
- 8 files changed, 164 insertions(+), 3 deletions(-)
+ src/virtual_secondary/dockercomposesecondary.cc | 91 +++++++++++++++++++++++++
+ src/virtual_secondary/dockercomposesecondary.h  | 38 +++++++++++
+ 8 files changed, 166 insertions(+), 3 deletions(-)
  create mode 100644 config/secondary/dockercomposesec.json
  create mode 100644 config/secondary/example-redis.yml
  create mode 100644 src/virtual_secondary/dockercomposesecondary.cc
@@ -55,7 +55,7 @@ index 0000000..d6dfa2e
 +    image: "redis:alpine"
 +    restart: always
 diff --git a/src/aktualizr_primary/secondary.cc b/src/aktualizr_primary/secondary.cc
-index 8ae3a47..4fa81cb 100644
+index d22ccc2..7805ad6 100644
 --- a/src/aktualizr_primary/secondary.cc
 +++ b/src/aktualizr_primary/secondary.cc
 @@ -29,6 +29,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
@@ -71,10 +71,10 @@ index 8ae3a47..4fa81cb 100644
      //     Add another secondary factory here
      //  }
 diff --git a/src/aktualizr_primary/secondary_config.cc b/src/aktualizr_primary/secondary_config.cc
-index a65d041..0a71551 100644
+index e923545..b74876b 100644
 --- a/src/aktualizr_primary/secondary_config.cc
 +++ b/src/aktualizr_primary/secondary_config.cc
-@@ -115,4 +115,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
+@@ -114,4 +114,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
    }
  }
  
@@ -87,7 +87,7 @@ index a65d041..0a71551 100644
 +
  }  // namespace Primary
 diff --git a/src/aktualizr_primary/secondary_config.h b/src/aktualizr_primary/secondary_config.h
-index b9d993e..bb17ca1 100644
+index 68f31ef..86e9312 100644
 --- a/src/aktualizr_primary/secondary_config.h
 +++ b/src/aktualizr_primary/secondary_config.h
 @@ -7,6 +7,7 @@
@@ -116,7 +116,7 @@ index b9d993e..bb17ca1 100644
    };
  
 diff --git a/src/virtual_secondary/CMakeLists.txt b/src/virtual_secondary/CMakeLists.txt
-index cc0f9c2..5166275 100644
+index 2017fe7..78e7163 100644
 --- a/src/virtual_secondary/CMakeLists.txt
 +++ b/src/virtual_secondary/CMakeLists.txt
 @@ -1,6 +1,6 @@
@@ -130,10 +130,10 @@ index cc0f9c2..5166275 100644
  
 diff --git a/src/virtual_secondary/dockercomposesecondary.cc b/src/virtual_secondary/dockercomposesecondary.cc
 new file mode 100644
-index 0000000..4787f47
+index 0000000..797c95b
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.cc
-@@ -0,0 +1,90 @@
+@@ -0,0 +1,91 @@
 +#include "dockercomposesecondary.h"
 +#include "utilities/types.h"
 +#include "logging/logging.h"
@@ -208,33 +208,35 @@ index 0000000..4787f47
 +  return rescode == 0;
 +}
 +
-+bool DockerComposeSecondary::getFirmwareInfo(std::string* target_name, size_t& target_len, std::string* sha256hash) {
++bool DockerComposeSecondary::getFirmwareInfo(Uptane::InstalledImageInfo& firmware_info) const {
 +  std::string content;
 +
 +  if (!boost::filesystem::exists(sconfig.target_name_path) || !boost::filesystem::exists(sconfig.firmware_path)) {
-+    *target_name = std::string("noimage");
++    firmware_info.name = std::string("noimage");
 +    content = "";
 +  } else {
-+    *target_name = Utils::readFile(sconfig.target_name_path.string());
++    firmware_info.name = Utils::readFile(sconfig.target_name_path.string());
 +    content = Utils::readFile(sconfig.firmware_path.string());
 +  }
-+  *sha256hash = boost::algorithm::to_lower_copy(boost::algorithm::hex(Crypto::sha256digest(content)));
-+  target_len = content.size();
++  firmware_info.hash = Uptane::ManifestIssuer::generateVersionHashStr(content);
++  firmware_info.len = content.size();
 +
 +  return true;
 +}
++
 +}  // namespace Primary
 diff --git a/src/virtual_secondary/dockercomposesecondary.h b/src/virtual_secondary/dockercomposesecondary.h
 new file mode 100644
-index 0000000..8deaf6c
+index 0000000..168c14b
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.h
-@@ -0,0 +1,37 @@
+@@ -0,0 +1,38 @@
 +#ifndef PRIMARY_DOCKERCOMPOSESECONDARY_H_
 +#define PRIMARY_DOCKERCOMPOSESECONDARY_H_
 +
 +#include <string>
 +#include "managedsecondary.h"
++#include "utilities/types.h"
 +
 +namespace Primary {
 +
@@ -261,7 +263,7 @@ index 0000000..8deaf6c
 +
 + private:
 +  bool storeFirmware(const std::string& target_name, const std::string& content) override;
-+  bool getFirmwareInfo(std::string* target_name, size_t& target_len, std::string* sha256hash) override;
++  bool getFirmwareInfo(Uptane::InstalledImageInfo& firmware_info) const override;
 +};
 +
 +}  // namespace Primary
