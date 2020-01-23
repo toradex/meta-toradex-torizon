@@ -1,7 +1,7 @@
 require conf/distro/include/torizon-common.inc
 
 # Distro override for all torizon Distros
-DISTROOVERRIDES = "torizon:use-mainline-bsp"
+DISTROOVERRIDES .= ":torizon:use-mainline-bsp"
 
 PACKAGECONFIG_remove_pn-networkmanager = "ifupdown dnsmasq"
 
