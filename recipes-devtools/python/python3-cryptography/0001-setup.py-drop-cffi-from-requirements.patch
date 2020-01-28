@@ -1,0 +1,46 @@
+From c3041cbeb6fce32af4e5c7a7b0139c4f09295343 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 28 Jan 2020 16:53:09 +0100
+Subject: [PATCH] setup.py: drop cffi from requirements
+
+Cffi is a build time dependency, it does not have to be in
+requirements.
+
+Upstream-Status: Inappropriate [OE specific configuration]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ pyproject.toml | 2 --
+ setup.py       | 3 +--
+ 2 files changed, 1 insertion(+), 4 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index e4d893f..8fac02e 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -4,7 +4,5 @@ requires = [
+     # and may be stricter than the version required in `setup.py`
+     "setuptools>=40.6.0",
+     "wheel",
+-    # Must be kept in sync with the `setup_requirements` in `setup.py`
+-    "cffi>=1.8,!=1.11.3; platform_python_implementation != 'PyPy'",
+ ]
+ build-backend = "setuptools.build_meta"
+diff --git a/setup.py b/setup.py
+index a5bbfa1..e983252 100644
+--- a/setup.py
++++ b/setup.py
+@@ -38,9 +38,8 @@ about = {}
+ with open(os.path.join(src_dir, "cryptography", "__about__.py")) as f:
+     exec(f.read(), about)
+ 
+-
+ # `setup_requirements` must be kept in sync with `pyproject.toml`
+-setup_requirements = ["cffi>=1.8,!=1.11.3"]
++setup_requirements = []
+ 
+ if platform.python_implementation() == "PyPy":
+     if sys.pypy_version_info < (5, 4):
+-- 
+2.7.4
+
