@@ -1,0 +1,59 @@
+From 3f52141abec1c51e57e352d21e4468d526c9c401 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 28 Jan 2020 16:57:19 +0100
+Subject: [PATCH] setup.py: drop cffi from requirements
+
+Cffi is a build time dependency, it does not have to be in
+requirements.
+
+Upstream-Status: Inappropriate [OE specific configuration]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ pyproject.toml | 1 -
+ setup.py       | 3 ---
+ 2 files changed, 4 deletions(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index f821a2e..3d810b6 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -3,7 +3,6 @@
+ requires = [
+     "setuptools>=40.8.0",
+     "wheel",
+-    "cffi>=1.1; python_implementation != 'PyPy'",
+ ]
+ # Point to the setuptools' PEP517 build backend explicitly to
+ # disable Pip's fallback guessing
+diff --git a/setup.py b/setup.py
+index e5ba3ed..2061356 100644
+--- a/setup.py
++++ b/setup.py
+@@ -9,7 +9,6 @@ from setuptools.command.install import install
+ from setuptools.command.test import test
+ 
+ 
+-CFFI_DEPENDENCY = "cffi>=1.1"
+ SIX_DEPENDENCY = "six>=1.4.1"
+ 
+ 
+@@ -142,7 +141,6 @@ def keywords_with_side_effects(argv):
+         }
+     else:
+         return {
+-            "setup_requires": [CFFI_DEPENDENCY],
+             "cmdclass": {
+                 "test": PyTest,
+             },
+@@ -202,7 +200,6 @@ setup(
+ 
+     python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
+     install_requires=[
+-        CFFI_DEPENDENCY,
+         SIX_DEPENDENCY,
+     ],
+     extras_require={
+-- 
+2.7.4
+

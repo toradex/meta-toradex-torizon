@@ -1,0 +1,30 @@
+From 607b70c874e1dc1bb78dc81669ae4eb4766f40dc Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 28 Jan 2020 10:44:00 +0100
+Subject: [PATCH] setup.py: drop cffi from requirements
+
+Cffi is a build time dependency, it does not have to be in
+requirements.
+
+Upstream-Status: Inappropriate [OE specific configuration]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ setup.py | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/setup.py b/setup.py
+index 85db16d..c941b37 100644
+--- a/setup.py
++++ b/setup.py
+@@ -49,7 +49,6 @@ if platform.python_implementation() == "PyPy":
+             "upgrade PyPy to use this library."
+         )
+ else:
+-    requirements.append("cffi>=1.4.1")
+     setup_requirements.append("cffi>=1.4.1")
+ 
+ 
+-- 
+2.7.4
+
