@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-2019.07:"
 
-SRCREV = "03cac0835ca0fb04f69501e9664b6c3f5d559eb4"
+SRCREV = "694e2136eefc2d110f44b26218c03e44a1e88235"
 SRCBRANCH = "toradex_2019.07-next"
 
 SRC_URI_append += " \
