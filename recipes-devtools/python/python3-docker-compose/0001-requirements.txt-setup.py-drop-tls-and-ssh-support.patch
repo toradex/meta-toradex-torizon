@@ -1,0 +1,55 @@
+From 236060540cd69c0539a4a0fe7940de67977732d8 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 4 Feb 2020 14:03:15 +0100
+Subject: [PATCH] requirements.txt/setup.py: drop tls and ssh support
+
+Upstream-Status: Inappropriate [OE specific configuration]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ docker_compose.egg-info/requires.txt | 2 +-
+ requirements.txt                     | 1 -
+ setup.py                             | 2 +-
+ 3 files changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/docker_compose.egg-info/requires.txt b/docker_compose.egg-info/requires.txt
+index d6ca0a5..2c9b4f8 100644
+--- a/docker_compose.egg-info/requires.txt
++++ b/docker_compose.egg-info/requires.txt
+@@ -4,7 +4,7 @@ PyYAML<4.3,>=3.10
+ requests!=2.11.0,!=2.12.2,!=2.18.0,<2.21,>=2.6.1
+ texttable<0.10,>=0.9.0
+ websocket-client<1.0,>=0.32.0
+-docker[ssh]<4.0,>=3.7.0
++docker<4.0,>=3.7.0
+ dockerpty<0.5,>=0.4.1
+ six<2,>=1.3.0
+ jsonschema<3,>=2.5.1
+diff --git a/requirements.txt b/requirements.txt
+index a20680d..e9e0962 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -12,7 +12,6 @@ functools32==3.2.3.post2; python_version < '3.2'
+ idna==2.5
+ ipaddress==1.0.18
+ jsonschema==3.0.1
+-paramiko==2.4.2
+ pypiwin32==219; sys_platform == 'win32' and python_version < '3.6'
+ pypiwin32==223; sys_platform == 'win32' and python_version >= '3.6'
+ PySocks==1.6.7
+diff --git a/setup.py b/setup.py
+index 21a25be..0f82510 100644
+--- a/setup.py
++++ b/setup.py
+@@ -36,7 +36,7 @@ install_requires = [
+     'requests >= 2.6.1, != 2.11.0, != 2.12.2, != 2.18.0, < 2.23',
+     'texttable >= 0.9.0, < 0.10',
+     'websocket-client >= 0.32.0, < 1.0',
+-    'docker[ssh] >= 3.7.0, < 4.0',
++    'docker >= 3.7.0, < 4.0',
+     'dockerpty >= 0.4.1, < 0.5',
+     'six >= 1.3.0, < 2',
+     'jsonschema >= 2.5.1, < 4',
+-- 
+2.7.4
+
