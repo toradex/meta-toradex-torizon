@@ -24,5 +24,4 @@ PREFERRED_PROVIDER_iasl-native = "acpica-native"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
-    /meta-lmp/meta-lmp-base/recipes-security/optee \
 "
