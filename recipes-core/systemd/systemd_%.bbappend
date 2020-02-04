@@ -3,6 +3,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 SRC_URI_append = " \
     file://sysctl-panic.conf \
     file://0001-seccomp-more-comprehensive-protection-against-libsec.patch \
+    file://0001-seccomp-add-new-Linux-5.3-syscalls-to-syscall-filter.patch \
+    file://0001-seccomp-add-all-time64-syscalls.patch \
 "
 
 PACKAGECONFIG_append = " resolved networkd"
