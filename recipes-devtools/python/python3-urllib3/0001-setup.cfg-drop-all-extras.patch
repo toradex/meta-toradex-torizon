@@ -1,0 +1,28 @@
+From e6b8956541a49e2f295f23185b4b59324ce041f4 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 4 Feb 2020 12:43:17 +0100
+Subject: [PATCH] setup.cfg: drop all extras
+
+Upstream-Status: Inappropriate [OE specific configuration]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ setup.cfg | 2 --
+ 1 file changed, 2 deletions(-)
+
+diff --git a/setup.cfg b/setup.cfg
+index c23f2de..5378ffe 100755
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -8,8 +8,6 @@ universal = 1
+ [metadata]
+ license_file = LICENSE.txt
+ provides-extra = 
+-	secure
+-	socks
+ requires-dist = 
+ 	pyOpenSSL>=0.14,<18.0.0; python_version=="2.6" and extra == 'secure'
+ 	pyOpenSSL>=0.14; python_version=="2.7" and extra == 'secure'
+-- 
+2.7.4
+
