@@ -1,7 +1,9 @@
 inherit image_type_tezi
 
 TEZI_ROOT_LABEL = "otaroot"
-TEZI_ROOT_SUFFIX ??= "ota.tar.xz"
+TEZI_ROOT_SUFFIX = "ota.tar.zst"
+TEZI_BOOT_SUFFIX = "bootfs.tar.zst"
+TEZI_CONFIG_FORMAT = "3"
 
 SUMMARY_append_torizon-rt = " (PREEMPT_RT)"
 DESCRIPTION_append_torizon-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
