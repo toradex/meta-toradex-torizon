@@ -1,4 +1,4 @@
-inherit image_type_tezi
+inherit image_type_tezi module-base
 
 TEZI_ROOT_LABEL = "otaroot"
 TEZI_ROOT_SUFFIX ??= "ota.tar.xz"
@@ -57,6 +57,20 @@ def get_layer_revision_information(d):
         e = sys.exc_info()[0]
         bb.warn("Failed to get layers information. Exception: {}".format(e))
     return '\n'.join(res)
+
+IMAGE_CMD_ostree_append() {
+    # Follow the new standard location recommendation from OSTree
+    rm -rf boot/*
+    cp ${DEPLOY_DIR_IMAGE}/${OSTREE_KERNEL} usr/lib/modules/${KERNEL_VERSION}/vmlinuz
+    cp ${DEPLOY_DIR_IMAGE}/${INITRAMFS_IMAGE}-${MACHINE}.${INITRAMFS_FSTYPES} usr/lib/modules/${KERNEL_VERSION}/initramfs.img
+
+    # Follow the Fedora ARM location
+    mkdir -p usr/lib/modules/${KERNEL_VERSION}/dtb/
+    for DTS_FILE in ${KERNEL_DEVICETREE}; do
+        DTS_FILE_BASENAME=$(basename ${DTS_FILE})
+        cp ${DEPLOY_DIR_IMAGE}/${DTS_FILE_BASENAME} usr/lib/modules/${KERNEL_VERSION}/dtb/${DTS_FILE_BASENAME}
+    done
+}
 
 # Add layers revision information to ostree body
 OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
