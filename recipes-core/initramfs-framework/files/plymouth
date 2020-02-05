@@ -1,0 +1,33 @@
+#!/bin/sh
+# Copyright (C) 2020 Toradex
+# Licensed on MIT
+
+#
+# Starts plymouth early in initramfs
+# Two kernel command-line parameters are supported:
+# - nosplash (disables plymouth support)
+# - plymouth.debug (runs plymouth daemon in debug mode)
+#
+
+plymouth_enabled() {
+	if [ ! -e /usr/sbin/plymouthd ]; then
+		debug "/usr/sbin/plymouthd doesn't exist"
+		return 1
+	fi
+
+	return 0
+}
+
+plymouth_run() {
+	if [ "$bootparam_nosplash" = "true" ]; then
+		return 0
+	fi
+	if [ "$bootparam_plymouth_debug" = "true" ]; then
+		PLYMOUTH_ARGS="--debug"
+	fi
+	PLYMOUTH_ARGS="${PLYMOUTH_ARGS} --mode=boot --pid-file=/run/plymouth/pid --attach-to-session"
+	mkdir /dev/pts
+	mount -t devpts devpts /dev/pts
+	/usr/sbin/plymouthd ${PLYMOUTH_ARGS}
+	/usr/bin/plymouth show-splash
+}
