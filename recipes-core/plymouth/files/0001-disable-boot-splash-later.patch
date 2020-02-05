@@ -1,0 +1,31 @@
+From f06f6a832b2c110b8c076b9442f0b52acaa55270 Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Tue, 4 Feb 2020 16:23:46 +0100
+Subject: [PATCH] disable boot splash later
+
+Currently we have one big target (multi-user.target) for lots of
+services. This does not allow to order the plymouth-quit.service to get
+started at the very end. Work around by explicitly order after
+docker.service.
+
+Upstream-Status: Inappropriate [embedded specific]
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ systemd-units/plymouth-quit.service.in | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/systemd-units/plymouth-quit.service.in b/systemd-units/plymouth-quit.service.in
+index cf9901e..e5d3b6d 100644
+--- a/systemd-units/plymouth-quit.service.in
++++ b/systemd-units/plymouth-quit.service.in
+@@ -1,6 +1,6 @@
+ [Unit]
+ Description=Terminate Plymouth Boot Screen
+-After=rc-local.service plymouth-start.service systemd-user-sessions.service
++After=rc-local.service plymouth-start.service systemd-user-sessions.service docker.service
+ 
+ [Service]
+ ExecStart=-@PLYMOUTH_CLIENT_DIR@/plymouth quit
+-- 
+2.25.0
+
