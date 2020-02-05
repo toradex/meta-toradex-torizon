@@ -19,6 +19,8 @@ set_user_group_append () {
 
 IMAGE_FEATURES += "splash"
 
+SPLASH = "plymouth"
+
 # Base packages
 CORE_IMAGE_BASE_INSTALL_append = " \
     kernel-modules \
