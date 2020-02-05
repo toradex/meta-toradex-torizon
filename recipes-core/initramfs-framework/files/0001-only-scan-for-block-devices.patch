@@ -2,11 +2,12 @@ diff --git a/udev b/udev
 index 87551ff4a9..6eb8d53854 100644
 --- a/udev
 +++ b/udev
-@@ -42,6 +42,6 @@ udev_run() {
+@@ -42,6 +42,7 @@ udev_run() {
  	mkdir -p /var/run
  
  	$_UDEV_DAEMON --daemon
 -	udevadm trigger --action=add
-+	udevadm trigger --action=add --subsystem-match=block
++	udevadm trigger --action=add --subsystem-match=block \
++			--subsystem-match=graphics --subsystem-match=drm --subsystem-match=tty
  	udevadm settle
  }
