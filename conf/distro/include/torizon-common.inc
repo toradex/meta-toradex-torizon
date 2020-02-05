@@ -23,5 +23,6 @@ PREFERRED_PROVIDER_iasl-native = "acpica-native"
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
+    /meta-freescale/recipes-graphics/cairo \
     /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
 "
