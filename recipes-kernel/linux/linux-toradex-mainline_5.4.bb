@@ -6,7 +6,7 @@ require recipes-kernel/linux/linux-yocto.inc
 inherit toradex-kernel-localversion
 
 SRCREV_machine = "4d9a701d8bda68d6dabcb3e05e52fbf4d3ea54bc"
-SRCREV_meta = "a783aeb31050d5b5b41afaf3b5ff7e4c5971e84f"
+SRCREV_meta = "bc3a6a8b0bd0cd5e08cbf655227327f222fccf90"
 
 KBRANCH = "toradex_5.4.y"
 KMETABRANCH = "toradex_5.4.y"
