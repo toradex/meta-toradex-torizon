@@ -1,11 +1,11 @@
-LINUX_VERSION ?= "5.4.2"
+LINUX_VERSION ?= "5.4.18"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 inherit toradex-kernel-localversion
 
-SRCREV_machine = "0a15b6b8f63335a6ca666e355daaafc186354872"
+SRCREV_machine = "4d9a701d8bda68d6dabcb3e05e52fbf4d3ea54bc"
 SRCREV_meta = "a783aeb31050d5b5b41afaf3b5ff7e4c5971e84f"
 
 KBRANCH = "toradex_5.4.y"
@@ -20,5 +20,6 @@ KMETAPROTOCOL="https"
 
 SRC_URI += " \
     git://${KMETAREPOSITORY};protocol=${KMETAPROTOCOL};type=kmeta;name=meta;branch=${KMETABRANCH};destsuffix=${KMETA} \
+    file://0001-Revert-ARM-dts-imx7-colibri-aster-enable-Atmel-multi.patch \
 "
 
