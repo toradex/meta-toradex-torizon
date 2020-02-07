@@ -36,7 +36,7 @@ SOTA_CLIENT_PROV ?= "aktualizr-device-prov"
 SOTA_DEPLOY_CREDENTIALS ?= "0"
 
 DISTRO_FEATURES_append = " virtualization"
-DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc pulseaudio wayland x11 ptest multiarch opengl vulkan"
+DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x11 ptest multiarch opengl vulkan"
 
 # General
 WKS_FILE_DEPENDS_BOOTLOADERS_remove = "syslinux systemd-boot"
