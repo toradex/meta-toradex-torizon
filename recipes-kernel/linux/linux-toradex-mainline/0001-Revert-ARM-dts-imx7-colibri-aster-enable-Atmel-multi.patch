@@ -1,0 +1,31 @@
+From 0ef2fcf7ba8df9a7ae3a1e6a5068c488e01361bc Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Fri, 7 Feb 2020 12:05:36 +0100
+Subject: [PATCH] Revert "ARM: dts: imx7-colibri-aster: enable Atmel
+ multi-touch"
+
+This reverts commit fc30cd84958111b64fb1e6f18b8b0983ca1f4b12.
+
+Upstream-Status: Inappropriate [oe specific]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ arch/arm/boot/dts/imx7-colibri-aster.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm/boot/dts/imx7-colibri-aster.dtsi b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
+index cba9c4d..1d03cf5 100644
+--- a/arch/arm/boot/dts/imx7-colibri-aster.dtsi
++++ b/arch/arm/boot/dts/imx7-colibri-aster.dtsi
+@@ -139,7 +139,7 @@
+ 		interrupt-parent = <&gpio2>;
+ 		interrupts = <15 IRQ_TYPE_EDGE_FALLING>;
+ 		reset-gpios = <&gpio2 28 GPIO_ACTIVE_HIGH>;
+-		status = "okay";
++		status = "disabled";
+ 	};
+ 
+ 	/* M41T0M6 real time clock on carrier board */
+-- 
+2.7.4
+
