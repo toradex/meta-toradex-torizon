@@ -20,7 +20,7 @@ IMAGE_FSTYPES_remove = "wic wic.gz wic.bmap ext4 ext4.gz teziimg-distro"
 # avoid circular dependencies
 EXTRA_IMAGEDEPENDS = ""
 
-inherit core-image
+inherit core-image nopackages
 
 IMAGE_ROOTFS_SIZE = "8192"
 
