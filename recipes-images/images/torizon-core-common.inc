@@ -30,6 +30,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     set-hostname \
     sudo \
     torizon-conf \
+    tzdata \
     udev-toradex-rules \
     wireless-regdb-static \
 "
