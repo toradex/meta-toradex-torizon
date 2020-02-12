@@ -1,0 +1,6 @@
+[Manager]
+# Change CtrlAltDelBurstAction from default of `reboot-force` to `none`.
+# Disable the immediate reboot which occurs when Ctrl+Alt+Del is pressed more
+# than 7 times per 2s
+# https://www.freedesktop.org/software/systemd/man/systemd.html#SIGINT
+CtrlAltDelBurstAction=none
