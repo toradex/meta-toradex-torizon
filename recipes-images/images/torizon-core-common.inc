@@ -17,6 +17,8 @@ set_user_group_append () {
 	eval flock -x ${IMAGE_ROOTFS}${sysconfdir} -c \"$PSEUDO passwd -e -R ${IMAGE_ROOTFS} torizon\" || true
 }
 
+do_rootfs[cleandirs] += "${IMAGE_ROOTFS}"
+
 IMAGE_FEATURES += "splash"
 
 SPLASH = "plymouth"
