@@ -118,6 +118,7 @@ if [ -z "${SDKMACHINE}" ]; then
 fi
 
 MANIFESTS="${OEROOT}"/.repo/manifests
+SCRIPTS="${OEROOT}"/layers/meta-toradex-torizon/scripts
 
 # We can be called with only 1 parameter max (build folder)
 BUILDDIR=${1:-build-$DISTRO}
@@ -154,14 +155,13 @@ if [ -e conf/checksum -a "${MACHINE}" = "$oldmach" ]; then
 fi
 
 # Evaluate new checksum and regenerate the conf files
-sha512sum "${MANIFESTS}"/setup-environment-internal 2>&1 > conf/checksum
+sha512sum "${SCRIPTS}"/setup-environment-internal 2>&1 > conf/checksum
 
 if [ ! -f "conf/local.conf" ]; then
-    cp "${MANIFESTS}"/conf/local.conf conf/local.conf
+    cp "${SCRIPTS}"/../conf/template/local.conf conf/local.conf
 fi
-ln -sf "${MANIFESTS}"/conf/bblayers.conf conf/bblayers.conf
+ln -sf "${SCRIPTS}"/../conf/template/bblayers.conf conf/bblayers.conf
 ln -sf "${MANIFESTS}"/README.md README.md
-
 ln -sf "${MANIFESTS}" "${OEROOT}"/layers/
 
 DISTRO_DIRNAME=$(echo "${DISTRO}" | sed 's#[.-]#_#g')
