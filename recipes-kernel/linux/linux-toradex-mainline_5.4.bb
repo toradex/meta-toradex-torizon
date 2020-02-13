@@ -3,7 +3,6 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
-inherit toradex-kernel-localversion
 
 SRCREV_machine = "4d9a701d8bda68d6dabcb3e05e52fbf4d3ea54bc"
 SRCREV_meta = "bc3a6a8b0bd0cd5e08cbf655227327f222fccf90"
