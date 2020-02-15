@@ -4,6 +4,8 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = "\
     file://10-toradex-net-rename.rules \
     file://90-toradex-gpio.rules \
+    file://91-toradex-i2cdev.rules \
+    file://92-toradex-spidev.rules \
     file://99-toradex.rules \
     file://toradex-net-rename.sh \
 "
@@ -12,6 +14,8 @@ do_install () {
     install -d ${D}${sysconfdir}/udev/rules.d
     install -m 0644 ${WORKDIR}/10-toradex-net-rename.rules ${D}${sysconfdir}/udev/rules.d/
     install -m 0644 ${WORKDIR}/90-toradex-gpio.rules ${D}${sysconfdir}/udev/rules.d/
+    install -m 0644 ${WORKDIR}/91-toradex-i2cdev.rules ${D}${sysconfdir}/udev/rules.d/
+    install -m 0644 ${WORKDIR}/92-toradex-spidev.rules ${D}${sysconfdir}/udev/rules.d/
     install -m 0644 ${WORKDIR}/99-toradex.rules ${D}${sysconfdir}/udev/rules.d/
 
     install -d ${D}${bindir}
