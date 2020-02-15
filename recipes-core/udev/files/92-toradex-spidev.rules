@@ -1,0 +1,1 @@
+KERNEL=="spidev[0-9]*.[0-9]*", GROUP="spidev", MODE="0664"
