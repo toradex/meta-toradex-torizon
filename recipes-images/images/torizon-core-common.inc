@@ -35,6 +35,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     tzdata \
     udev-toradex-rules \
     wireless-regdb-static \
+    ostree-customize-plymouth \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
