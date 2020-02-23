@@ -17,7 +17,7 @@ LICENSE = "MIT"
 IMAGE_FSTYPES = "cpio.gz"
 IMAGE_FSTYPES_remove = "wic wic.gz wic.bmap ext4 ext4.gz teziimg-distro"
 
-IMAGE_CLASSES_remove = "image_repo_manifest"
+IMAGE_CLASSES_remove = "image_type_torizon image_types_ostree image_types_ota image_repo_manifest license_image"
 
 # avoid circular dependencies
 EXTRA_IMAGEDEPENDS = ""
