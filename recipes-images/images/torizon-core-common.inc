@@ -5,11 +5,6 @@ TEZI_IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}"
 
 inherit core-image extrausers
 
-EXTRA_USERS_PARAMS = " \
-    useradd -P torizon torizon; \
-    usermod -a -G sudo,users,plugdev torizon; \
-"
-
 set_user_group_append () {
 	eval flock -x ${IMAGE_ROOTFS}${sysconfdir} -c \"$PSEUDO passwd -e -R ${IMAGE_ROOTFS} torizon\" || true
 }
@@ -29,6 +24,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     set-hostname \
     sudo \
     torizon-conf \
+    torizon-users \
     tzdata \
     udev-toradex-rules \
     wireless-regdb-static \
