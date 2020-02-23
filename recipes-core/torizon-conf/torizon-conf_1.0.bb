@@ -6,6 +6,9 @@ SRC_URI = " \
     file://path-sbin.sh \
 "
 
+EXCLUDE_FROM_WORLD = "1"
+INHIBIT_DEFAULT_DEPS = "1"
+
 do_install () {
     install -d ${D}${sysconfdir}/profile.d
     install -m 0755 ${WORKDIR}/path-sbin.sh ${D}${sysconfdir}/profile.d/
