@@ -1,6 +1,6 @@
-From b3defa13d889b15134a068f2c463d45f98e56aa5 Mon Sep 17 00:00:00 2001
+From 8a749de9d0a33871a472c4939068c1d7b014021f Mon Sep 17 00:00:00 2001
 From: Ming Liu <ming.liu@toradex.com>
-Date: Wed, 21 Aug 2019 21:20:52 +0800
+Date: Sun, 23 Feb 2020 15:12:14 +0100
 Subject: [PATCH] Initial support for docker-compose secondaries
 
 Upstream-Status: Inappropriate [Torizon specific]
@@ -9,15 +9,15 @@ Signed-off-by: Phil Wise <phil@phil-wise.com>
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- config/secondary/dockercomposesec.json          | 14 ++++
- config/secondary/example-redis.yml              |  5 ++
- src/aktualizr_primary/secondary.cc              |  5 ++
- src/aktualizr_primary/secondary_config.cc       |  7 ++
- src/aktualizr_primary/secondary_config.h        |  5 +-
- src/virtual_secondary/CMakeLists.txt            |  4 +-
- src/virtual_secondary/dockercomposesecondary.cc | 91 +++++++++++++++++++++++++
- src/virtual_secondary/dockercomposesecondary.h  | 38 +++++++++++
- 8 files changed, 166 insertions(+), 3 deletions(-)
+ config/secondary/dockercomposesec.json        |  14 +++
+ config/secondary/example-redis.yml            |   5 +
+ src/aktualizr_primary/secondary.cc            |   5 +
+ src/aktualizr_primary/secondary_config.cc     |   7 ++
+ src/aktualizr_primary/secondary_config.h      |   5 +-
+ src/virtual_secondary/CMakeLists.txt          |   4 +-
+ .../dockercomposesecondary.cc                 | 103 ++++++++++++++++++
+ .../dockercomposesecondary.h                  |  42 +++++++
+ 8 files changed, 182 insertions(+), 3 deletions(-)
  create mode 100644 config/secondary/dockercomposesec.json
  create mode 100644 config/secondary/example-redis.yml
  create mode 100644 src/virtual_secondary/dockercomposesecondary.cc
@@ -25,7 +25,7 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
 
 diff --git a/config/secondary/dockercomposesec.json b/config/secondary/dockercomposesec.json
 new file mode 100644
-index 0000000..93d81a6
+index 00000000..93d81a69
 --- /dev/null
 +++ b/config/secondary/dockercomposesec.json
 @@ -0,0 +1,14 @@
@@ -45,7 +45,7 @@ index 0000000..93d81a6
 +}
 diff --git a/config/secondary/example-redis.yml b/config/secondary/example-redis.yml
 new file mode 100644
-index 0000000..d6dfa2e
+index 00000000..d6dfa2e6
 --- /dev/null
 +++ b/config/secondary/example-redis.yml
 @@ -0,0 +1,5 @@
@@ -55,15 +55,15 @@ index 0000000..d6dfa2e
 +    image: "redis:alpine"
 +    restart: always
 diff --git a/src/aktualizr_primary/secondary.cc b/src/aktualizr_primary/secondary.cc
-index d22ccc2..7805ad6 100644
+index a9b29bc8..2ecebe92 100644
 --- a/src/aktualizr_primary/secondary.cc
 +++ b/src/aktualizr_primary/secondary.cc
-@@ -29,6 +29,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
+@@ -31,6 +31,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
         auto virtual_sec_cgf = dynamic_cast<const VirtualSecondaryConfig&>(config);
         return Secondaries({std::make_shared<VirtualSecondary>(virtual_sec_cgf)});
       }},
 +    {DockerComposeSecondaryConfig::Type,
-+     [](const SecondaryConfig& config) {
++     [](const SecondaryConfig& config, Aktualizr& /* unused */) {
 +       auto docker_compose_sec_cgf = dynamic_cast<const DockerComposeSecondaryConfig&>(config);
 +       return Secondaries({std::make_shared<DockerComposeSecondary>(docker_compose_sec_cgf)});
 +     }},
@@ -71,7 +71,7 @@ index d22ccc2..7805ad6 100644
      //     Add another secondary factory here
      //  }
 diff --git a/src/aktualizr_primary/secondary_config.cc b/src/aktualizr_primary/secondary_config.cc
-index e923545..b74876b 100644
+index 09c67138..a8f24ee3 100644
 --- a/src/aktualizr_primary/secondary_config.cc
 +++ b/src/aktualizr_primary/secondary_config.cc
 @@ -114,4 +114,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
@@ -87,7 +87,7 @@ index e923545..b74876b 100644
 +
  }  // namespace Primary
 diff --git a/src/aktualizr_primary/secondary_config.h b/src/aktualizr_primary/secondary_config.h
-index 68f31ef..86e9312 100644
+index 68f31ef4..86e9312a 100644
 --- a/src/aktualizr_primary/secondary_config.h
 +++ b/src/aktualizr_primary/secondary_config.h
 @@ -7,6 +7,7 @@
@@ -116,7 +116,7 @@ index 68f31ef..86e9312 100644
    };
  
 diff --git a/src/virtual_secondary/CMakeLists.txt b/src/virtual_secondary/CMakeLists.txt
-index 2017fe7..78e7163 100644
+index 2017fe75..78e7163e 100644
 --- a/src/virtual_secondary/CMakeLists.txt
 +++ b/src/virtual_secondary/CMakeLists.txt
 @@ -1,6 +1,6 @@
@@ -130,10 +130,10 @@ index 2017fe7..78e7163 100644
  
 diff --git a/src/virtual_secondary/dockercomposesecondary.cc b/src/virtual_secondary/dockercomposesecondary.cc
 new file mode 100644
-index 0000000..797c95b
+index 00000000..612352b1
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.cc
-@@ -0,0 +1,91 @@
+@@ -0,0 +1,103 @@
 +#include "dockercomposesecondary.h"
 +#include "utilities/types.h"
 +#include "logging/logging.h"
@@ -149,6 +149,7 @@ index 0000000..797c95b
 +
 +DockerComposeSecondaryConfig::DockerComposeSecondaryConfig(const Json::Value& json_config) : ManagedSecondaryConfig(Type) {
 +  partial_verifying = json_config["partial_verifying"].asBool();
++  ecu_serial = json_config["ecu_serial"].asString();
 +  ecu_hardware_id = json_config["ecu_hardware_id"].asString();
 +  full_client_dir = json_config["full_client_dir"].asString();
 +  ecu_private_key = json_config["ecu_private_key"].asString();
@@ -158,20 +159,27 @@ index 0000000..797c95b
 +  metadata_path = json_config["metadata_path"].asString();
 +}
 +
-+DockerComposeSecondaryConfig DockerComposeSecondaryConfig::create_from_file(const boost::filesystem::path& file_full_path) {
++std::vector<DockerComposeSecondaryConfig> DockerComposeSecondaryConfig::create_from_file(
++    const boost::filesystem::path& file_full_path) {
 +  Json::Value json_config;
-+  Json::Reader reader;
 +  std::ifstream json_file(file_full_path.string());
-+
-+  reader.parse(json_file, json_config);
++  Json::parseFromStream(Json::CharReaderBuilder(), json_file, &json_config, nullptr);
 +  json_file.close();
-+  return DockerComposeSecondaryConfig(json_config[Type][0]);
++
++  std::vector<DockerComposeSecondaryConfig> sec_configs;
++  sec_configs.reserve(json_config[Type].size());
++
++  for (const auto& item : json_config[Type]) {
++    sec_configs.emplace_back(DockerComposeSecondaryConfig(item));
++  }
++  return sec_configs;
 +}
 +
 +void DockerComposeSecondaryConfig::dump(const boost::filesystem::path& file_full_path) const {
 +  Json::Value json_config;
 +
 +  json_config["partial_verifying"] = partial_verifying;
++  json_config["ecu_serial"] = ecu_serial;
 +  json_config["ecu_hardware_id"] = ecu_hardware_id;
 +  json_config["full_client_dir"] = full_client_dir.string();
 +  json_config["ecu_private_key"] = ecu_private_key;
@@ -183,14 +191,18 @@ index 0000000..797c95b
 +  Json::Value root;
 +  root[Type].append(json_config);
 +
-+  Json::StyledStreamWriter json_writer;
++  Json::StreamWriterBuilder json_bwriter;
++  json_bwriter["indentation"] = "\t";
++  std::unique_ptr<Json::StreamWriter> const json_writer(json_bwriter.newStreamWriter());
++
 +  boost::filesystem::create_directories(file_full_path.parent_path());
 +  std::ofstream json_file(file_full_path.string());
-+  json_writer.write(json_file, root);
++  json_writer->write(root, &json_file);
 +  json_file.close();
 +}
 +
-+DockerComposeSecondary::DockerComposeSecondary(Primary::DockerComposeSecondaryConfig sconfig_in) : ManagedSecondary(std::move(sconfig_in)) {}
++DockerComposeSecondary::DockerComposeSecondary(Primary::DockerComposeSecondaryConfig sconfig_in)
++    : ManagedSecondary(std::move(sconfig_in)) {}
 +
 +bool DockerComposeSecondary::storeFirmware(const std::string& target_name, const std::string& content) {
 +  if (fiu_fail((std::string("secondary_install_") + getSerial().ToString()).c_str()) != 0) {
@@ -227,10 +239,10 @@ index 0000000..797c95b
 +}  // namespace Primary
 diff --git a/src/virtual_secondary/dockercomposesecondary.h b/src/virtual_secondary/dockercomposesecondary.h
 new file mode 100644
-index 0000000..168c14b
+index 00000000..9452a684
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.h
-@@ -0,0 +1,38 @@
+@@ -0,0 +1,42 @@
 +#ifndef PRIMARY_DOCKERCOMPOSESECONDARY_H_
 +#define PRIMARY_DOCKERCOMPOSESECONDARY_H_
 +
@@ -245,7 +257,7 @@ index 0000000..168c14b
 +  DockerComposeSecondaryConfig() : ManagedSecondaryConfig(Type) {}
 +  DockerComposeSecondaryConfig(const Json::Value& json_config);
 +
-+  static DockerComposeSecondaryConfig create_from_file(const boost::filesystem::path& file_full_path);
++  static std::vector<DockerComposeSecondaryConfig> create_from_file(const boost::filesystem::path& file_full_path);
 +  void dump(const boost::filesystem::path& file_full_path) const;
 +
 + public:
@@ -261,6 +273,10 @@ index 0000000..168c14b
 +  explicit DockerComposeSecondary(Primary::DockerComposeSecondaryConfig sconfig_in);
 +  ~DockerComposeSecondary() override = default;
 +
++  std::string Type() const override { return DockerComposeSecondaryConfig::Type; }
++
++  bool ping() const override { return true; }
++
 + private:
 +  bool storeFirmware(const std::string& target_name, const std::string& content) override;
 +  bool getFirmwareInfo(Uptane::InstalledImageInfo& firmware_info) const override;
@@ -270,5 +286,5 @@ index 0000000..168c14b
 +
 +#endif  // PRIMARY_DOCKERCOMPOSESECONDARY_H_
 -- 
-2.7.4
+2.25.0
 
