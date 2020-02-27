@@ -3,4 +3,4 @@ Description=Aktualizr OSTree Update Automatic Reboot
 
 [Service]
 Type=simple
-ExecStart=/usr/bin/systemctl --force reboot
+ExecStart=/usr/sbin/reboot
