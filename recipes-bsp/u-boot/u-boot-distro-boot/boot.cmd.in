@@ -20,7 +20,7 @@ env set bootcmd_otenv 'ext4load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/
 env set bootcmd_args 'env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${scriptargs} ${tdxargs}'
 else
 # Load commands for raw NAND devices
-env set bootcmd_otenv 'ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}; ubifsumount'
+env set bootcmd_otenv 'ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}'
 env set bootcmd_args 'env set bootargs ubi.mtd=ubi root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}'
 fi
 
