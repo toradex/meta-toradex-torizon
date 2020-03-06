@@ -1,4 +1,4 @@
-LINUX_VERSION ?= "5.4.18"
+LINUX_VERSION ?= "5.4.24"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 require recipes-kernel/linux/linux-toradex-mainline.inc
