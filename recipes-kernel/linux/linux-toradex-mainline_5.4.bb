@@ -15,7 +15,7 @@ python __anonymous () {
     bb.build.addtask('do_kernel_checkout', 'do_kernel_metadata', 'do_symlink_kernsrc', d)
 }
 
-SRCREV_machine = "4d9a701d8bda68d6dabcb3e05e52fbf4d3ea54bc"
+SRCREV_machine = "6c215c3541d4a7ac1e13a6c305e2bf3cfc0117e5"
 SRCREV_meta = "bc3a6a8b0bd0cd5e08cbf655227327f222fccf90"
 
 KBRANCH = "toradex_5.4.y"
