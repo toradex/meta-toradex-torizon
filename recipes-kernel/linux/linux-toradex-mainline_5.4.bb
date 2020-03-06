@@ -12,7 +12,6 @@ python __anonymous () {
     # http://lists.openembedded.org/pipermail/openembedded-core/2020-March/293911.html
     #
     # We need this temproary hack here until that patch merged in OE layer.
-    bb.build.deltask('do_kernel_checkout', d)
     bb.build.addtask('do_kernel_checkout', 'do_kernel_metadata', 'do_symlink_kernsrc', d)
 }
 
