@@ -4,17 +4,6 @@ PV = "${LINUX_VERSION}+git${SRCPV}"
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 
-python __anonymous () {
-    # A temporary fix for a inter-task dependency issue in kernel-yocto.bbclass, in
-    # which, kernel_checkout should run after do_symlink_kernsrc rather than do_unpack.
-    #
-    # A patch has been sent to OE mail list on 2020-03-04, reference:
-    # http://lists.openembedded.org/pipermail/openembedded-core/2020-March/293911.html
-    #
-    # We need this temproary hack here until that patch merged in OE layer.
-    bb.build.addtask('do_kernel_checkout', 'do_kernel_metadata', 'do_symlink_kernsrc', d)
-}
-
 SRCREV_machine = "6c215c3541d4a7ac1e13a6c305e2bf3cfc0117e5"
 SRCREV_meta = "bc3a6a8b0bd0cd5e08cbf655227327f222fccf90"
 
