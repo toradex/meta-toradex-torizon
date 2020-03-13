@@ -1,7 +1,9 @@
+inherit toradex-kernel-config
+
 kernel_do_configure_append() {
 	# set kernel to reboot on panic and hung tasks
-	echo "CONFIG_DETECT_HUNG_TASK=y" >> ${B}/.config
-	echo "CONFIG_BOOTPARAM_HUNG_TASK_PANIC=y" >> ${B}/.config
-	echo "CONFIG_PANIC_ON_OOPS=y" >> ${B}/.config
-	echo "CONFIG_PANIC_TIMEOUT=5" >> ${B}/.config
+	kernel_configure_variable DETECT_HUNG_TASK y
+	kernel_configure_variable BOOTPARAM_HUNG_TASK_PANIC y
+	kernel_configure_variable PANIC_ON_OOPS y
+	kernel_configure_variable PANIC_TIMEOUT 5
 }
