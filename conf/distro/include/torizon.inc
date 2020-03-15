@@ -44,7 +44,7 @@ WKS_FILE_DEPENDS_BOOTLOADERS_remove = "syslinux systemd-boot"
 WKS_FILE_sota_remove = "efiimage-sota.wks"
 
 PREFERRED_VERSION_u-boot-toradex ?= "2019.07%"
-PREFERRED_VERSION_u-boot-toradex-fw-utils = "2019.07%"
+PREFERRED_VERSION_u-boot-toradex-fw-utils ?= "2019.07%"
 
 # Use i.MX Gstreamer Version (for PXP DMA-ENGINE Driver)
 PREFERRED_VERSION_gstreamer1.0_use-mainline-bsp_torizon = "1.14.imx"
