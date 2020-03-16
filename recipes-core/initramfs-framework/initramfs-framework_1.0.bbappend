@@ -4,8 +4,7 @@ SRC_URI += " \
     file://psplash \
     file://plymouth \
     file://0001-only-scan-for-block-devices.patch \
-    file://0002-set-stdfds-for-udevd-without-console.patch \
-    file://0003-redirect-console-when-conosle-null.patch \
+    file://0002-redirect-console-when-conosle-null.patch \
 "
 
 PACKAGES_append = " initramfs-module-psplash initramfs-module-plymouth"
