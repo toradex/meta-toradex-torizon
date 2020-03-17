@@ -1,3 +1,5 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+
 SRCREV_docker = "afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3"
 
 DOCKER_VERSION = "19.03.8-ce"
