@@ -29,6 +29,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     wireless-regdb-static \
     ostree-customize-plymouth \
     virtual/network-configuration \
+    u-boot-fw-utils \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \

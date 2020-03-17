@@ -1,0 +1,74 @@
+From d401d6fa16ac4567e020cefe7ebd55c980d74c70 Mon Sep 17 00:00:00 2001
+From: Naeem Khan <naeem.khan@toradex.com>
+Date: Tue, 10 Mar 2020 08:08:20 -0400
+Subject: [PATCH] define bootcount related variables to make bootcount work
+
+Related to: TOR-73, 50811
+
+Signed-off-by: Naeem Khan <naeem.khan@toradex.com>
+---
+ include/configs/apalis-imx8.h     | 3 ++-
+ include/configs/apalis-imx8x.h    | 3 ++-
+ include/configs/colibri-imx8qxp.h | 3 ++-
+ include/configs/verdin-imx8mm.h   | 3 ++-
+ 4 files changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/include/configs/apalis-imx8.h b/include/configs/apalis-imx8.h
+index 2ff591a822..a04596230a 100644
+--- a/include/configs/apalis-imx8.h
++++ b/include/configs/apalis-imx8.h
+@@ -134,7 +134,8 @@
+ 	"mmcargs=setenv bootargs console=${console},${baudrate} root=${mmcroot} " \
+ 	"video=imxdpufb5:off video=imxdpufb6:off video=imxdpufb7:off\0" \
+ 	"setup=run loadhdp; hdp load ${hdp_addr}; run mmcargs\0" \
+-	"defargs=pci=nomsi"
++	"defargs=pci=nomsi" \
++	"bootlimit=3\0"
+ 
+ /* Link Definitions */
+ #define CONFIG_LOADADDR			0x80280000
+diff --git a/include/configs/apalis-imx8x.h b/include/configs/apalis-imx8x.h
+index 8c692abdf0..c97cbfbfee 100644
+--- a/include/configs/apalis-imx8x.h
++++ b/include/configs/apalis-imx8x.h
+@@ -111,7 +111,8 @@
+ 	"mmcautodetect=yes\0" \
+ 	"mmcargs=setenv bootargs console=${console},${baudrate} root=${mmcroot} " \
+ 	"video=imxdpufb5:off video=imxdpufb6:off video=imxdpufb7:off\0" \
+-	"setup=run mmcargs\0"
++	"setup=run mmcargs\0" \
++	"bootlimit=3\0"
+ 
+ /* Link Definitions */
+ #define CONFIG_LOADADDR			0x80280000
+diff --git a/include/configs/colibri-imx8qxp.h b/include/configs/colibri-imx8qxp.h
+index 5ab3a418c2..6c2cb74ae7 100644
+--- a/include/configs/colibri-imx8qxp.h
++++ b/include/configs/colibri-imx8qxp.h
+@@ -108,7 +108,8 @@
+ 	"mmcautodetect=yes\0" \
+ 	"mmcargs=setenv bootargs console=${console},${baudrate} root=${mmcroot} " \
+ 	"video=imxdpufb5:off video=imxdpufb6:off video=imxdpufb7:off\0" \
+-	"setup=run mmcargs\0"
++	"setup=run mmcargs\0" \
++	"bootlimit=3\0"
+ 
+ /* Link Definitions */
+ #define CONFIG_LOADADDR			0x80280000
+diff --git a/include/configs/verdin-imx8mm.h b/include/configs/verdin-imx8mm.h
+index 52b6766b70..e5b9a08845 100644
+--- a/include/configs/verdin-imx8mm.h
++++ b/include/configs/verdin-imx8mm.h
+@@ -132,7 +132,8 @@
+ 	"initrd_addr=0x43800000\0" \
+ 	"initrd_high=0xffffffffffffffff\0" \
+ 	"kernel_image=Image\0" \
+-	"setup=setenv setupargs console=${console},${baudrate} console=tty1 consoleblank=0 earlycon\0"
++	"setup=setenv setupargs console=${console},${baudrate} console=tty1 consoleblank=0 earlycon\0" \
++	"bootlimit=3\0"
+ 
+ #define CONFIG_SYS_INIT_RAM_ADDR	0x40000000
+ #define CONFIG_SYS_INIT_RAM_SIZE	0x80000
+-- 
+2.17.1
+
