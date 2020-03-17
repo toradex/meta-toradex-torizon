@@ -33,6 +33,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     udev-toradex-rules \
     wireless-regdb-static \
     ostree-customize-plymouth \
+    u-boot-fw-utils \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \

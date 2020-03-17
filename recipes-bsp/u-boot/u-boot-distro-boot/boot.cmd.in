@@ -35,7 +35,17 @@ then
 	env set scriptargs pci=nomsi
 fi
 
-if test -n ${rollback} && test ${rollback} = 1
+if test -n "${bootcount}" && test ${bootcount} -gt ${bootlimit}
+then
+    echo "bootlimit reached! rollback to last deployment"
+    env set rollback 1
+else
+    env set rollback 0
+fi
+
+# check kernel_image2 to avoid booting from other then default emmc in case of 
+# bootlimit is reached and there is no other deployed image
+if test -n "${kernel_image2}" && test -n "${rollback}" && test ${rollback} = 1
 then
     echo "Roolback enabled. Booting old version."
     env set kernel_image ${kernel_image2}
