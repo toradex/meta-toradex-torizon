@@ -1,9 +1,9 @@
 diff --git a/udev b/udev
-index 87551ff4a9..6eb8d53854 100644
+index 4898b89..5645e45 100644
 --- a/udev
 +++ b/udev
-@@ -42,6 +42,7 @@ udev_run() {
- 	mkdir -p /var/run
+@@ -45,6 +45,7 @@ udev_run() {
+ 	sh -c "exec 4< /dev/console" || { exec 0> /dev/null; exec 1> /dev/null; exec 2> /dev/null; }
  
  	$_UDEV_DAEMON --daemon
 -	udevadm trigger --action=add
