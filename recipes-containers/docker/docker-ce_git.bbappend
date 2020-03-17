@@ -1,6 +1,6 @@
-SRCREV_docker = "633a0ea838f10e000b7c6d6eed1623e6e988b5bb"
+SRCREV_docker = "afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3"
 
-DOCKER_VERSION = "19.03.5-ce"
+DOCKER_VERSION = "19.03.8-ce"
 
 do_install_prepend() {
 	# Final dockerd binary location has been moved. Work around by creating
