@@ -16,9 +16,6 @@ MACHINE_EXTRA_RRECOMMENDS_remove_imx = "imx-alsa-plugins"
 ## No need to install u-boot, already a WKS dependency
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS_remove_imx = "u-boot-fslc"
 
-# A kernel specific variable, shared by all kernel recipes
-export DTC_FLAGS = "-@"
-
 # qemuarm64
 PREFERRED_PROVIDER_virtual/bootloader_qemuarm64 = "u-boot-toradex"
 UBOOT_MACHINE_qemuarm64 = "qemu_arm64_defconfig"
