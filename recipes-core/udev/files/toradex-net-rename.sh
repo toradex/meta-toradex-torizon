@@ -32,7 +32,7 @@ then
   exit 1
 fi
 
-mac0_serial=$(cat /proc/device-tree/serial-number | tr '\0' '\n')
+mac0_serial=$(expr $(cat /proc/device-tree/serial-number | tr '\0' '\n') + 0)
 
 # Secondary MAC address is allocated from block
 # 0x100000(1048576) higher than the first MAC address
