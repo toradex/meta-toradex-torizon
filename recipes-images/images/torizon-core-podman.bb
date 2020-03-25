@@ -1,6 +1,6 @@
-SUMMARY = "TorizonCore image with Podman runtime"
-DESCRIPTION = "TorizonCore image, featuring the podman container runtime and \
-secure OTA update capabilities."
+SUMMARY = "TorizonCore - experimental image using Podman"
+DESCRIPTION = "TorizonCore Linux experimental image based on production image \
+using Podman container engine."
 
 require torizon-core-container.inc
 

@@ -1,6 +1,5 @@
-SUMMARY = "TorizonCore image with Docker runtime"
-DESCRIPTION = "TorizonCore image, featuring complete Docker runtime and secure \
-OTA update capabilities."
+SUMMARY = "TorizonCore - production image"
+DESCRIPTION = "TorizonCore Linux production image with Docker container engine."
 
 require torizon-core-container.inc
 
