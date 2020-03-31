@@ -1,5 +1,5 @@
-SUMMARY = "TorizonCore - production image"
-DESCRIPTION = "TorizonCore Linux production image with Docker container engine."
+SUMMARY = "TorizonCore"
+DESCRIPTION = "TorizonCore Linux with no containers pre-provisioned."
 
 require torizon-core-container.inc
 
