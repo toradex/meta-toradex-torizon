@@ -1,10 +1,10 @@
-LINUX_VERSION ?= "5.4.24"
+LINUX_VERSION ?= "5.4.28"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 
-SRCREV_machine = "585b24d35ce748075dc88af9e55b740ad3ded8a1"
+SRCREV_machine = "9ef9ba76540e1778510af18b07582d0a32c50ebf"
 SRCREV_meta = "0aedf32650908d08f8cd9cbd3e12f8e65f00bea0"
 
 KBRANCH = "toradex_5.4.y"
