@@ -7,15 +7,13 @@ TORADEX_PRODUCT_IDS[0039] = "imx7d-colibri-emmc-eval-v3.dtb,emmc"
 TORADEX_PRODUCT_IDS[0041] = "imx7d-colibri-eval-v3.dtb,rawnand"
 TORADEX_FLASH_TYPE = "rawnand emmc"
 
-MACHINE_BOOT_FILES = "boot.scr"
-IMAGE_BOOT_FILES_append = " ${MACHINE_BOOT_FILES}"
-WKS_FILE_DEPENDS_append = " u-boot-distro-boot"
-
 UBOOT_BINARY_TEZI_EMMC = "u-boot.imx-sd"
 UBOOT_BINARY_TEZI_RAWNAND = "u-boot.imx-nd"
 
 UBOOT_ENV_TEZI_EMMC = "uEnv-sd.txt"
 UBOOT_ENV_TEZI_RAWNAND = "uEnv-nd.txt"
+
+PREFERRED_PROVIDER_u-boot-default-script = "u-boot-distro-boot"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc" 
 
