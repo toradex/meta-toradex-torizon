@@ -46,8 +46,11 @@ WKS_FILE_sota_remove = "efiimage-sota.wks"
 PREFERRED_VERSION_u-boot-toradex ?= "2019.07%"
 PREFERRED_VERSION_u-boot-toradex-fw-utils ?= "2019.07%"
 
-# TorizonCore does not use runtim epackage management, so version numbers going
+# TorizonCore does not use runtime package management, so version numbers going
 # backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
 
 hostname_pn-base-files = ""
+
+# Remove unneeded mainline bsp firmware for i.MX8 devices
+MACHINE_FIRMWARE_remove_mx8 = "linux-firmware-imx-sdma-imx6q firmware-imx-vpu-imx6q firmware-imx-vpu-imx6d"
