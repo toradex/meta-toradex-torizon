@@ -166,7 +166,16 @@ ln -sf "${MANIFESTS}" "${OEROOT}"/layers/
 
 DISTRO_DIRNAME=$(echo "${DISTRO}" | sed 's#[.-]#_#g')
 
-cat > conf/auto.conf <<EOF
+if [ "$(basename `readlink -f ${MANIFESTS}/../manifest.xml`)" != "default.xml" ]; then
+    cat > conf/auto.conf <<EOF
+# This is needed when building on integration. With use-head-next you
+# always get the newest kernel. Without use-head-next your build may fail.
+MACHINEOVERRIDES =. "use-head-next:"
+
+EOF
+fi
+
+cat >> conf/auto.conf <<EOF
 DISTRO ?= "${DISTRO}"
 MACHINE ?= "${MACHINE}"
 SDKMACHINE ?= "${SDKMACHINE}"
