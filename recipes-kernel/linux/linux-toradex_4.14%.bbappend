@@ -5,6 +5,7 @@ SRC_URI_append = " \
 	file://0001-arm64-dts-fsl-imx8qm-apalis-add-configuration-for-to.patch \
 	file://0002-arm64-dts-fsl-imx8qxp-apalis-add-configuration-for-t.patch \
 	file://0003-arm64-dts-fsl-imx8qxp-colibri-add-configuration-for-.patch \
+	file://0001-fsl-imx8qxp-colibri-eval-v3.dtsi-enable-spidev0.patch \
 	"
 
 # Add symbols to make overlays work
