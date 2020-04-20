@@ -17,6 +17,11 @@ PREFERRED_PROVIDER_u-boot-default-script = "u-boot-distro-boot"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc" 
 
+MACHINEOVERRIDES_append_upstream = ":use-mainline-bsp"
+
+PREFERRED_PROVIDER_virtual/kernel_use-mainline-bsp = "linux-toradex-mainline"
+PREFERRED_PROVIDER_virtual/kernel_use-mainline-bsp_preempt-rt = "linux-toradex-mainline-rt"
+
 KERNEL_DEVICETREE_use-mainline-bsp = "imx7d-colibri-eval-v3.dtb \
 		imx7s-colibri-eval-v3.dtb imx7d-colibri-emmc-eval-v3.dtb"
 
