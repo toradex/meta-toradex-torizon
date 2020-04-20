@@ -3,8 +3,6 @@ require conf/distro/include/torizon-common.inc
 # Distro override for all torizon Distros
 DISTROOVERRIDES = "torizon:use-mainline-bsp"
 
-PACKAGECONFIG_remove_pn-networkmanager = "ifupdown dnsmasq"
-
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
 PACKAGECONFIG_remove_pn-${PREFERRED_PROVIDER_virtual/runc} = "static"
@@ -55,8 +53,6 @@ PREFERRED_VERSION_gstreamer1.0-plugins-bad_use-mainline-bsp_torizon = "1.14.imx"
 # TorizonCore does not use runtime package management, so version numbers going
 # backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
-
-hostname_pn-base-files = ""
 
 # Remove unneeded mainline bsp firmware for i.MX8 devices
 MACHINE_FIRMWARE_remove_mx8 = "linux-firmware-imx-sdma-imx6q firmware-imx-vpu-imx6q firmware-imx-vpu-imx6d"
