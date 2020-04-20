@@ -1,6 +1,7 @@
 require conf/distro/include/tdx-base.inc
 
 IMAGE_CLASSES += "image_type_torizon"
+IMAGE_CLASSES_remove = "image_type_tezi image_types_fsl"
 
 TDX_RELEASE = "4.0.0"
 
