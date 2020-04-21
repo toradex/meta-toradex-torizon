@@ -18,6 +18,9 @@ QB_OPT_APPEND_qemuarm64 = "-no-acpi -bios u-boot.bin -d unimp -semihosting-confi
 
 IMAGE_FSTYPES_REMOVE = "teziimg-distro"
 
+IMAGE_RT_SUFFIX_qemuarm64 = ""
+IMAGE_NAME_qemuarm64 = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSION_SUFFIX}"
+
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-toradex"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64 = "linux-yocto"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64_torizon-rt = "linux-yocto-rt"
