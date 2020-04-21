@@ -16,10 +16,6 @@ MACHINE_EXTRA_RRECOMMENDS_remove_imx = "imx-alsa-plugins"
 ## No need to install u-boot, already a WKS dependency
 MACHINE_ESSENTIAL_EXTRA_RDEPENDS_remove_imx = "u-boot-fslc"
 
-# Make sure to use L4.14.98-2.0.0_ga release as this is the user space we
-# use in our Vivante specific Debian containers
-PREFERRED_VERSION_virtual/kernel_mx8 = "4.14-2.0.x"
-
 # A kernel specific variable, shared by all kernel recipes
 export DTC_FLAGS = "-@"
 
