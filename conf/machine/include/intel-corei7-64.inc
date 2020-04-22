@@ -6,4 +6,4 @@ IMAGE_FSTYPES_REMOVE = "live hddimg teziimg-distro"
 IMAGE_FSTYPES_append = " wic.vmdk wic.vdi"
 
 PREFERRED_PROVIDER_virtual/kernel_intel-corei7-64 = "linux-yocto"
-PREFERRED_PROVIDER_virtual/kernel_intel-corei7-64_torizon-rt = "linux-yocto-rt"
+PREFERRED_PROVIDER_virtual/kernel_intel-corei7-64_preempt-rt = "linux-yocto-rt"

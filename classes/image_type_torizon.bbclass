@@ -3,8 +3,8 @@ inherit image_type_tezi
 TEZI_ROOT_LABEL = "otaroot"
 TEZI_ROOT_SUFFIX ??= "ota.tar.xz"
 
-SUMMARY_append_torizon-rt = " (PREEMPT_RT)"
-DESCRIPTION_append_torizon-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
+SUMMARY_append_preempt-rt = " (PREEMPT_RT)"
+DESCRIPTION_append_preempt-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
 
 #Name an ostree branch after image basename, this allows having multiple images in one repo
 OSTREE_BRANCHNAME = "${MACHINE}/${DISTRO}/${IMAGE_BASENAME}"
