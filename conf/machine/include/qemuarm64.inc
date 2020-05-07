@@ -1,26 +1,34 @@
 UBOOT_MACHINE = "qemu_arm64_defconfig"
 UBOOT_ENTRYPOINT = "0x40080000"
 
-KERNEL_CLASSES = "kernel-fitimage"
-IMAGE_BOOT_FILES_qemuarm64 = "boot.scr uEnv.txt"
+KERNEL_CLASSES = "kernel-lmp-fitimage"
 KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
 
+IMAGE_BOOT_FILES_qemuarm64 = "boot.scr uEnv.txt"
 WKS_FILE_DEPENDS_append = " virtual/bootloader u-boot-distro-boot"
 WKS_FILE_DEPENDS_remove = "tezi-metadata"
 
+SOTA_CLIENT_FEATURES_append = " ubootenv"
 OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 
 QB_MACHINE = "-machine virt"
 QB_MEM = "-m 1057"
-QB_DRIVE_TYPE = "/dev/vd"
-QB_OPT_APPEND_qemuarm64 = "-no-acpi -bios u-boot.bin -d unimp -semihosting-config enable,target=native"
+QB_DRIVE_TYPE = "/dev/vdb"
+QB_DEFAULT_FSTYPE = "wic"
+QB_OPT_APPEND_qemuarm64 = "-no-acpi -bios ${DEPLOY_DIR_IMAGE}/u-boot.bin -d unimp -semihosting-config enable,target=native"
 
 IMAGE_FSTYPES_REMOVE = "teziimg-distro"
 
 IMAGE_RT_SUFFIX_qemuarm64 = ""
-IMAGE_NAME_qemuarm64 = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSION_SUFFIX}"
+IMAGE_NAME_qemuarm64_preempt-rt = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSION_SUFFIX}"
+
+hostname_pn-base-files = "${MACHINE}"
+CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-toradex"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64 = "linux-yocto"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64_preempt-rt = "linux-yocto-rt"
+
+PREFERRED_PROVIDER_u-boot-fw-utils = "u-boot-toradex-fw-utils"
+PREFERRED_RPROVIDER_u-boot-fw-utils = "u-boot-toradex-fw-utils"
