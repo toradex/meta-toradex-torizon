@@ -32,18 +32,20 @@ do_install() {
     kerneldir=${D}${KERNEL_BUILD_ROOT}${KERNEL_VERSION}
     install -d $kerneldir
 
-    cp ${DEPLOY_DIR_IMAGE}/${KERNEL_IMAGETYPE} $kerneldir/vmlinuz
+    cp ${DEPLOY_DIR_IMAGE}/${OSTREE_KERNEL} $kerneldir/vmlinuz
 
-    if [ -n "${INITRAMFS_IMAGE}" ]; then
-        cp ${DEPLOY_DIR_IMAGE}/${INITRAMFS_IMAGE}-${MACHINE}.${INITRAMFS_FSTYPES} $kerneldir/initramfs.img
-    fi
+    if [ "${KERNEL_IMAGETYPE}" != "fitImage" ]; then
+        if [ -n "${INITRAMFS_IMAGE}" ]; then
+            cp ${DEPLOY_DIR_IMAGE}/${INITRAMFS_IMAGE}-${MACHINE}.${INITRAMFS_FSTYPES} $kerneldir/initramfs.img
+        fi
 
-    if [ -n "${KERNEL_DEVICETREE}" ]; then
-        mkdir -p $kerneldir/dtb
-        for dts_file in ${KERNEL_DEVICETREE}; do
-            dts_file_basename=$(basename $dts_file)
-            cp ${DEPLOY_DIR_IMAGE}/$dts_file_basename $kerneldir/dtb/$dts_file_basename
-        done
+        if [ "${OSTREE_DEPLOY_DEVICETREE}" = "1"  ] && [ -n "${KERNEL_DEVICETREE}" ]; then
+            mkdir -p $kerneldir/dtb
+            for dts_file in ${KERNEL_DEVICETREE}; do
+                dts_file_basename=$(basename $dts_file)
+                cp ${DEPLOY_DIR_IMAGE}/$dts_file_basename $kerneldir/dtb/$dts_file_basename
+            done
+        fi
     fi
 }
 do_install[vardepsexclude] = "KERNEL_VERSION"
