@@ -1,0 +1,53 @@
+From 1a3df6ec80a129d255deee0dece14a53b1884974 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Fri, 8 May 2020 15:09:07 +0200
+Subject: [PATCH] Makefile: fix a dependency issue
+
+Instead of being depended by docs, targets '.install.md2man' and
+'docdir' should be depended by 'MANPAGES', or else the path
+'docs/build/man' or 'GOMD2MAN' might not exist when it tries to
+generate files in it.
+
+This fixes a following build error:
+| open docs/build/man/podman-volume-ls.1: no such file or directory
+| Makefile:377: recipe for target 'docs/source/markdown/podman-volume-ls.1' failed
+| make: *** [docs/source/markdown/podman-volume-ls.1] Error 1
+| make: *** Waiting for unfinished jobs....
+| open docs/build/man/podman-init.1: no such file or directory
+| Makefile:377: recipe for target 'docs/source/markdown/podman-init.1' failed
+
+Upstream-Status: Submitted
+
+Reference:
+https://github.com/containers/libpod/pull/6136
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ Makefile | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/import/Makefile b/src/import/Makefile
+index 264597f39..7e00e116f 100644
+--- a/src/import/Makefile
++++ b/src/import/Makefile
+@@ -373,7 +373,7 @@ MANPAGES_MD ?= $(wildcard docs/source/markdown/*.md pkg/*/docs/*.md)
+ MANPAGES ?= $(MANPAGES_MD:%.md=%)
+ MANPAGES_DEST ?= $(subst markdown,man, $(subst source,build,$(MANPAGES)))
+ 
+-$(MANPAGES): %: %.md .gopathok docdir
++$(MANPAGES): %: %.md .install.md2man docdir
+ 	@sed -e 's/\((podman.*\.md)\)//' -e 's/\[\(podman.*\)\]/\1/' $<  | $(GOMD2MAN) -in /dev/stdin -out $(subst source/markdown,build/man,$@)
+ 
+ .PHONY: docs
+@@ -381,7 +381,7 @@ docdir:
+ 	mkdir -p docs/build/man
+ 
+ .PHONY: docs
+-docs: .install.md2man $(MANPAGES) ## Generate documentation
++docs: $(MANPAGES) ## Generate documentation
+ 
+ install-podman-remote-%-docs: podman-remote docs $(MANPAGES)
+ 	rm -rf docs/build/remote
+-- 
+2.26.2
+
