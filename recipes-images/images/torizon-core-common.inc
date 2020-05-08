@@ -36,9 +36,11 @@ CORE_IMAGE_BASE_INSTALL_append = " \
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
     linux-firmware-sd8887 \
     linux-firmware-sd8997 \
+    mwifiexap \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
     kernel-module-imx-gpu-viv \
+    mwifiexap \
     backports \
 "
