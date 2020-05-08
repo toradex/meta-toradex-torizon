@@ -1,6 +1,7 @@
 LINUX_VERSION ?= "5.4.28"
 PV = "${LINUX_VERSION}+git${SRCPV}"
 
+require linux-toradex-version.inc
 require recipes-kernel/linux/linux-toradex-mainline.inc
 require recipes-kernel/linux/linux-yocto.inc
 
