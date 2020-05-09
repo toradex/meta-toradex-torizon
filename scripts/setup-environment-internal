@@ -188,7 +188,7 @@ UPSTREAMOVERRIDES_apalis-imx8x = ""
 UPSTREAMOVERRIDES_colibri-imx8x = ""
 UPSTREAMOVERRIDES_verdin-imx8mm = ""
 UPSTREAMOVERRIDES_qemuarm64 = ""
-UPSTREAMOVERRIDES_intel-corei7-64 = ""
+UPSTREAMOVERRIDES_genericx86-64 = ""
 DISTROOVERRIDES .= "\${UPSTREAMOVERRIDES}"
 
 # Extra options that can be changed by the user
