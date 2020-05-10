@@ -22,6 +22,9 @@ PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/runc} = " seccomp"
 PACKAGECONFIG_append_pn-${PREFERRED_PROVIDER_virtual/docker} = " seccomp"
 PACKAGECONFIG_append_pn-systemd = " seccomp"
 
+# Set default network configuration
+PREFERRED_RPROVIDER_network-configuration = "networkmanager"
+
 # Default image formats
 IMAGE_FSTYPES = "teziimg-distro"
 

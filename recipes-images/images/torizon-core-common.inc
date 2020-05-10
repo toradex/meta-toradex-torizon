@@ -21,7 +21,6 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     linux-firmware-rtl8192cu \
     media-mountpoint \
     nano \
-    networkmanager \
     set-hostname \
     sudo \
     torizon-conf \
@@ -31,6 +30,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     wireless-regdb-static \
     ostree-customize-plymouth \
     u-boot-fw-utils \
+    network-configuration \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
