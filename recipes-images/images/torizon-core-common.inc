@@ -20,7 +20,6 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     kernel-modules \
     linux-firmware-rtl8192cu \
     media-mountpoint \
-    networkmanager \
     set-hostname \
     sudo \
     torizon-conf \
@@ -29,6 +28,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     udev-toradex-rules \
     wireless-regdb-static \
     ostree-customize-plymouth \
+    virtual/network-configuration \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \

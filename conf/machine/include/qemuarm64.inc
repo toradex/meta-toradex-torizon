@@ -26,6 +26,8 @@ IMAGE_NAME_qemuarm64_preempt-rt = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSIO
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 
+PREFERRED_RPROVIDER_virtual/network-configuration_qemuarm64 = "networkd-static-conf"
+
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-toradex"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64 = "linux-yocto"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64_preempt-rt = "linux-yocto-rt"
