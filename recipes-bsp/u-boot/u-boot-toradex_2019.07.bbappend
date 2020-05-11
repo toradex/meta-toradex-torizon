@@ -1,8 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-2019.07:"
 
-SRCREV = "694e2136eefc2d110f44b26218c03e44a1e88235"
-SRCBRANCH = "toradex_2019.07-next"
-
 SRC_URI_append += " \
     file://0001-colibri_imx7-use-distro-boot-by-default.patch \
     file://0002-colibri_imx6-use-distro-boot-by-default.patch \
