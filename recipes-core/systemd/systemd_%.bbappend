@@ -9,6 +9,11 @@ SRC_URI_append = " \
 PACKAGECONFIG_append = " resolved networkd"
 RRECOMMENDS_${PN}_remove = "os-release"
 
+DEF_FALLBACK_NTP_SERVERS="time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com"
+EXTRA_OEMESON += ' \
+	-Dntp-servers="${DEF_FALLBACK_NTP_SERVERS}" \
+'
+
 PACKAGE_WRITE_DEPS_append = " ${@bb.utils.contains('DISTRO_FEATURES','systemd','systemd-systemctl-native','',d)}"
 pkg_postinst_${PN}_append () {
 	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
