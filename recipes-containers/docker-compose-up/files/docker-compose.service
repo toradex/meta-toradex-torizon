@@ -8,6 +8,8 @@ ConditionPathExists=/var/sota/storage/docker-compose/docker-compose.yml
 Type=oneshot
 WorkingDirectory=/var/sota/storage/docker-compose/
 ExecStart=/usr/bin/docker-compose up -d --remove-orphans
+ExecStop=/usr/bin/docker-compose down
+RemainAfterExit=yes
 
 [Install]
 WantedBy=multi-user.target
