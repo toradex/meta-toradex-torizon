@@ -4,3 +4,4 @@
 # than 7 times per 2s
 # https://www.freedesktop.org/software/systemd/man/systemd.html#SIGINT
 CtrlAltDelBurstAction=none
+DefaultEnvironment="MACHINE=@@MACHINE@@"
