@@ -21,12 +21,10 @@ SRC_URI = " \
     file://0001-Make-full-path-to-systemd-tty-ask-password-agent-con.patch \
 "
 
-S = "${WORKDIR}/git"
-
-SRCREV = "921328b1ef1c1ec60350a57c73b76297ea3e8455"
+PV = "0.9.5+git${SRCPV}"
 SRCREV = "d7c737d05afea5ff1b26f90708a15add5c30fe92"
-SRC_URI[md5sum] = "4efa5551d230165981b105e7c6a50aa7"
-SRC_URI[sha256sum] = "4a197a4f1a05785d7453dd829b231352fb2d09171bd86c5ffaafbb2dd6791351"
+
+S = "${WORKDIR}/git"
 
 EXTRA_OECONF += " --enable-shared --disable-static --disable-gtk --disable-documentation \
     --with-udev --with-runtimedir=/run --with-logo=${LOGO} \
