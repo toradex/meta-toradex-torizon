@@ -37,7 +37,7 @@ GO_IMPORT = "import"
 
 S = "${WORKDIR}/git"
 
-PV = "1.8.1+git${SRCREV}"
+PV = "1.8.1+git${SRCPV}"
 
 PACKAGES =+ "${PN}-contrib"
 
