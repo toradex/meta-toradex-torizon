@@ -8,7 +8,6 @@ IMAGE_BOOT_FILES_qemuarm64 = "boot.scr uEnv.txt"
 WKS_FILE_DEPENDS_append = " virtual/bootloader u-boot-distro-boot"
 WKS_FILE_DEPENDS_remove = "tezi-metadata"
 
-SOTA_CLIENT_FEATURES_append = " ubootenv"
 OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 
