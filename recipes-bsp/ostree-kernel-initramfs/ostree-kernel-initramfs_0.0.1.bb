@@ -5,7 +5,7 @@ LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/GPL-2.0;md5=801f80980d171dd6425610833a22dbe6"
 
 # Whilst not a module, this ensures we don't get multilib extended (which would make no sense)
-inherit module-base
+inherit module-base kernel-artifact-names
 
 PACKAGES = "ostree-kernel ostree-initramfs ostree-devicetrees"
 
