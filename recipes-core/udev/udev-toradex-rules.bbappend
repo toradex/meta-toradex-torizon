@@ -1,11 +1,14 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-SRC_URI += "\
+SRC_URI_append = " \
     file://10-toradex-net-rename.rules \
     file://90-toradex-gpio.rules \
     file://91-toradex-i2cdev.rules \
     file://92-toradex-spidev.rules \
     file://toradex-net-rename.sh \
+"
+SRC_URI_append_colibri-imx7 = " \
+    file://99-toradex-persistent-emmc-naming.rules \
 "
 
 do_install_append () {
@@ -16,4 +19,8 @@ do_install_append () {
 
     install -d ${D}${bindir}
     install -m 0755 ${WORKDIR}/toradex-net-rename.sh ${D}${bindir}/
+}
+
+do_install_append_colibri-imx7 () {
+    install -m 0644 ${WORKDIR}/99-toradex-persistent-emmc-naming.rules ${D}${sysconfdir}/udev/rules.d/
 }
