@@ -4,7 +4,6 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 
 SRC_URI = " \
     file://path-sbin.sh \
-    file://docker-cli-experimental.sh \
     file://machine.sh \
 "
 
@@ -15,7 +14,6 @@ INHIBIT_DEFAULT_DEPS = "1"
 do_install () {
     install -d ${D}${sysconfdir}/profile.d
     install -m 0755 ${WORKDIR}/path-sbin.sh ${D}${sysconfdir}/profile.d/
-    install -m 0755 ${WORKDIR}/docker-cli-experimental.sh ${D}${sysconfdir}/profile.d/
     install -m 0755 ${WORKDIR}/machine.sh ${D}${sysconfdir}/profile.d/
     sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${sysconfdir}/profile.d/machine.sh
 }
