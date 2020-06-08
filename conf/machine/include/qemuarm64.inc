@@ -6,7 +6,7 @@ KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
 
 IMAGE_BOOT_FILES_qemuarm64 = "boot.scr uEnv.txt"
 WKS_FILE_DEPENDS_append = " virtual/bootloader u-boot-distro-boot"
-WKS_FILE_DEPENDS_remove = "tezi-metadata"
+WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 
 OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
@@ -25,6 +25,7 @@ IMAGE_NAME_qemuarm64_preempt-rt = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSIO
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 
+PREFERRED_PROVIDER_virtual/dtb = ""
 PREFERRED_RPROVIDER_virtual/network-configuration_qemuarm64 = "networkd-static-conf"
 
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-toradex"
