@@ -1,5 +1,5 @@
 diff --git a/finish b/finish
-index 717383ebac..acc714f356 100755
+index f34edd8..ab015c9 100755
 --- a/finish
 +++ b/finish
 @@ -14,6 +14,9 @@ finish_run() {
@@ -9,6 +9,6 @@ index 717383ebac..acc714f356 100755
 +		# To run docker successfully /dev/console can't return an error
 +		sh -c "exec 4< /dev/console" || { rm /dev/console; mknod /dev/console c 1 3; }
 +
- 		debug "Moving /dev, /proc and /sys onto rootfs..."
+ 		debug "Moving /dev, /proc, /sys and /run onto rootfs..."
  		mount --move /dev $ROOTFS_DIR/dev
  		mount --move /proc $ROOTFS_DIR/proc
