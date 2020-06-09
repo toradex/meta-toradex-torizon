@@ -23,6 +23,7 @@ MACHINEOVERRIDES_append_upstream = ":use-mainline-bsp"
 
 PREFERRED_PROVIDER_virtual/kernel_use-mainline-bsp = "linux-toradex-mainline"
 PREFERRED_PROVIDER_virtual/kernel_use-mainline-bsp_preempt-rt = "linux-toradex-mainline-rt"
+PREFERRED_PROVIDER_virtual/dtb_use-mainline-bsp = "device-tree-overlays-mainline"
 
 KERNEL_DEVICETREE_use-mainline-bsp = "imx7d-colibri-eval-v3.dtb \
 		imx7s-colibri-eval-v3.dtb imx7d-colibri-emmc-eval-v3.dtb"
