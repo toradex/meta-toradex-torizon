@@ -144,7 +144,7 @@ export BB_ENV_EXTRAWHITE="MACHINE DISTRO TCLIBC TCMODE GIT_PROXY_COMMAND \
 
 mkdir -p "${BUILDDIR}"/conf && cd "${BUILDDIR}"
 if [ -f "conf/auto.conf" ]; then
-    oldmach=$(egrep "^MACHINE" "conf/auto.conf" |
+    oldmach=$(egrep "^MACHINE \?=" "conf/auto.conf" |
              sed -e 's%^MACHINE ?= %%' | sed -e 's/^"//' -e 's/"$//')
 fi
 
