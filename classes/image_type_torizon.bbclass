@@ -6,8 +6,13 @@ TEZI_ROOT_SUFFIX ??= "ota.tar.xz"
 SUMMARY_append_preempt-rt = " (PREEMPT_RT)"
 DESCRIPTION_append_preempt-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
 
-#Name an ostree branch after image basename, this allows having multiple images in one repo
-OSTREE_BRANCHNAME = "${MACHINE}/${DISTRO}/${IMAGE_BASENAME}"
+def get_tdx_ostree_purpose(purpose):
+    return purpose.lower()
+
+TDX_OSTREE_PURPOSE ?= "${@get_tdx_ostree_purpose(d.getVar('TDX_PURPOSE'))}"
+
+# Use new branch naming
+OSTREE_BRANCHNAME = "${TDX_MAJOR}/${MACHINE}/${DISTRO}/${IMAGE_BASENAME}/${TDX_OSTREE_PURPOSE}"
 
 #Force ostree summary to be updated
 OSTREE_UPDATE_SUMMARY = "1"
