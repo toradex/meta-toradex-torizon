@@ -1,21 +1,21 @@
-From 09f8e89f23133c6456f45c483c6ca08bedb28e28 Mon Sep 17 00:00:00 2001
+From ad78158ab02e723de0d3587f63a1f5b228621d48 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Thu, 19 Sep 2019 10:44:18 +0200
-Subject: [PATCH 1/4] colibri_imx7: use distro boot by default
+Subject: [PATCH 4/4] colibri_imx7: use distro boot by default
 
 Use distro boot for eMMC as well as raw NAND modules by default. This
 is required for TorizonCore.
 
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
- include/configs/colibri_imx7.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/configs/colibri_imx7.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
-index 5fdf9b04e1..3978ea9a3a 100644
+index 2acd7459eb..95b8061e52 100644
 --- a/include/configs/colibri_imx7.h
 +++ b/include/configs/colibri_imx7.h
-@@ -117,13 +117,13 @@
+@@ -77,7 +77,7 @@
  		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
  
  #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
@@ -24,14 +24,7 @@ index 5fdf9b04e1..3978ea9a3a 100644
  	"setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && run distro_bootcmd;"
  #define MODULE_EXTRA_ENV_SETTINGS \
  	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0" \
- 	UBI_BOOTCMD
- #elif defined(CONFIG_TARGET_COLIBRI_IMX7_EMMC)
--#define CONFIG_BOOTCOMMAND "run emmcboot ; echo ; echo emmcboot failed ; " \
-+#define CONFIG_BOOTCOMMAND \
- 	"setenv fdtfile ${soc}-colibri-emmc-${fdt_board}.dtb && run distro_bootcmd;"
- #define MODULE_EXTRA_ENV_SETTINGS \
- 	"variant=-emmc\0" \
-@@ -132,6 +132,7 @@
+@@ -91,6 +91,7 @@
  
  #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
  #define BOOT_TARGET_DEVICES(func) \
@@ -40,5 +33,5 @@ index 5fdf9b04e1..3978ea9a3a 100644
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
 -- 
-2.23.0
+2.27.0
 
