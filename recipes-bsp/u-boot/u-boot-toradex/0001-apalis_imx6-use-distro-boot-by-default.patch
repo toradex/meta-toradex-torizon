@@ -1,0 +1,33 @@
+From 5cbf6969269be716160e2590a6b0f9e1e9dc96ca Mon Sep 17 00:00:00 2001
+From: Stefan Agner <stefan.agner@toradex.com>
+Date: Thu, 19 Sep 2019 17:09:06 +0200
+Subject: [PATCH 1/4] apalis_imx6: use distro boot by default
+
+Boot from internal eMMC by default. This serves as a basic security
+mechansim since TorizonCore is meant as a ready to use distribution.
+Booting from external SD-card can be exploited in case a SD-card slot
+is made accessible to the outside.
+
+Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+---
+ include/configs/apalis_imx6.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/configs/apalis_imx6.h b/include/configs/apalis_imx6.h
+index 51942e0c32..4cf4efc640 100644
+--- a/include/configs/apalis_imx6.h
++++ b/include/configs/apalis_imx6.h
+@@ -102,9 +102,9 @@
+ 
+ #ifndef CONFIG_SPL_BUILD
+ #define BOOT_TARGET_DEVICES(func) \
++	func(MMC, mmc, 0) \
+ 	func(MMC, mmc, 1) \
+ 	func(MMC, mmc, 2) \
+-	func(MMC, mmc, 0) \
+ 	func(USB, usb, 0) \
+ 	func(DHCP, dhcp, na)
+ #include <config_distro_bootcmd.h>
+-- 
+2.27.0
+

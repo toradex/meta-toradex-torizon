@@ -1,7 +1,7 @@
-From 540376b954cb2c4c5375451266b8a87f20ed5749 Mon Sep 17 00:00:00 2001
+From 041774829836e7381cc1123b76a9a595561e2372 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Thu, 19 Sep 2019 17:09:58 +0200
-Subject: [PATCH 4/4] colibri-imx6ull: use distro boot by default
+Subject: [PATCH 3/4] colibri-imx6ull: use distro boot by default
 
 Use distro boot for raw NAND modules by default. This is required
 for TorizonCore.
@@ -29,5 +29,5 @@ index e2c31cd4e0..9c628ad39e 100644
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
 -- 
-2.23.0
+2.27.0
 

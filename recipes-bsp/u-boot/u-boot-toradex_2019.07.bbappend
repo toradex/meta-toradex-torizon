@@ -1,10 +1,10 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI_append += " \
-    file://0001-colibri_imx7-use-distro-boot-by-default.patch \
-    file://0002-colibri_imx6-use-distro-boot-by-default.patch \
-    file://0003-apalis_imx6-use-distro-boot-by-default.patch \
-    file://0004-colibri-imx6ull-use-distro-boot-by-default.patch \
+    file://0001-apalis_imx6-use-distro-boot-by-default.patch \
+    file://0002-colibri_imx6-boot-from-eMMC-by-default.patch \
+    file://0003-colibri-imx6ull-use-distro-boot-by-default.patch \
+    file://0004-colibri_imx7-use-distro-boot-by-default.patch \
     file://0001-qemuarm64-enable-support-for-fitimage.patch \
     file://bootcount.cfg \
     file://bootlimit.cfg \
