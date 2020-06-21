@@ -12,10 +12,10 @@ OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ex
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 
 QB_MACHINE = "-machine virt"
-QB_MEM = "-m 1057"
-QB_DRIVE_TYPE = "/dev/vdb"
+QB_DRIVE_TYPE = "/dev/vda"
 QB_DEFAULT_FSTYPE = "wic"
-QB_OPT_APPEND_qemuarm64 = "-no-acpi -bios ${DEPLOY_DIR_IMAGE}/u-boot.bin -d unimp -semihosting-config enable,target=native"
+QB_MEM_qemuarm64 = "-m 1057"
+QB_OPT_APPEND_qemuarm64 = "-device qemu-xhci -device usb-tablet -device usb-kbd -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -no-acpi -bios ${DEPLOY_DIR_IMAGE}/u-boot.bin -d unimp -semihosting-config enable,target=native"
 
 IMAGE_FSTYPES_REMOVE = "teziimg-distro"
 
