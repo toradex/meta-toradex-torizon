@@ -70,4 +70,5 @@ BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-freescale/recipes-graphics/cairo \
     /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
+    /meta-lmp/meta-lmp-base/recipes-containers/docker/docker-ce_git.bbappend \
 "

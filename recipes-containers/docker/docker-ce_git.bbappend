@@ -1,13 +1,19 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
+python () {
+    srcurl = d.getVar('SRC_URI').replace('branch=master', 'branch=bump_19.03')
+    d.setVar('SRC_URI', srcurl)
+}
+
 SRC_URI_append = " \
     file://chrome.json \
     file://docker.service \
 "
 
-SRCREV_docker = "afacb8b7f0d8d4f9d2a8e8736e9c993e672b41f3"
+SRCREV_docker = "42e35e61f352e527082521280d5ea3761f0dee50"
+SRCREV_libnetwork = "026aabaa659832804b01754aaadd2c0f420c68b6"
 
-DOCKER_VERSION = "19.03.8-ce"
+DOCKER_VERSION = "19.03.11-ce"
 
 do_install_prepend() {
 	# Final dockerd binary location has been moved. Work around by creating
