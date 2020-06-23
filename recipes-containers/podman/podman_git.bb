@@ -24,10 +24,9 @@ python __anonymous() {
         raise bb.parse.SkipRecipe(msg)
 }
 
-SRCREV = "444a19cdd2e6108c75f6c1aadc1a2a9138a8bd73"
+SRCREV = "eec482cae3289ecaad45c602629657da7062ce9c"
 SRC_URI = " \
-    git://github.com/containers/libpod.git;branch=master \
-    file://0001-Makefile-fix-a-dependency-issue.patch \
+    git://github.com/containers/libpod.git;branch=v2.0 \
 "
 
 LICENSE = "Apache-2.0"
@@ -37,7 +36,7 @@ GO_IMPORT = "import"
 
 S = "${WORKDIR}/git"
 
-PV = "1.8.1+git${SRCPV}"
+PV = "2.0.0+git${SRCPV}"
 
 PACKAGES =+ "${PN}-contrib"
 
@@ -79,7 +78,7 @@ do_compile() {
 
 	cd ${S}/src/.gopath/src/"${PODMAN_PKG}"
 
-	oe_runmake cmd/podman/varlink/iopodman.go GO=go
+	oe_runmake pkg/varlink/iopodman.go GO=go
 
 	# Pass the needed cflags/ldflags so that cgo
 	# can find the needed headers files and libraries
