@@ -11,18 +11,19 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
  1 file changed, 2 deletions(-)
 
 diff --git a/setup.cfg b/setup.cfg
-index c23f2de..5378ffe 100755
+index 81b5727..04dd58c 100644
 --- a/setup.cfg
 +++ b/setup.cfg
-@@ -8,8 +8,6 @@ universal = 1
+@@ -9,9 +9,6 @@ universal = 1
  [metadata]
  license_file = LICENSE.txt
  provides-extra = 
 -	secure
 -	socks
+-	brotli
  requires-dist = 
- 	pyOpenSSL>=0.14,<18.0.0; python_version=="2.6" and extra == 'secure'
- 	pyOpenSSL>=0.14; python_version=="2.7" and extra == 'secure'
+ 	pyOpenSSL>=0.14; extra == 'secure'
+ 	cryptography>=1.3.4; extra == 'secure'
 -- 
 2.7.4
 
