@@ -5,9 +5,13 @@ SRC_URI_append += " \
     file://0002-colibri_imx6-boot-from-eMMC-by-default.patch \
     file://0003-colibri-imx6ull-use-distro-boot-by-default.patch \
     file://0004-colibri_imx7-use-distro-boot-by-default.patch \
-    file://0001-qemuarm64-enable-support-for-fitimage.patch \
     file://bootcount.cfg \
     file://bootlimit.cfg \
+"
+
+SRC_URI_append_qemuarm64 = " \
+    file://0001-qemu-arm-support-saving-env-in-boot-partition.patch \
+    file://fitfatenv.cfg \
 "
 
 nand_padding_colibri-imx7 () {
