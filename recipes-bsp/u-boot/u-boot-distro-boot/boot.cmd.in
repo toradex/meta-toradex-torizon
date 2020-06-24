@@ -58,10 +58,10 @@ then
     env set kernel_image ${kernel_image2}
     env set ramdisk_image ${ramdisk_image2}
     env set bootargs ${bootargs2}
-    env set fdt_path ${fdt_path2}
+    env set fdtdir ${fdtdir2}
 fi
 
-env set bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot${fdt_path}${fdtfile}"; if test -e ${devtype} ${devnum}:1 ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
+env set bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot${fdtdir}/${fdtfile}"; if test -e ${devtype} ${devnum}:1 ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
 env set bootcmd_boot '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
 env set bootcmd_run 'run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_load_r && run bootcmd_boot'
 run bootcmd_run
