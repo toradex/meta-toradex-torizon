@@ -24,7 +24,7 @@ python __anonymous() {
         raise bb.parse.SkipRecipe(msg)
 }
 
-SRCREV = "eec482cae3289ecaad45c602629657da7062ce9c"
+SRCREV = "a11c4ead10177a66ef2810a0a92ea8ce2299da07"
 SRC_URI = " \
     git://github.com/containers/libpod.git;branch=v2.0 \
 "
@@ -36,7 +36,7 @@ GO_IMPORT = "import"
 
 S = "${WORKDIR}/git"
 
-PV = "2.0.0+git${SRCPV}"
+PV = "2.0.1+git${SRCPV}"
 
 PACKAGES =+ "${PN}-contrib"
 
@@ -92,6 +92,10 @@ do_compile() {
 
 do_install() {
 	cd ${S}/src/.gopath/src/"${PODMAN_PKG}"
+
+	export GOARCH="${BUILD_GOARCH}"
+	export GOPATH="${S}/src/.gopath"
+	export GOROOT="${STAGING_DIR_NATIVE}/${nonarch_libdir}/${HOST_SYS}/go"
 
 	oe_runmake install DESTDIR="${D}"
 	if ${@bb.utils.contains('PACKAGECONFIG', 'docker', 'true', 'false', d)}; then
