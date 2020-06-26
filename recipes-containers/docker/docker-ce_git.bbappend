@@ -10,10 +10,10 @@ SRC_URI_append = " \
     file://docker.service \
 "
 
-SRCREV_docker = "42e35e61f352e527082521280d5ea3761f0dee50"
+SRCREV_docker = "48a66213fe1747e8873f849862ff3fb981899fc6"
 SRCREV_libnetwork = "026aabaa659832804b01754aaadd2c0f420c68b6"
 
-DOCKER_VERSION = "19.03.11-ce"
+DOCKER_VERSION = "19.03.12-ce"
 
 do_install_prepend() {
 	# Final dockerd binary location has been moved. Work around by creating
