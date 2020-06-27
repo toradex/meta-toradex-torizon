@@ -1,0 +1,94 @@
+From 1d358acd46c9ca71d848fca8c2d677414257f247 Mon Sep 17 00:00:00 2001
+From: Chen Qi <Qi.Chen@windriver.com>
+Date: Fri, 22 Nov 2019 09:24:58 +0800
+Subject: [PATCH] setup.py: remove maximum version requirements
+
+Remove maximum version requirements so that docker-compose will not
+require old version recipes.
+
+Aslo drop docker[ssh] dependency, change to depend on docker, hence
+paramiko could be dropped as well, this can let docker-compose start
+faster at runtime.
+
+Upstream-Status: Inappropriate [OE Specific]
+
+Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
+Signed-off-by: Ming Liu <liu.ming50@gmail.com>
+---
+ docker_compose.egg-info/requires.txt |    2 +-
+ requirements.txt                     |    1 -
+ setup.py                             |   26 +++++++++++++-------------
+ 3 files changed, 14 insertions(+), 15 deletions(-)
+
+diff --git a/docker_compose.egg-info/requires.txt b/docker_compose.egg-info/requires.txt
+index 7a9765c..104db9e 100644
+--- a/docker_compose.egg-info/requires.txt
++++ b/docker_compose.egg-info/requires.txt
+@@ -1,7 +1,7 @@
+ PyYAML<6,>=3.10
+ cached-property<2,>=1.2.0
+ distro<2,>=1.5.0
+-docker[ssh]<5,>=3.7.0
++docker<5,>=3.7.0
+ dockerpty<1,>=0.4.1
+ docopt<1,>=0.6.1
+ jsonschema<4,>=2.5.1
+diff --git a/requirements.txt b/requirements.txt
+index 3c86344..11a9e20 100644
+--- a/requirements.txt
++++ b/requirements.txt
+@@ -14,7 +14,6 @@ functools32==3.2.3.post2; python_version < '3.2'
+ idna==2.8
+ ipaddress==1.0.23
+ jsonschema==3.2.0
+-paramiko==2.7.1
+ pypiwin32==219; sys_platform == 'win32' and python_version < '3.6'
+ pypiwin32==223; sys_platform == 'win32' and python_version >= '3.6'
+ PySocks==1.7.1
+diff --git a/setup.py b/setup.py
+index efc144b..fcc6882 100644
+--- a/setup.py
++++ b/setup.py
+@@ -30,18 +30,18 @@ def find_version(*file_paths):
+ 
+ 
+ install_requires = [
+-    'cached-property >= 1.2.0, < 2',
+-    'docopt >= 0.6.1, < 1',
+-    'PyYAML >= 3.10, < 6',
+-    'requests >= 2.20.0, < 3',
+-    'texttable >= 0.9.0, < 2',
+-    'websocket-client >= 0.32.0, < 1',
+-    'distro >= 1.5.0, < 2',
+-    'docker[ssh] >= 3.7.0, < 5',
+-    'dockerpty >= 0.4.1, < 1',
+-    'six >= 1.3.0, < 2',
+-    'jsonschema >= 2.5.1, < 4',
+-    'python-dotenv >= 0.13.0, < 1',
++    'cached-property >= 1.2.0',
++    'docopt >= 0.6.1',
++    'PyYAML >= 3.10',
++    'requests >= 2.20.0',
++    'texttable >= 0.9.0',
++    'websocket-client >= 0.32.0',
++    'distro >= 1.5.0',
++    'docker >= 3.7.0',
++    'dockerpty >= 0.4.1',
++    'six >= 1.3.0',
++    'jsonschema >= 2.5.1',
++    'python-dotenv >= 0.13.0',
+ ]
+ 
+ 
+@@ -61,7 +61,7 @@ extras_require = {
+     ':python_version < "3.3"': ['backports.shutil_get_terminal_size == 1.0.0',
+                                 'ipaddress >= 1.0.16, < 2'],
+     ':sys_platform == "win32"': ['colorama >= 0.4, < 1'],
+-    'socks': ['PySocks >= 1.5.6, != 1.5.7, < 2'],
++    'socks': ['PySocks >= 1.5.6, != 1.5.7'],
+     'tests': tests_require,
+ }
+ 
+-- 
+2.25.0
+
