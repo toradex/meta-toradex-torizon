@@ -62,11 +62,6 @@ def get_layer_revision_information(d):
         bb.warn("Failed to get layers information. Exception: {}".format(e))
     return '\n'.join(res)
 
-IMAGE_CMD_ostree_append() {
-    # Follow the new standard location recommendation from OSTree, drop the old ones.
-    rm -rf boot/*
-}
-
 # Add layers revision information to ostree body
 OSTREE_COMMIT_BODY := "${@get_layer_revision_information(d)}"
 
