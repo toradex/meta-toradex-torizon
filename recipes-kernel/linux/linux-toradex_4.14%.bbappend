@@ -20,4 +20,6 @@ kernel_do_configure_append() {
 	kernel_configure_variable BOOTPARAM_SOFTLOCKUP_PANIC y
 	kernel_configure_variable PANIC_ON_OOPS y
 	kernel_configure_variable PANIC_TIMEOUT 5
+
+	kernel_configure_variable SENSORS_SHT3x y
 }
