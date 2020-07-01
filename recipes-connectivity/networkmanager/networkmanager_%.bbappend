@@ -2,6 +2,8 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 SRC_URI += "file://toradex-nmconnection.conf file://network.nmconnection.in"
 
+PACKAGECONFIG_remove = "ifupdown dnsmasq"
+
 do_install_append() {
     install -m 0600 ${WORKDIR}/toradex-nmconnection.conf ${D}${nonarch_libdir}/NetworkManager/conf.d
 
