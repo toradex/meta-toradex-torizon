@@ -21,13 +21,9 @@ DISTRO_FEATURES_NATIVESDK_remove = "x11"
 
 PREFERRED_PROVIDER_iasl-native = "acpica-native"
 
-MASK_META_VIRT_KERNEL_PATH = "/meta-virtualization/recipes-kernel/linux"
-MASK_META_VIRT_KERNEL_PATH_intel-corei7-64 = ""
-
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-freescale/recipes-graphics/cairo \
     /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
-    ${MASK_META_VIRT_KERNEL_PATH} \
 "
