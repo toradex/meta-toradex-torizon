@@ -1,7 +1,19 @@
-require conf/distro/include/torizon-common.inc
+require conf/distro/include/tdx-base.inc
 
-# Distro override for all torizon Distros
-DISTROOVERRIDES .= ":torizon:use-mainline-bsp"
+MAINTAINER = "Toradex TorizonCore Team <torizoncore@toradex.com>"
+
+TCLIBCAPPEND = ""
+
+IMAGE_CLASSES += "image_type_torizon"
+IMAGE_CLASSES_remove = "image_type_tezi image_types_fsl"
+
+TDX_RELEASE = "0.0.0"
+
+SDK_NAME_PREFIX = "${DISTRO}"
+SDK_VERSION = "${DISTRO_VERSION}"
+
+# Torizon machine specific overrides
+INHERIT += "torizon"
 
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
@@ -33,6 +45,10 @@ SOTA_DEPLOY_CREDENTIALS ?= "0"
 DISTRO_FEATURES_append = " virtualization"
 DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x11 ptest multiarch opengl vulkan"
 
+# No need for x11 even for native
+DISTRO_FEATURES_NATIVE_remove = "x11"
+DISTRO_FEATURES_NATIVESDK_remove = "x11"
+
 # General
 WKS_FILE_DEPENDS_BOOTLOADERS_remove = "syslinux systemd-boot"
 ## We don't use the default efi sota wks file
@@ -41,3 +57,10 @@ WKS_FILE_sota_remove = "efiimage-sota.wks"
 # TorizonCore does not use runtime package management, so version numbers going
 # backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
+
+# Compatibility with toradex layers
+BBMASK += " \
+    /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
+    /meta-freescale/recipes-graphics/cairo \
+    /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
+"
