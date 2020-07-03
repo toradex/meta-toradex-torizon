@@ -34,5 +34,3 @@ do_configure_append(){
 	        echo "CONFIG_BOOTCOUNT_BOOTLIMIT=3" >> ${S}/configs/${CONFIG_FILE}
 	done
 }
-
-RDEPENDS_${PN}_append_qemuarm64 = " u-boot-distro-boot"

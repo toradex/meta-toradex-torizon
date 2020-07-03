@@ -2,8 +2,11 @@ UBOOT_MACHINE = "qemu_arm64_defconfig"
 UBOOT_ENTRYPOINT = "0x40080000"
 
 KERNEL_CLASSES = "kernel-fitimage"
-IMAGE_BOOT_FILES_qemuarm64 = "boot.scr uEnv.txt"
+IMAGE_BOOT_FILES_qemuarm64 = "boot.scr-${MACHINE};boot.scr uEnv.txt"
 KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
+
+WKS_FILE_DEPENDS_append = " virtual/bootloader u-boot-default-script"
+WKS_FILE_DEPENDS_remove = "tezi-metadata"
 
 OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
@@ -18,3 +21,5 @@ IMAGE_FSTYPES_REMOVE = "teziimg-distro"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-toradex"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64 = "linux-yocto"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64_torizon-rt = "linux-yocto-rt"
+
+PREFERRED_PROVIDER_u-boot-default-script_qemuarm64 = "u-boot-distro-boot"
