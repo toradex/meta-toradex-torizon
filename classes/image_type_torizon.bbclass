@@ -5,8 +5,8 @@ TEZI_ROOT_SUFFIX = "ota.tar.zst"
 TEZI_BOOT_SUFFIX = "bootfs.tar.zst"
 TEZI_CONFIG_FORMAT = "3"
 
-SUMMARY_append_torizon-rt = " (PREEMPT_RT)"
-DESCRIPTION_append_torizon-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
+SUMMARY_append_preempt-rt = " (PREEMPT_RT)"
+DESCRIPTION_append_preempt-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
 
 #Name an ostree branch after image basename, this allows having multiple images in one repo
 OSTREE_BRANCHNAME = "${MACHINE}/${DISTRO}/${IMAGE_BASENAME}"
