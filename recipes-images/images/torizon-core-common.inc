@@ -29,7 +29,6 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     udev-toradex-rules \
     wireless-regdb-static \
     ostree-customize-plymouth \
-    u-boot-fw-utils \
     network-configuration \
 "
 
