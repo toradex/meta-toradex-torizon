@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline:"
 require linux-toradex-version.inc
 require recipes-kernel/linux/linux-yocto.inc
 
-SRCREV_meta = "0aedf32650908d08f8cd9cbd3e12f8e65f00bea0"
+SRCREV_meta = "90c6e8f1ed6720fd3274922bf4d985ee4cb92903"
 
 KMETABRANCH = "toradex_5.4.y"
 LINUX_KERNEL_TYPE = "standard"
