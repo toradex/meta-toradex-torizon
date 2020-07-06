@@ -1,4 +1,4 @@
-From c541b39a836e3f09a67fc95922ef3beaaf30ba45 Mon Sep 17 00:00:00 2001
+From 7439aa0291b78d2946868b152852384adbd7ed32 Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Tue, 4 Feb 2020 13:39:27 +0100
 Subject: [PATCH] deploy: support devicetree directory
@@ -18,37 +18,117 @@ change leads to a new deployment and hence can be rolled back.
 
 The loader configuration has a new key "devicetreepath" which contains
 the path where devicetrees are stored. This is also written to the
-U-Boot variable "fdt_path". The boot loader is expected to use this path
+U-Boot variable "fdtdir". The boot loader is expected to use this path
 to load a particular machines device tree from.
 
 Closes: #1900
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
-Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- src/libostree/ostree-bootloader-uboot.c |  4 ++
- src/libostree/ostree-sysroot-deploy.c   | 87 ++++++++++++++++++++++---
- 2 files changed, 83 insertions(+), 8 deletions(-)
+ src/libostree/ostree-bootloader-uboot.c |   4 +
+ src/libostree/ostree-sysroot-deploy.c   | 127 ++++++++++++++++++++++--
+ tests/test-admin-deploy-uboot.sh        |  30 +++++-
+ 3 files changed, 151 insertions(+), 10 deletions(-)
 
 diff --git a/src/libostree/ostree-bootloader-uboot.c b/src/libostree/ostree-bootloader-uboot.c
-index 4cd955d5..0d3bcc92 100644
+index 4cd955d5..1e1f0371 100644
 --- a/src/libostree/ostree-bootloader-uboot.c
 +++ b/src/libostree/ostree-bootloader-uboot.c
 @@ -144,6 +144,10 @@ create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
        if (val)
          g_ptr_array_add (new_lines, g_strdup_printf ("fdt_file%s=%s", index_suffix, val));
  
-+      val = ostree_bootconfig_parser_get (config, "devicetreepath");
++      val = ostree_bootconfig_parser_get (config, "fdtdir");
 +      if (val)
-+        g_ptr_array_add (new_lines, g_strdup_printf ("fdt_path%s=%s", index_suffix, val));
++        g_ptr_array_add (new_lines, g_strdup_printf ("fdtdir%s=%s", index_suffix, val));
 +
        val = ostree_bootconfig_parser_get (config, "options");
        if (val)
          {
 diff --git a/src/libostree/ostree-sysroot-deploy.c b/src/libostree/ostree-sysroot-deploy.c
-index ee00c02c..b3d12497 100644
+index ee00c02c..cb593020 100644
 --- a/src/libostree/ostree-sysroot-deploy.c
 +++ b/src/libostree/ostree-sysroot-deploy.c
-@@ -1065,6 +1065,9 @@ get_kernel_from_tree_usrlib_modules (int                  deployment_dfd,
+@@ -217,6 +217,79 @@ dirfd_copy_attributes_and_xattrs (int            src_parent_dfd,
+   return TRUE;
+ }
+ 
++static gint
++str_sort_cb (gconstpointer name_ptr_a, gconstpointer name_ptr_b)
++{
++  const gchar *name_a = *((const gchar **) name_ptr_a);
++  const gchar *name_b = *((const gchar **) name_ptr_b);
++
++  return g_strcmp0 (name_a, name_b);
++}
++
++static gboolean
++checksum_dir_recurse (int          dfd,
++                  const char      *path,
++                  OtChecksum      *checksum,
++                  GCancellable    *cancellable,
++                  GError         **error)
++{
++  g_auto(GLnxDirFdIterator) dfditer = { 0, };
++  g_autoptr (GPtrArray) d_entries = g_ptr_array_new_with_free_func (g_free);
++
++  if (!glnx_dirfd_iterator_init_at (dfd, path, TRUE, &dfditer, error))
++    return FALSE;
++
++  while (TRUE)
++    {
++      struct dirent *dent;
++
++      if (!glnx_dirfd_iterator_next_dent (&dfditer, &dent, cancellable, error))
++        return FALSE;
++
++      if (dent == NULL)
++        break;
++
++      g_ptr_array_add (d_entries, g_strdup (dent->d_name));
++    }
++
++  /* File systems do not guarantee dir entry order, make sure this is
++   * reproducable
++   */
++  g_ptr_array_sort(d_entries, str_sort_cb);
++
++  for (gint i=0; i < d_entries->len; i++)
++    {
++      const gchar *d_name = (gchar *)g_ptr_array_index (d_entries, i);
++      struct stat stbuf;
++
++      if (!glnx_fstatat (dfditer.fd, d_name, &stbuf,
++                         AT_SYMLINK_NOFOLLOW, error))
++        return FALSE;
++
++      if (S_ISDIR (stbuf.st_mode))
++        {
++          if (!checksum_dir_recurse(dfditer.fd, d_name, checksum, cancellable, error))
++            return FALSE;
++        }
++      else
++        {
++          int fd;
++
++          if (!ot_openat_ignore_enoent (dfditer.fd, d_name, &fd, error))
++            return FALSE;
++          if (fd != -1)
++            {
++              g_autoptr(GInputStream) in = g_unix_input_stream_new (fd, FALSE);
++              if (!ot_gio_splice_update_checksum (NULL, in, checksum, cancellable, error))
++                return FALSE;
++            }
++        }
++
++    }
++
++  return TRUE;
++}
++
+ static gboolean
+ copy_dir_recurse (int              src_parent_dfd,
+                   int              dest_parent_dfd,
+@@ -1065,6 +1138,9 @@ get_kernel_from_tree_usrlib_modules (int                  deployment_dfd,
    g_clear_object (&in);
    glnx_close_fd (&fd);
  
@@ -58,47 +138,31 @@ index ee00c02c..b3d12497 100644
    if (!ot_openat_ignore_enoent (ret_layout->boot_dfd, "devicetree", &fd, error))
      return FALSE;
    if (fd != -1)
-@@ -1075,6 +1078,39 @@ get_kernel_from_tree_usrlib_modules (int                  deployment_dfd,
+@@ -1075,6 +1151,23 @@ get_kernel_from_tree_usrlib_modules (int                  deployment_dfd,
        if (!ot_gio_splice_update_checksum (NULL, in, &checksum, cancellable, error))
          return FALSE;
      }
 +  else
 +    {
-+      g_auto(GLnxDirFdIterator) mod_dt_fditer = { 0, };
-+      if (!ot_dfd_iter_init_allow_noent (ret_layout->boot_dfd, "dtb", &mod_dt_fditer,
-+                                         &exists, error))
++      struct stat stbuf;
++      /* Check for dtb directory */
++      if (!glnx_fstatat_allow_noent (ret_layout->boot_dfd, "dtb", &stbuf, 0, error))
 +        return FALSE;
-+      if (exists)
++
++      if (errno == 0 && S_ISDIR (stbuf.st_mode))
 +        {
 +          /* devicetree_namever set to NULL indicates a complete directory */
 +          ret_layout->devicetree_srcpath = g_strdup ("dtb");
 +          ret_layout->devicetree_namever = NULL;
 +
-+          while (TRUE)
-+           {
-+              struct dirent *dent;
-+              if (!glnx_dirfd_iterator_next_dent_ensure_dtype (&mod_dt_fditer, &dent, cancellable, error))
-+                return FALSE;
-+              if (dent == NULL)
-+                break;
-+              if (dent->d_type == DT_DIR)
-+                continue;
-+
-+              if (!ot_openat_ignore_enoent (ret_layout->boot_dfd, dent->d_name, &fd, error))
-+                return FALSE;
-+              if (fd != -1)
-+                {
-+                  in = g_unix_input_stream_new (fd, FALSE);
-+                  if (!ot_gio_splice_update_checksum (NULL, in, &checksum, cancellable, error))
-+                    return FALSE;
-+                }
-+            }
++          if (!checksum_dir_recurse(ret_layout->boot_dfd, "dtb", &checksum, cancellable, error))
++            return FALSE;
 +        }
 +    }
  
    g_clear_object (&in);
    glnx_close_fd (&fd);
-@@ -1730,16 +1766,46 @@ install_deployment_kernel (OstreeSysroot   *sysroot,
+@@ -1730,15 +1823,24 @@ install_deployment_kernel (OstreeSysroot   *sysroot,
  
    if (kernel_layout->devicetree_srcpath)
      {
@@ -114,7 +178,7 @@ index ee00c02c..b3d12497 100644
 -                                  sysroot->debug_flags,
 -                                  cancellable, error))
 +          if (!glnx_fstatat_allow_noent (bootcsum_dfd, kernel_layout->devicetree_namever, &stbuf, 0, error))
-             return FALSE;
++            return FALSE;
 +          if (errno == ENOENT)
 +            {
 +              if (!install_into_boot (repo, sepolicy, kernel_layout->boot_dfd, kernel_layout->devicetree_srcpath,
@@ -126,45 +190,73 @@ index ee00c02c..b3d12497 100644
 +        }
 +      else
 +        {
-+          g_auto(GLnxDirFdIterator) dfditer = { 0, };
-+          if (!glnx_dirfd_iterator_init_at (kernel_layout->boot_dfd, "dtb/", FALSE, &dfditer, error))
-+            return FALSE;
-+
-+          while (TRUE)
-+            {
-+              struct dirent *dent;
-+
-+              if (!glnx_dirfd_iterator_next_dent (&dfditer, &dent, cancellable, error))
-+                  return FALSE;
-+              if (dent == NULL)
-+                break;
-+
-+              if (!glnx_fstatat_allow_noent (bootcsum_dfd, dent->d_name, &stbuf, 0, error))
-+                return FALSE;
-+              if (errno == ENOENT)
-+                {
-+                  if (!install_into_boot (repo, sepolicy, dfditer.fd, dent->d_name,
-+                                    bootcsum_dfd, dent->d_name,
-+                                    sysroot->debug_flags,
-+                                    cancellable, error))
-+                    return FALSE;
-+                }
-+           }
++          if (!copy_dir_recurse(kernel_layout->boot_dfd, bootcsum_dfd, kernel_layout->devicetree_srcpath,
++                                sysroot->debug_flags, cancellable, error))
+             return FALSE;
          }
      }
- 
-@@ -1850,6 +1916,11 @@ install_deployment_kernel (OstreeSysroot   *sysroot,
+@@ -1850,6 +1952,15 @@ install_deployment_kernel (OstreeSysroot   *sysroot,
        g_autofree char * boot_relpath = g_strconcat ("/", bootcsumdir, "/", kernel_layout->devicetree_namever, NULL);
        ostree_bootconfig_parser_set (bootconfig, "devicetree", boot_relpath);
      }
 +  else if (kernel_layout->devicetree_srcpath)
 +    {
-+      g_autofree char * boot_relpath = g_strconcat ("/", bootcsumdir, "/", "", NULL);
-+      ostree_bootconfig_parser_set (bootconfig, "devicetreepath", boot_relpath);
++      /* If devicetree_srcpath is set but devicetree_namever is NULL, then we
++       * want to point to a whole directory of device trees.
++       * See: https://github.com/ostreedev/ostree/issues/1900
++       */
++      g_autofree char * boot_relpath = g_strconcat ("/", bootcsumdir, "/", kernel_layout->devicetree_srcpath, NULL);
++      ostree_bootconfig_parser_set (bootconfig, "fdtdir", boot_relpath);
 +    }
  
    /* Note this is parsed in ostree-impl-system-generator.c */
    g_autofree char *ostree_kernel_arg = g_strdup_printf ("ostree=/ostree/boot.%d/%s/%s/%d",
+diff --git a/tests/test-admin-deploy-uboot.sh b/tests/test-admin-deploy-uboot.sh
+index 8ea37fe9..e3163cb0 100755
+--- a/tests/test-admin-deploy-uboot.sh
++++ b/tests/test-admin-deploy-uboot.sh
+@@ -25,9 +25,11 @@ set -euo pipefail
+ . $(dirname $0)/libtest.sh
+ 
+ # Exports OSTREE_SYSROOT so --sysroot not needed.
+-setup_os_repository "archive" "uboot"
++kver="3.6.0"
++modulesdir="usr/lib/modules/${kver}"
++setup_os_repository "archive" "uboot" ${modulesdir}
+ 
+-extra_admin_tests=1
++extra_admin_tests=2
+ 
+ . $(dirname $0)/admin-test.sh
+ 
+@@ -52,3 +54,27 @@ assert_file_has_content sysroot/boot/uEnv.txt "kernel_image2="
+ assert_file_has_content sysroot/boot/uEnv.txt "kernel_image3="
+ 
+ echo "ok merging uEnv.txt files"
++
++cd ${test_tmpdir}
++os_repository_new_commit "uboot test" "test with device tree directory"
++
++devicetree_path=osdata/${modulesdir}/dtb/asoc-board.dtb
++devicetree_overlay_path=osdata/${modulesdir}/dtb/overlays/overlay.dtbo
++
++mkdir -p osdata/${modulesdir}/dtb
++echo "a device tree" > ${devicetree_path}
++mkdir -p osdata/${modulesdir}/dtb/overlays
++echo "a device tree overlay" > ${devicetree_overlay_path}
++
++bootcsum=$(
++  (echo "new: a kernel uboot test" && echo "new: an initramfs uboot test" &&
++    cat ${devicetree_path} ${devicetree_overlay_path} ) |
++  sha256sum | cut -f 1 -d ' ')
++
++${CMD_PREFIX} ostree --repo=testos-repo commit --tree=dir=osdata/ -b testos/buildmaster/x86_64-runtime
++${CMD_PREFIX} ostree admin upgrade --os=testos
++assert_file_has_content sysroot/boot/uEnv.txt "fdtdir="
++assert_file_has_content sysroot/boot/ostree/testos-${bootcsum}/dtb/asoc-board.dtb 'a device tree'
++assert_file_has_content sysroot/boot/ostree/testos-${bootcsum}/dtb/overlays/overlay.dtbo 'a device tree overlay'
++
++echo "ok deploying fdtdir"
 -- 
-2.25.0
+2.27.0
 
