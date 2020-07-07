@@ -22,9 +22,6 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     ldd \
     less \
     openssh-sftp-server \
-    ostree-devicetrees \
-    ostree-kernel \
-    ostree-initramfs \
     packagegroup-core-full-cmdline-multiuser \
     packagegroup-core-full-cmdline-utils \
     pciutils \
