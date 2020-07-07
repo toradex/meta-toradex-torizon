@@ -12,5 +12,5 @@ inherit useradd
 
 USERADD_PACKAGES = "${PN}"
 
-GROUPADD_PARAM_${PN} = "-g 880 torizon"
-USERADD_PARAM_${PN} = "-u 1220 -g 880 -G sudo,users,plugdev -m -d /home/torizon -P torizon torizon"
+GROUPADD_PARAM_${PN} = "-g 1000 torizon"
+USERADD_PARAM_${PN} = "-u 1000 -g 1000 -G sudo,users,plugdev -m -d /home/torizon -P torizon torizon"
