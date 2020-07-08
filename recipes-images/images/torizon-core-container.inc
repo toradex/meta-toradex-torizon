@@ -1,6 +1,6 @@
 require torizon-core-common.inc
 
-IMAGE_BASENAME_append_preempt-rt = "${IMAGE_RT_SUFFIX}"
+IMAGE_BASENAME_append_preempt-rt = "-rt"
 
 IMAGE_FEATURES += "ssh-server-openssh"
 
