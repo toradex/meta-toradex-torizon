@@ -130,6 +130,7 @@ BUILDDIR=$OEROOT/${BUILDDIR%%/}
 # wrong binaries can be used instead of the expected ones during task execution
 export PATH=$(echo "${PATH}" | sed 's/\(:.\|:\)*:/:/g;s/^.\?://;s/:.\?$//')
 export PATH="${OEROOT}/bitbake/bin:${OEROOT}/.repo/repo:${PATH}"
+export PATH="${OEROOT}/layers/openembedded-core/bitbake/bin:${PATH}"
 export PATH="${OEROOT}/layers/openembedded-core/scripts:${PATH}"
 # Remove duplicate path entries
 export PATH=$(echo "$PATH" |
