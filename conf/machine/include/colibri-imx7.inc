@@ -17,8 +17,6 @@ PREFERRED_PROVIDER_u-boot-default-script = "u-boot-distro-boot"
 
 MACHINE_FIRMWARE_remove = "firmware-imx-epdc" 
 
-MACHINEOVERRIDES_append_upstream = ":use-mainline-bsp"
-
 PREFERRED_PROVIDER_virtual/kernel_use-mainline-bsp = "linux-toradex-mainline"
 PREFERRED_PROVIDER_virtual/dtb_use-mainline-bsp = "device-tree-overlays-mainline"
 
