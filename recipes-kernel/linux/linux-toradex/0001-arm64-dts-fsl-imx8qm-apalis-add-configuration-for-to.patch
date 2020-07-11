@@ -41,13 +41,13 @@ index 7a79599123a47..858100b21dda3 100644
 +#include "fsl-imx8qm-apalis-torizon.dtsi"
  
  / {
- 	model = "Toradex Apalis iMX8QM/QP on Apalis Ixora Board";
+ 	model = "Toradex Apalis iMX8QM/QP on Apalis Ixora V1.1 Carrier Board";
 diff --git a/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis-torizon.dtsi b/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis-torizon.dtsi
 new file mode 100644
 index 0000000000000..61afebe07e467
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/fsl-imx8qm-apalis-torizon.dtsi
-@@ -0,0 +1,20 @@
+@@ -0,0 +1,19 @@
 +/ {
 +    aliases {
 +        rtc0 = &rtc;
@@ -59,7 +59,6 @@ index 0000000000000..61afebe07e467
 +
 +/delete-node/ &atmel_mxt_ts;
 +/delete-node/ &rtc_i2c;
-+/delete-node/ &pinctrl_touch;
 +
 +&ldb2 {
 +    status = "disabled";

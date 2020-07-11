@@ -30,7 +30,7 @@ new file mode 100644
 index 0000000000000..125f6f718b0b2
 --- /dev/null
 +++ b/arch/arm64/boot/dts/freescale/fsl-imx8qxp-apalis-torizon.dtsi
-@@ -0,0 +1,22 @@
+@@ -0,0 +1,21 @@
 +/ {
 +    lvds1_panel {
 +        status = "disabled";
@@ -38,7 +38,6 @@ index 0000000000000..125f6f718b0b2
 +};
 +
 +/delete-node/ &atmel_mxt_ts;
-+/delete-node/ &pinctrl_touch;
 +
 +&adma_lcdif {
 +    status = "disabled";
