@@ -12,6 +12,9 @@ IMAGE_CLASSES_remove = "image_type_tezi image_types_fsl"
 
 TDX_RELEASE = "0.0.0"
 
+IMX_DEFAULT_BSP = "nxp"
+IMX_DEFAULT_BSP_upstream = "mainline"
+
 SDK_NAME_PREFIX = "${DISTRO}"
 SDK_VERSION = "${DISTRO_VERSION}"
 
