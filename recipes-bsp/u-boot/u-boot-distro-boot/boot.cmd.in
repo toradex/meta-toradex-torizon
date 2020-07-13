@@ -20,9 +20,9 @@ then
 fi
 
 env set overlays_file "overlays.txt"
-env set load_overlay 'load ${devtype} ${devnum}:1 ${loadaddr} ${overlays_file}; env import -t ${loadaddr} ${filesize}'
+env set load_overlay 'load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlays_file}; env import -t ${loadaddr} ${filesize}'
 env set apply_overlays 'fdt addr ${fdt_addr_r} && fdt resize 0x20000 && for overlay_file in ${fdt_overlays}; do echo "Applying Overlay: ${overlay_file}"
-&& load ${devtype} ${devnum}:1 ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; done;'
+&& load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; done;'
 
 
 env set bootcmd_load_k 'load ${devtype} ${devnum}:2 ${kernel_addr_r} "/boot"${kernel_image}'
@@ -45,7 +45,7 @@ if test "${board}" = "apalis-imx8"
 then
 	echo "Loading HDMI firmware..."
 	env set hdp_file hdmitxfw.bin
-	load ${devtype} ${devnum}:1 ${loadaddr} ${hdp_file}
+	load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${hdp_file}
 	hdp load ${loadaddr}
 	env set scriptargs pci=nomsi
 fi
@@ -61,7 +61,7 @@ then
     env set fdtdir ${fdtdir2}
 fi
 
-env set bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot${fdtdir}/${fdtfile}"; if test -e ${devtype} ${devnum}:1 ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
+env set bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} "/boot${fdtdir}/${fdtfile}"; if test -e ${devtype} ${devnum}:${distro_bootpart} ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
 env set bootcmd_boot '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
 env set bootcmd_run 'run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_load_r && run bootcmd_boot'
 run bootcmd_run
