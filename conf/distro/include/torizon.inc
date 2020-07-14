@@ -62,11 +62,6 @@ DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x1
 DISTRO_FEATURES_NATIVE_remove = "x11"
 DISTRO_FEATURES_NATIVESDK_remove = "x11"
 
-# General
-WKS_FILE_DEPENDS_BOOTLOADERS_remove = "syslinux systemd-boot"
-## We don't use the default efi sota wks file
-WKS_FILE_sota_remove = "efiimage-sota.wks"
-
 # TorizonCore does not use runtime package management, so version numbers going
 # backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
