@@ -1,4 +1,4 @@
-From 8a749de9d0a33871a472c4939068c1d7b014021f Mon Sep 17 00:00:00 2001
+From d6a5c5692c1b5b066bc58cc5d6c3e328bb0b6414 Mon Sep 17 00:00:00 2001
 From: Ming Liu <ming.liu@toradex.com>
 Date: Sun, 23 Feb 2020 15:12:14 +0100
 Subject: [PATCH] Initial support for docker-compose secondaries
@@ -9,15 +9,15 @@ Signed-off-by: Phil Wise <phil@phil-wise.com>
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- config/secondary/dockercomposesec.json        |  14 +++
- config/secondary/example-redis.yml            |   5 +
- src/aktualizr_primary/secondary.cc            |   5 +
- src/aktualizr_primary/secondary_config.cc     |   7 ++
- src/aktualizr_primary/secondary_config.h      |   5 +-
- src/virtual_secondary/CMakeLists.txt          |   4 +-
- .../dockercomposesecondary.cc                 | 103 ++++++++++++++++++
- .../dockercomposesecondary.h                  |  42 +++++++
- 8 files changed, 182 insertions(+), 3 deletions(-)
+ config/secondary/dockercomposesec.json        | 14 +++
+ config/secondary/example-redis.yml            |  5 ++
+ src/aktualizr_primary/secondary.cc            |  5 ++
+ src/aktualizr_primary/secondary_config.cc     |  7 ++
+ src/aktualizr_primary/secondary_config.h      |  5 +-
+ src/virtual_secondary/CMakeLists.txt          |  4 +-
+ .../dockercomposesecondary.cc                 | 87 +++++++++++++++++++
+ .../dockercomposesecondary.h                  | 41 +++++++++
+ 8 files changed, 165 insertions(+), 3 deletions(-)
  create mode 100644 config/secondary/dockercomposesec.json
  create mode 100644 config/secondary/example-redis.yml
  create mode 100644 src/virtual_secondary/dockercomposesecondary.cc
@@ -25,7 +25,7 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
 
 diff --git a/config/secondary/dockercomposesec.json b/config/secondary/dockercomposesec.json
 new file mode 100644
-index 00000000..93d81a69
+index 000000000..93d81a69a
 --- /dev/null
 +++ b/config/secondary/dockercomposesec.json
 @@ -0,0 +1,14 @@
@@ -45,7 +45,7 @@ index 00000000..93d81a69
 +}
 diff --git a/config/secondary/example-redis.yml b/config/secondary/example-redis.yml
 new file mode 100644
-index 00000000..d6dfa2e6
+index 000000000..d6dfa2e6a
 --- /dev/null
 +++ b/config/secondary/example-redis.yml
 @@ -0,0 +1,5 @@
@@ -55,10 +55,10 @@ index 00000000..d6dfa2e6
 +    image: "redis:alpine"
 +    restart: always
 diff --git a/src/aktualizr_primary/secondary.cc b/src/aktualizr_primary/secondary.cc
-index a9b29bc8..2ecebe92 100644
+index b3c02dba3..07ba388de 100644
 --- a/src/aktualizr_primary/secondary.cc
 +++ b/src/aktualizr_primary/secondary.cc
-@@ -31,6 +31,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
+@@ -32,6 +32,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
         auto virtual_sec_cgf = dynamic_cast<const VirtualSecondaryConfig&>(config);
         return Secondaries({std::make_shared<VirtualSecondary>(virtual_sec_cgf)});
       }},
@@ -71,7 +71,7 @@ index a9b29bc8..2ecebe92 100644
      //     Add another secondary factory here
      //  }
 diff --git a/src/aktualizr_primary/secondary_config.cc b/src/aktualizr_primary/secondary_config.cc
-index 09c67138..a8f24ee3 100644
+index 09c671389..a8f24ee3f 100644
 --- a/src/aktualizr_primary/secondary_config.cc
 +++ b/src/aktualizr_primary/secondary_config.cc
 @@ -114,4 +114,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
@@ -87,7 +87,7 @@ index 09c67138..a8f24ee3 100644
 +
  }  // namespace Primary
 diff --git a/src/aktualizr_primary/secondary_config.h b/src/aktualizr_primary/secondary_config.h
-index 68f31ef4..86e9312a 100644
+index 68f31ef44..86e9312aa 100644
 --- a/src/aktualizr_primary/secondary_config.h
 +++ b/src/aktualizr_primary/secondary_config.h
 @@ -7,6 +7,7 @@
@@ -116,7 +116,7 @@ index 68f31ef4..86e9312a 100644
    };
  
 diff --git a/src/virtual_secondary/CMakeLists.txt b/src/virtual_secondary/CMakeLists.txt
-index 2017fe75..78e7163e 100644
+index 2017fe754..78e7163e9 100644
 --- a/src/virtual_secondary/CMakeLists.txt
 +++ b/src/virtual_secondary/CMakeLists.txt
 @@ -1,6 +1,6 @@
@@ -130,12 +130,12 @@ index 2017fe75..78e7163e 100644
  
 diff --git a/src/virtual_secondary/dockercomposesecondary.cc b/src/virtual_secondary/dockercomposesecondary.cc
 new file mode 100644
-index 00000000..612352b1
+index 000000000..ad8574808
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.cc
-@@ -0,0 +1,103 @@
+@@ -0,0 +1,87 @@
 +#include "dockercomposesecondary.h"
-+#include "utilities/types.h"
++#include "libaktualizr/types.h"
 +#include "logging/logging.h"
 +#include "utilities/fault_injection.h"
 +
@@ -204,22 +204,6 @@ index 00000000..612352b1
 +DockerComposeSecondary::DockerComposeSecondary(Primary::DockerComposeSecondaryConfig sconfig_in)
 +    : ManagedSecondary(std::move(sconfig_in)) {}
 +
-+bool DockerComposeSecondary::storeFirmware(const std::string& target_name, const std::string& content) {
-+  if (fiu_fail((std::string("secondary_install_") + getSerial().ToString()).c_str()) != 0) {
-+    return false;
-+  }
-+
-+  Utils::writeFile(sconfig.target_name_path, target_name);
-+  Utils::writeFile(sconfig.firmware_path, content);
-+  sync();
-+
-+  stringstream cmd_line;
-+  cmd_line << "docker-compose -f " << sconfig.firmware_path << " up -d";
-+  LOG_INFO << " Running " << cmd_line.str();
-+  int rescode = system(cmd_line.str().c_str());
-+  return rescode == 0;
-+}
-+
 +bool DockerComposeSecondary::getFirmwareInfo(Uptane::InstalledImageInfo& firmware_info) const {
 +  std::string content;
 +
@@ -239,16 +223,16 @@ index 00000000..612352b1
 +}  // namespace Primary
 diff --git a/src/virtual_secondary/dockercomposesecondary.h b/src/virtual_secondary/dockercomposesecondary.h
 new file mode 100644
-index 00000000..9452a684
+index 000000000..b9d7b1546
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.h
-@@ -0,0 +1,42 @@
+@@ -0,0 +1,41 @@
 +#ifndef PRIMARY_DOCKERCOMPOSESECONDARY_H_
 +#define PRIMARY_DOCKERCOMPOSESECONDARY_H_
 +
 +#include <string>
 +#include "managedsecondary.h"
-+#include "utilities/types.h"
++#include "libaktualizr/types.h"
 +
 +namespace Primary {
 +
@@ -278,7 +262,6 @@ index 00000000..9452a684
 +  bool ping() const override { return true; }
 +
 + private:
-+  bool storeFirmware(const std::string& target_name, const std::string& content) override;
 +  bool getFirmwareInfo(Uptane::InstalledImageInfo& firmware_info) const override;
 +};
 +
@@ -286,5 +269,5 @@ index 00000000..9452a684
 +
 +#endif  // PRIMARY_DOCKERCOMPOSESECONDARY_H_
 -- 
-2.25.0
+2.27.0
 
