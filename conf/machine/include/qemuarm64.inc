@@ -19,9 +19,6 @@ QB_OPT_APPEND_qemuarm64 = "-show-cursor -device VGA,edid=on -device qemu-xhci -d
 
 IMAGE_FSTYPES_REMOVE = "teziimg-distro"
 
-IMAGE_RT_SUFFIX_qemuarm64 = ""
-IMAGE_NAME_qemuarm64_preempt-rt = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSION_SUFFIX}"
-
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 

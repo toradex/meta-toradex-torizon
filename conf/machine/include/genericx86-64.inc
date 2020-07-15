@@ -9,8 +9,5 @@ SOTA_CLIENT_FEATURES_remove = "ubootenv"
 IMAGE_FSTYPES_REMOVE = "hddimg teziimg-distro"
 IMAGE_FSTYPES_append = " wic.vmdk wic.vdi"
 
-IMAGE_RT_SUFFIX_qemuarm64 = ""
-IMAGE_NAME_qemuarm64_preempt-rt = "${IMAGE_BASENAME}-rt-${MACHINE}${IMAGE_VERSION_SUFFIX}"
-
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
