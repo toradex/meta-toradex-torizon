@@ -15,6 +15,7 @@ python __anonymous () {
 }
 
 SRCREV_meta = "90c6e8f1ed6720fd3274922bf4d985ee4cb92903"
+SRCREV_meta_use-head-next = "${AUTOREV}"
 
 KMETABRANCH = "toradex_5.4.y"
 LINUX_KERNEL_TYPE = "standard"
