@@ -1,7 +1,5 @@
 require torizon-core-common.inc
 
-IMAGE_BASENAME_append_preempt-rt = "-rt"
-
 IMAGE_FEATURES += "ssh-server-openssh"
 
 # Enough free space for a full image update

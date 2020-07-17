@@ -1,8 +1,6 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-TEZI_IMAGE_NAME = "${IMAGE_BASENAME}-${MACHINE}"
-
 inherit core-image extrausers
 
 set_user_group_append () {
@@ -10,6 +8,8 @@ set_user_group_append () {
 }
 
 do_rootfs[cleandirs] += "${IMAGE_ROOTFS}"
+
+IMAGE_NAME = "${IMAGE_BASENAME}${IMAGE_BASENAME_SUFFIX}-${MACHINE}"
 
 IMAGE_FEATURES += "splash"
 
