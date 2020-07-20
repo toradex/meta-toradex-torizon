@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+inherit bash-completion
+
 SRC_URI_append = " \
     file://ostree-pending-reboot.service \
     file://ostree-pending-reboot.path \
