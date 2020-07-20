@@ -1,6 +1,6 @@
 require torizon-core-common.inc
 
-IMAGE_FEATURES += "ssh-server-openssh"
+IMAGE_FEATURES += "ssh-server-openssh bash-completion-pkgs"
 
 # Enough free space for a full image update
 IMAGE_OVERHEAD_FACTOR = "2.3"
