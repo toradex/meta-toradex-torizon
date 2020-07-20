@@ -1,5 +1,7 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
+inherit bash-completion
+
 SRC_URI_append = " \
     file://chrome.json \
     file://docker.service \
@@ -17,4 +19,8 @@ do_install_append() {
 		# Replace docker.service with the TorizonCore specific version
 		install -m 644 ${WORKDIR}/docker.service ${D}/${systemd_unitdir}/system
 	fi
+
+	COMPLETION_DIR=${D}${datadir}/bash-completion/completions
+	install -d ${COMPLETION_DIR}
+	install -m 0644 ${S}/src/import/components/cli/contrib/completion/bash/docker ${COMPLETION_DIR}
 }
