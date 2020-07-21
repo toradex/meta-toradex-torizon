@@ -2,6 +2,11 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
 inherit bash-completion
 
+SRCREV_docker = "48a66213fe1747e8873f849862ff3fb981899fc6"
+SRCREV_libnetwork = "026aabaa659832804b01754aaadd2c0f420c68b6"
+
+DOCKER_VERSION = "19.03.12-ce"
+
 SRC_URI_append = " \
     file://chrome.json \
     file://docker.service \
