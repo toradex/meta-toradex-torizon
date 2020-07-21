@@ -15,8 +15,5 @@ OSTREE_DEPLOY_DEVICETREE = "1"
 ## Drop IMX BSP that is not needed
 MACHINE_EXTRA_RRECOMMENDS_remove_imx = "imx-alsa-plugins"
 
-# A kernel specific variable, shared by all kernel recipes
-export DTC_FLAGS = "-@"
-
 # git is required by torizon to get hashes from all meta layers ()
 HOSTTOOLS += "git"
