@@ -8,9 +8,6 @@ SRC_URI_append = " \
 	file://0001-fsl-imx8qxp-colibri-eval-v3.dtsi-enable-spidev0.patch \
 	"
 
-# Add symbols to make overlays work
-EXTRA_OEMAKE += "'DTC_FLAGS=-@'"
-
 kernel_do_configure_append() {
 	# set kernel to reboot on panic and hung tasks
 	kernel_configure_variable DETECT_HUNG_TASK y
