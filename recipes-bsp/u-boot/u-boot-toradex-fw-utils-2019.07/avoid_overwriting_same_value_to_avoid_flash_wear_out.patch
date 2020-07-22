@@ -1,0 +1,138 @@
+diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
+index eef12dd2b7..1a946a179c 100644
+--- a/tools/env/fw_env.c
++++ b/tools/env/fw_env.c
+@@ -563,25 +563,6 @@ int fw_env_write(char *name, char *value)
+ 			errno = EROFS;
+ 			return -1;
+ 		}
+-	} else if (overwriting) {
+-		if (env_flags_validate_varaccess(name,
+-		    ENV_FLAGS_VARACCESS_PREVENT_OVERWR)) {
+-			printf("Can't overwrite \"%s\"\n", name);
+-			errno = EROFS;
+-			return -1;
+-		} else if (env_flags_validate_varaccess(name,
+-			   ENV_FLAGS_VARACCESS_PREVENT_NONDEF_OVERWR)) {
+-			const char *defval = fw_getdefenv(name);
+-
+-			if (defval == NULL)
+-				defval = "";
+-			if (strcmp(oldval, defval)
+-			    != 0) {
+-				printf("Can't overwrite \"%s\"\n", name);
+-				errno = EROFS;
+-				return -1;
+-			}
+-		}
+ 	} else if (creating) {
+ 		if (env_flags_validate_varaccess(name,
+ 		    ENV_FLAGS_VARACCESS_PREVENT_CREATE)) {
+@@ -589,7 +570,10 @@ int fw_env_write(char *name, char *value)
+ 			errno = EROFS;
+ 			return -1;
+ 		}
+-	} else
++	} else if(overwriting)
++	{
++		/* Nothing to check */
++	}else
+ 		/* Nothing to do */
+ 		return 0;
+ 
+@@ -644,6 +628,43 @@ int fw_env_write(char *name, char *value)
+ 	return 0;
+ }
+ 
++static ow_status_t check_ow_applicable(char *name, char *value)
++{
++	int overwriting;
++	char *oldval = fw_getenv(name);
++	if(oldval)
++	{
++		overwriting = (oldval && (value && strlen(value)));
++		if(overwriting) {
++			if (env_flags_validate_varaccess(name,
++			    ENV_FLAGS_VARACCESS_PREVENT_OVERWR)) {
++				printf("Can't overwrite \"%s\"\n", name);
++				errno = EROFS;
++				return OW_ISSUE_OCCURED;
++			} else if (env_flags_validate_varaccess(name,
++				   ENV_FLAGS_VARACCESS_PREVENT_NONDEF_OVERWR)) {
++				const char *defval = fw_getdefenv(name);
++
++				if (defval == NULL)
++					defval = "";
++				if (strcmp(oldval, defval)
++				    != 0) {
++					printf("Can't overwrite \"%s\"\n", name);
++					errno = EROFS;
++					return OW_ISSUE_OCCURED;
++				}
++			} else if(!strcmp(oldval, value)) {
++				return OW_SKIP;
++			}
++		}
++	}else
++	{
++		return OW_NO_CASE;
++	}		
++
++	return OW;
++}
++
+ /*
+  * Deletes or sets environment variables. Returns -1 and sets errno error codes:
+  * 0	  - OK
+@@ -707,14 +728,25 @@ int fw_env_set(int argc, char *argv[], struct env_opts *opts)
+ 		value[len++] = '\0';
+ 	}
+ 
+-	fw_env_write(name, value);
++        ow_status_t stat = check_ow_applicable(name, value);
++        if(stat == OW || stat == OW_NO_CASE)
++        {
++		fw_env_write(name, value);
++        }
+ 
+-	free(value);
++        if(stat != OW_SKIP)
++        {
++		ret = fw_env_flush(opts);
++        }else
++        {
++		ret = 0;
++        }
+ 
+-	ret = fw_env_flush(opts);
+-	fw_env_close(opts);
++        free(value);
+ 
+-	return ret;
++        fw_env_close(opts);
++
++        return ret;
+ }
+ 
+ /*
+diff --git a/tools/env/fw_env.h b/tools/env/fw_env.h
+index b250e2f3d7..581fd57862 100644
+--- a/tools/env/fw_env.h
++++ b/tools/env/fw_env.h
+@@ -20,6 +20,16 @@ struct env_opts {
+ 	char *lockname;
+ };
+ 
++/*
++ * Status of applicability check for overwriting environment variable
++*/
++typedef enum {
++	OW_ISSUE_OCCURED=0,
++	OW_NO_CASE,
++	OW_SKIP,
++	OW
++}ow_status_t;
++
+ /**
+  * fw_printenv() - print one or several environment variables
+  *
