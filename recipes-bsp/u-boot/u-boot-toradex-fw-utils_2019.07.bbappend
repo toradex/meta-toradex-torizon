@@ -2,7 +2,11 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}-2019.07:"
 
 SRC_URI_append_colibri-imx7 = " \
     file://fw_env-emmc.config \
-    file://fw_env-mtd.config \	
+    file://fw_env-mtd.config \
+"
+
+SRC_URI_append = " \
+    file://avoid_overwriting_same_value_to_avoid_flash_wear_out.patch \
 "
 
 do_install_colibri-imx7() {
