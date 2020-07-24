@@ -24,6 +24,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     media-mountpoint \
     nano \
     set-hostname \
+    systemd-analyze \
     sudo \
     torizon-conf \
     torizon-users \
