@@ -33,7 +33,6 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     wireless-regdb-static \
     ostree-customize-plymouth \
     network-configuration \
-    modemmanager \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
