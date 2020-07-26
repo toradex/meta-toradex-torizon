@@ -3,7 +3,7 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 SRC_URI += "file://toradex-nmconnection.conf file://network.nmconnection.in"
 
 PACKAGECONFIG_remove = "ifupdown dnsmasq"
-
+PACKAGECONFIG_append = "modemmanager"
 RPROVIDES_${PN} = "virtual/network-configuration"
 
 do_install_append() {
