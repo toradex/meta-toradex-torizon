@@ -24,6 +24,16 @@ OSTREE_CHANGE_LOG_FILE = "${OSTREE_REPO}/${DISTRO}-${IMAGE_BASENAME}-diff.log"
 OSTREE_CHANGE_LOG_FOOTER = "================================"
 OSTREE_CHANGE_LOG_HEADER = "Changes in version ${IMAGE_NAME}"
 OSTREE_CREATE_DIFF = "1"
+EXTRA_OSTREE_COMMIT = " \
+    --add-metadata-string=oe.machine="${MACHINE}" \
+    --add-metadata-string=oe.distro="${DISTRO}" \
+    --add-metadata-string=oe.image="${IMAGE_BASENAME}" \
+    --add-metadata-string=oe.arch="${TARGET_ARCH}" \
+    --add-metadata-string=oe.package-arch="${TUNE_PKGARCH}" \
+    --add-metadata-string=oe.kargs-default="${OSTREE_KERNEL_ARGS}" \
+    --add-metadata-string=oe.garage-target-name="${GARAGE_TARGET_NAME}" \
+    --add-metadata-string=oe.garage-target-version="${GARAGE_TARGET_VERSION}" \
+"
 
 # Use full distro version only as commit subject, we have distro an image name
 # in the OSTree branch name.
