@@ -4,7 +4,7 @@ UBOOT_ENTRYPOINT = "0x40080000"
 KERNEL_CLASSES = "kernel-lmp-fitimage"
 KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
 
-IMAGE_BOOT_FILES_qemuarm64 = "boot.scr-${MACHINE};boot.scr uEnv.txt"
+IMAGE_BOOT_FILES_qemuarm64 = "boot.scr-${MACHINE};boot.scr u-boot-initial-env"
 WKS_FILE_DEPENDS_append = " virtual/bootloader u-boot-default-script"
 WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 
@@ -30,6 +30,3 @@ PREFERRED_PROVIDER_virtual/kernel_qemuarm64 = "linux-yocto"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64_preempt-rt = "linux-yocto-rt"
 
 PREFERRED_PROVIDER_u-boot-default-script_qemuarm64 = "u-boot-distro-boot"
-
-PREFERRED_PROVIDER_u-boot-fw-utils = "u-boot-toradex-fw-utils"
-PREFERRED_RPROVIDER_u-boot-fw-utils = "u-boot-toradex-fw-utils"

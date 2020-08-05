@@ -10,8 +10,8 @@ TORADEX_FLASH_TYPE = "rawnand emmc"
 UBOOT_BINARY_TEZI_EMMC = "u-boot.imx-sd"
 UBOOT_BINARY_TEZI_RAWNAND = "u-boot.imx-nd"
 
-UBOOT_ENV_TEZI_EMMC = "uEnv-sd.txt"
-UBOOT_ENV_TEZI_RAWNAND = "uEnv-nd.txt"
+UBOOT_ENV_TEZI_EMMC = "u-boot-initial-env-sd"
+UBOOT_ENV_TEZI_RAWNAND = "u-boot-initial-env-nd"
 
 PREFERRED_PROVIDER_u-boot-default-script = "u-boot-distro-boot"
 
