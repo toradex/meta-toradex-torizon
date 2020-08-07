@@ -1,3 +1,7 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+
+SRC_URI_append_genericx86-64 = " file://0001-rules-whitelist-hd-devices.patch"
+
 PACKAGECONFIG_append = " resolved networkd"
 RRECOMMENDS_${PN}_remove = "os-release"
 

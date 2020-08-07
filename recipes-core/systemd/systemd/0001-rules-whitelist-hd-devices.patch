@@ -1,0 +1,73 @@
+From 568ad5c5103d9731daba00efedcac36518e20ebb Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Fri, 7 Aug 2020 13:13:33 +0200
+Subject: [PATCH] rules: whitelist hd* devices
+
+qemu by default emulates IDE and the linux-yocto kernel(s) use
+CONFIG_IDE instead of the more modern libsata, so disks appear as
+/dev/hd*. Patch rejected upstream because CONFIG_IDE is deprecated.
+
+Upstream-Status: Denied [https://github.com/systemd/systemd/pull/1276]
+
+-----------------------------------------------
+
+rules: watch metadata changes in ide devices
+
+Formatting IDE storage does not trigger "change" uevents. As a result
+clients using udev API don't get any updates afterwards and get outdated
+information about the device.
+...
+root@qemux86-64:~# mkfs.ext4 -F /dev/hda1
+Creating filesystem with 262144 4k blocks and 65536 inodes
+Filesystem UUID: 98791eb2-2bf3-47ad-b4d8-4cf7e914eee2
+
+root@qemux86-64:~# ls /dev/disk/by-uuid/98791eb2-2bf3-47ad-b4d8-4cf7e914eee2
+ls: cannot access '/dev/disk/by-uuid/98791eb2-2bf3-47ad-b4d8-4cf7e914eee2': No such file or directory
+...
+Include hd* in a match for watch option assignment.
+
+Upstream-Status: Denied
+
+qemu by default emulates IDE and the linux-yocto kernel(s) use
+CONFIG_IDE instead of the more modern libsata, so disks appear as
+/dev/hd*. A similar patch rejected by upstream because CONFIG_IDE
+is deprecated.
+
+Signed-off-by: Hongxu Jia <hongxu.jia@windriver.com>
+[rebased for systemd 241]
+Signed-off-by: Chen Qi <Qi.Chen@windriver.com>
+[rebased for systemd 243]
+Signed-off-by: Scott Murray <scott.murray@konsulko.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ rules.d/60-block.rules              | 2 +-
+ rules.d/60-persistent-storage.rules | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/rules.d/60-block.rules b/rules.d/60-block.rules
+index 3134ab995e..cd72a494a1 100644
+--- a/rules.d/60-block.rules
++++ b/rules.d/60-block.rules
+@@ -9,5 +9,5 @@ ACTION=="change", SUBSYSTEM=="scsi", ENV{DEVTYPE}=="scsi_device", TEST=="block",
+ 
+ # watch metadata changes, caused by tools closing the device node which was opened for writing
+ ACTION!="remove", SUBSYSTEM=="block", \
+-  KERNEL=="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*", \
++  KERNEL=="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*|hd*", \
+   OPTIONS+="watch"
+diff --git a/rules.d/60-persistent-storage.rules b/rules.d/60-persistent-storage.rules
+index 01586690bd..b6176147a3 100644
+--- a/rules.d/60-persistent-storage.rules
++++ b/rules.d/60-persistent-storage.rules
+@@ -7,7 +7,7 @@ ACTION=="remove", GOTO="persistent_storage_end"
+ ENV{UDEV_DISABLE_PERSISTENT_STORAGE_RULES_FLAG}=="1", GOTO="persistent_storage_end"
+ 
+ SUBSYSTEM!="block", GOTO="persistent_storage_end"
+-KERNEL!="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*", GOTO="persistent_storage_end"
++KERNEL!="loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|sr*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*|hd*", GOTO="persistent_storage_end"
+ 
+ # ignore partitions that span the entire disk
+ TEST=="whole_disk", GOTO="persistent_storage_end"
+-- 
+2.28.0
+
