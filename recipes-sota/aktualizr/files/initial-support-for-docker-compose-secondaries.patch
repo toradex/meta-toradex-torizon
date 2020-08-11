@@ -1,4 +1,4 @@
-From d6a5c5692c1b5b066bc58cc5d6c3e328bb0b6414 Mon Sep 17 00:00:00 2001
+From 9ecefb872f8e29b8f718f68a42f2995f6c0645a7 Mon Sep 17 00:00:00 2001
 From: Ming Liu <ming.liu@toradex.com>
 Date: Sun, 23 Feb 2020 15:12:14 +0100
 Subject: [PATCH] Initial support for docker-compose secondaries
@@ -15,9 +15,9 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
  src/aktualizr_primary/secondary_config.cc     |  7 ++
  src/aktualizr_primary/secondary_config.h      |  5 +-
  src/virtual_secondary/CMakeLists.txt          |  4 +-
- .../dockercomposesecondary.cc                 | 87 +++++++++++++++++++
+ .../dockercomposesecondary.cc                 | 89 +++++++++++++++++++
  .../dockercomposesecondary.h                  | 41 +++++++++
- 8 files changed, 165 insertions(+), 3 deletions(-)
+ 8 files changed, 167 insertions(+), 3 deletions(-)
  create mode 100644 config/secondary/dockercomposesec.json
  create mode 100644 config/secondary/example-redis.yml
  create mode 100644 src/virtual_secondary/dockercomposesecondary.cc
@@ -55,10 +55,10 @@ index 000000000..d6dfa2e6a
 +    image: "redis:alpine"
 +    restart: always
 diff --git a/src/aktualizr_primary/secondary.cc b/src/aktualizr_primary/secondary.cc
-index b3c02dba3..07ba388de 100644
+index 556e0b23d..54f3f7795 100644
 --- a/src/aktualizr_primary/secondary.cc
 +++ b/src/aktualizr_primary/secondary.cc
-@@ -32,6 +32,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
+@@ -35,6 +35,11 @@ static SecondaryFactoryRegistry sec_factory_registry = {
         auto virtual_sec_cgf = dynamic_cast<const VirtualSecondaryConfig&>(config);
         return Secondaries({std::make_shared<VirtualSecondary>(virtual_sec_cgf)});
       }},
@@ -71,10 +71,10 @@ index b3c02dba3..07ba388de 100644
      //     Add another secondary factory here
      //  }
 diff --git a/src/aktualizr_primary/secondary_config.cc b/src/aktualizr_primary/secondary_config.cc
-index 09c671389..a8f24ee3f 100644
+index 54dfc9596..cc67474f1 100644
 --- a/src/aktualizr_primary/secondary_config.cc
 +++ b/src/aktualizr_primary/secondary_config.cc
-@@ -114,4 +114,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
+@@ -117,4 +117,11 @@ void JsonConfigParser::createVirtualSecondariesCfg(Configs& configs, const Json:
    }
  }
  
@@ -116,28 +116,30 @@ index 68f31ef44..86e9312aa 100644
    };
  
 diff --git a/src/virtual_secondary/CMakeLists.txt b/src/virtual_secondary/CMakeLists.txt
-index 2017fe754..78e7163e9 100644
+index 7d75b4ad3..ce117d4f5 100644
 --- a/src/virtual_secondary/CMakeLists.txt
 +++ b/src/virtual_secondary/CMakeLists.txt
 @@ -1,6 +1,6 @@
--set(SOURCES managedsecondary.cc virtualsecondary.cc partialverificationsecondary.cc)
-+set(SOURCES managedsecondary.cc virtualsecondary.cc partialverificationsecondary.cc dockercomposesecondary.cc)
+-set(SOURCES managedsecondary.cc virtualsecondary.cc)
++set(SOURCES managedsecondary.cc virtualsecondary.cc dockercomposesecondary.cc)
  
--set(HEADERS managedsecondary.h virtualsecondary.h partialverificationsecondary.h)
-+set(HEADERS managedsecondary.h virtualsecondary.h partialverificationsecondary.h dockercomposesecondary.h)
+-set(HEADERS managedsecondary.h virtualsecondary.h)
++set(HEADERS managedsecondary.h virtualsecondary.h dockercomposesecondary.h)
  
  set(TARGET virtual_secondary)
  
 diff --git a/src/virtual_secondary/dockercomposesecondary.cc b/src/virtual_secondary/dockercomposesecondary.cc
 new file mode 100644
-index 000000000..ad8574808
+index 000000000..08d4c19a6
 --- /dev/null
 +++ b/src/virtual_secondary/dockercomposesecondary.cc
-@@ -0,0 +1,87 @@
+@@ -0,0 +1,89 @@
 +#include "dockercomposesecondary.h"
++#include "uptane/manifest.h"
 +#include "libaktualizr/types.h"
 +#include "logging/logging.h"
 +#include "utilities/fault_injection.h"
++#include "utilities/utils.h"
 +
 +#include <sstream>
 +
@@ -269,5 +271,5 @@ index 000000000..b9d7b1546
 +
 +#endif  // PRIMARY_DOCKERCOMPOSESECONDARY_H_
 -- 
-2.27.0
+2.28.0
 
