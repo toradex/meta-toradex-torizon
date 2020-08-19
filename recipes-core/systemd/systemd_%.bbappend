@@ -5,6 +5,21 @@ SRC_URI_append_genericx86-64 = " file://0001-rules-whitelist-hd-devices.patch"
 PACKAGECONFIG_append = " resolved networkd"
 RRECOMMENDS_${PN}_remove = "os-release"
 
+# Workaround for some systemd specific udev rules being packaged in
+# systemd package while they are needed by initramfs which doesn't
+# want install systemd. Please refer to the discussion:
+# https://www.mail-archive.com/openembedded-core@lists.openembedded.org/msg140195.html
+#
+# Fix it by splitting systemd specific udev rules to its own package,
+# which could be installed by initramfs.
+PACKAGES_prepend = "${PN}-udev-rules "
+FILES_${PN}-udev-rules = " \
+    ${rootlibexecdir}/udev/rules.d/70-uaccess.rules \
+    ${rootlibexecdir}/udev/rules.d/71-seat.rules \
+    ${rootlibexecdir}/udev/rules.d/73-seat-late.rules \
+    ${rootlibexecdir}/udev/rules.d/99-systemd.rules \
+"
+
 DEF_FALLBACK_NTP_SERVERS="time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com"
 EXTRA_OEMESON += ' \
 	-Dntp-servers="${DEF_FALLBACK_NTP_SERVERS}" \
