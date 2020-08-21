@@ -5,6 +5,7 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 SRC_URI = " \
     file://path-sbin.sh \
     file://machine.sh \
+    file://containers-tags.sh \
 "
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
@@ -16,4 +17,5 @@ do_install () {
     install -m 0755 ${WORKDIR}/path-sbin.sh ${D}${sysconfdir}/profile.d/
     install -m 0755 ${WORKDIR}/machine.sh ${D}${sysconfdir}/profile.d/
     sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${sysconfdir}/profile.d/machine.sh
+    install -m 0755 ${WORKDIR}/containers-tags.sh ${D}${sysconfdir}/profile.d/
 }
