@@ -1,13 +1,6 @@
 FILESEXTRAPATHS_append:= ":${THISDIR}/linux-toradex"
 inherit toradex-kernel-config
 
-SRC_URI_append = " \
-	file://0001-arm64-dts-fsl-imx8qm-apalis-add-configuration-for-to.patch \
-	file://0002-arm64-dts-fsl-imx8qxp-apalis-add-configuration-for-t.patch \
-	file://0003-arm64-dts-fsl-imx8qxp-colibri-add-configuration-for-.patch \
-	file://0001-fsl-imx8qxp-colibri-eval-v3.dtsi-enable-spidev0.patch \
-	"
-
 kernel_do_configure_append() {
 	# set kernel to reboot on panic and hung tasks
 	kernel_configure_variable DETECT_HUNG_TASK y
