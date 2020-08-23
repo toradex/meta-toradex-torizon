@@ -4,8 +4,8 @@ UBOOT_ENTRYPOINT = "0x40080000"
 KERNEL_CLASSES = "kernel-lmp-fitimage"
 KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
 
-IMAGE_BOOT_FILES_qemuarm64 = "boot.scr-${MACHINE};boot.scr u-boot-initial-env"
-WKS_FILE_DEPENDS_append = " virtual/bootloader u-boot-default-script"
+IMAGE_BOOT_FILES_qemuarm64 = "boot.scr-${MACHINE};boot.scr"
+WKS_FILE_DEPENDS_append = " virtual/bootloader"
 WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 
 OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
