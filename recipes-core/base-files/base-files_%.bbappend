@@ -2,20 +2,10 @@ FILESEXTRAPATHS_prepend := "${THISDIR}/${PN}:"
 
 hostname = ""
 
-do_install_append() {
-    # remove /media because we are going to use /run/media
-    # as main mount point for removable storage devices
-    rmdir ${D}/media
-
-    if [ -n "${EFI_PROVIDER}" ]; then
-        echo "LABEL=efi /boot/efi vfat umask=0077 0 1" >> ${D}${sysconfdir}/fstab
-    fi
-}
-
 do_install_append_qemuarm64 () {
     cat >> ${D}${sysconfdir}/fstab <<EOF
 
-/dev/vda1       /mnt/boot       vfat    noatime,sync    0       0
+/dev/vda1            /mnt/boot            vfat       nofail,noatime,sync   0  0
 EOF
 }
 
