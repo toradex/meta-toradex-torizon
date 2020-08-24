@@ -7,8 +7,6 @@ SRC_URI_append = " \
 # We explicitly require pam
 inherit features_check
 
-PACKAGECONFIG_append = " pam-wheel"
-
 REQUIRED_DISTRO_FEATURES = "pam"
 
 do_install_append () {
