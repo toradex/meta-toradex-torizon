@@ -46,3 +46,27 @@ CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
     mwifiexap \
     backports \
 "
+
+nss_altfiles_set_users_groups () {
+    default_dir=${IMAGE_ROOTFS}/${libdir}
+    override_dir=${IMAGE_ROOTFS}/${sysconfdir}
+    nsswitch_conf=${IMAGE_ROOTFS}/${sysconfdir}/nsswitch.conf
+
+    sed -i -e '/^passwd/s/$/ altfiles/' -e '/^group/s/$/ altfiles/' -e '/^shadow/s/$/ altfiles/' ${nsswitch_conf}
+    install -d ${default_dir}
+    install -m 644 ${override_dir}/passwd ${default_dir}/
+    install -m 644 ${override_dir}/group ${default_dir}/
+    install -m 400 ${override_dir}/shadow ${default_dir}/
+    for file in passwd group shadow
+    do
+	cat > ${override_dir}/${file} <<- EOF
+	# NSS altfiles module is installed. Default user, group and shadow files are in
+	# /usr/lib/
+	EOF
+	grep -r torizon ${default_dir}/${file} >> ${override_dir}/${file}
+    done
+}
+
+# include nss-altfiles support
+CORE_IMAGE_BASE_INSTALL_append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss-altfiles", "",d)}'
+IMAGE_PREPROCESS_COMMAND_append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss_altfiles_set_users_groups; ", "",d)}'

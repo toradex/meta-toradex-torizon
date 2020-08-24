@@ -55,7 +55,7 @@ IMAGE_BOOT_FILES = ""
 SOTA_CLIENT_PROV ?= "aktualizr-device-prov"
 SOTA_DEPLOY_CREDENTIALS ?= "0"
 
-DISTRO_FEATURES_append = " virtualization"
+DISTRO_FEATURES_append = " virtualization stateless-system"
 DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x11 ptest multiarch opengl vulkan"
 
 # No need for x11 even for native
