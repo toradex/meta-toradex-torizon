@@ -13,6 +13,7 @@ RRECOMMENDS_${PN}_remove = "os-release"
 # Fix it by splitting systemd specific udev rules to its own package,
 # which could be installed by initramfs.
 PACKAGES_prepend = "${PN}-udev-rules "
+RDEPENDS_${PN} += "systemd-udev-rules"
 FILES_${PN}-udev-rules = " \
     ${rootlibexecdir}/udev/rules.d/70-uaccess.rules \
     ${rootlibexecdir}/udev/rules.d/71-seat.rules \

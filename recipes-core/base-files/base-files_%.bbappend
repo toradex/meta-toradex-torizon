@@ -5,7 +5,7 @@ hostname = ""
 do_install_append_qemuarm64 () {
     cat >> ${D}${sysconfdir}/fstab <<EOF
 
-/dev/vda1            /mnt/boot            vfat       nofail,noatime,sync   0  0
+/dev/vda1            /mnt/boot            vfat       noatime,sync   0  0
 EOF
 }
 
