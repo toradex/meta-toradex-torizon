@@ -18,7 +18,6 @@ SRC_URI_append_colibri-imx7 = " \
 "
 
 SRC_URI_append_qemuarm64 = " \
-    file://0001-qemu-arm-increase-bootm-length-to-64M.patch \
     file://fitfatenv.cfg \
     file://fw_env-sda.config \
 "
