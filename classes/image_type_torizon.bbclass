@@ -27,12 +27,16 @@ OSTREE_CREATE_DIFF = "1"
 EXTRA_OSTREE_COMMIT = " \
     --add-metadata-string=oe.machine="${MACHINE}" \
     --add-metadata-string=oe.distro="${DISTRO}" \
+    --add-metadata-string=oe.distro-codename="${DISTRO_CODENAME}" \
     --add-metadata-string=oe.image="${IMAGE_BASENAME}" \
+    --add-metadata-string=oe.tdx-build-purpose="${TDX_OSTREE_PURPOSE}" \
+    --add-metadata-string=oe.tdx-major="${TDX_MAJOR}" \
     --add-metadata-string=oe.arch="${TARGET_ARCH}" \
     --add-metadata-string=oe.package-arch="${TUNE_PKGARCH}" \
     --add-metadata-string=oe.kargs-default="${OSTREE_KERNEL_ARGS}" \
     --add-metadata-string=oe.garage-target-name="${GARAGE_TARGET_NAME}" \
     --add-metadata-string=oe.garage-target-version="${GARAGE_TARGET_VERSION}" \
+    --add-metadata-string=oe.sota-hardware-id="${SOTA_HARDWARE_ID}" \
 "
 
 # Use full distro version only as commit subject, we have distro an image name
