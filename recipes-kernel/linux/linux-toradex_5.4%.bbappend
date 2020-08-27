@@ -1,4 +1,7 @@
 FILESEXTRAPATHS_append:= ":${THISDIR}/linux-toradex"
+
+require linux-torizon.inc
+
 inherit toradex-kernel-config
 
 kernel_do_configure_append() {

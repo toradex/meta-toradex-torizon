@@ -1,6 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/linux-toradex-mainline:"
 
-require linux-toradex-version.inc
+require linux-torizon.inc
 require recipes-kernel/linux/linux-yocto.inc
 
 SRCREV_meta = "90c6e8f1ed6720fd3274922bf4d985ee4cb92903"
