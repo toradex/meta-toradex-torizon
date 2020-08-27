@@ -16,10 +16,20 @@ TDX_OSTREE_PURPOSE ?= "${@get_tdx_ostree_purpose(d.getVar('TDX_PURPOSE'))}"
 # Use new branch naming
 OSTREE_BRANCHNAME = "${TDX_MAJOR}/${MACHINE}/${DISTRO}/${IMAGE_BASENAME}/${TDX_OSTREE_PURPOSE}"
 
-#Force ostree summary to be updated
+# Force ostree summary to be updated
 OSTREE_UPDATE_SUMMARY = "1"
 
-#Create change log file inside ostree
+# Kernel source metadata
+OSTREE_KERNEL_SOURCE_META_DATA = "(${OSTREE_KERNEL_SOURCE_URL}, ${OSTREE_KERNEL_SOURCE_BRANCH}, ${OSTREE_KERNEL_SOURCE_VERSION})"
+OSTREE_KERNEL_SOURCE_META_DATA[vardepvalue] = "${OSTREE_KERNEL_SOURCE_URL}"
+OSTREE_KERNEL_SOURCE_META_DATA[vardepvalue] = "${OSTREE_KERNEL_SOURCE_BRANCH}"
+OSTREE_KERNEL_SOURCE_META_DATA[vardepvalue] = "${OSTREE_KERNEL_SOURCE_VERSION}"
+
+OSTREE_KERNEL_SOURCE_URL = "${@oe.utils.read_file('${STAGING_KERNEL_DIR}/.scmurl')}"
+OSTREE_KERNEL_SOURCE_BRANCH = "${@oe.utils.read_file('${STAGING_KERNEL_DIR}/.scmbranch')}"
+OSTREE_KERNEL_SOURCE_VERSION = "${@oe.utils.read_file('${STAGING_KERNEL_DIR}/.scmversion').replace('+git.', '')}"
+
+# Create change log file inside ostree
 OSTREE_CHANGE_LOG_FILE = "${OSTREE_REPO}/${DISTRO}-${IMAGE_BASENAME}-diff.log"
 OSTREE_CHANGE_LOG_FOOTER = "================================"
 OSTREE_CHANGE_LOG_HEADER = "Changes in version ${IMAGE_NAME}"
@@ -62,6 +72,7 @@ def get_layer_revision_information(d):
         e = sys.exc_info()[0]
         bb.warn("Failed to get layers information. Exception: {}".format(e))
 
+EXTRA_OSTREE_COMMIT[vardepsexclude] = "OSTREE_KERNEL_SOURCE_META_DATA"
 EXTRA_OSTREE_COMMIT = " \
     --add-metadata-string=oe.machine="${MACHINE}" \
     --add-metadata-string=oe.distro="${DISTRO}" \
@@ -72,6 +83,7 @@ EXTRA_OSTREE_COMMIT = " \
     --add-metadata-string=oe.arch="${TARGET_ARCH}" \
     --add-metadata-string=oe.package-arch="${TUNE_PKGARCH}" \
     --add-metadata-string=oe.kargs-default="${OSTREE_KERNEL_ARGS}" \
+    --add-metadata-string=oe.kernel-source="${OSTREE_KERNEL_SOURCE_META_DATA}" \
     --add-metadata-string=oe.garage-target-name="${GARAGE_TARGET_NAME}" \
     --add-metadata-string=oe.garage-target-version="${GARAGE_TARGET_VERSION}" \
     --add-metadata-string=oe.sota-hardware-id="${SOTA_HARDWARE_ID}" \
