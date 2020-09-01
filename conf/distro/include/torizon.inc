@@ -67,6 +67,14 @@ DISTRO_FEATURES_NATIVESDK_remove = "x11"
 # backwards are not a problem for us.
 ERROR_QA_remove = "version-going-backwards"
 
+# Note, enable or disable the useradd-staticids in a configured system,
+# the TMPDIR/DEPLOY_DIR/SSTATE_DIR may contain incorrect uid/gid values.
+# Clearing them will correct this condition.
+USERADDEXTENSION = "useradd-staticids"
+USERADD_UID_TABLES = "files/torizon-static-passwd"
+USERADD_GID_TABLES = "files/torizon-static-group"
+USERADD_ERROR_DYNAMIC = "skip"
+
 # Compatibility with toradex layers
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
