@@ -72,3 +72,5 @@ BBMASK += " \
     /meta-freescale/recipes-graphics/cairo \
     /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
 "
+
+DISTRO_FLAVOUR_append_mx8qxpc0 = " for V1.0C HW"
