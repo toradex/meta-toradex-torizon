@@ -21,7 +21,6 @@ SPLASH = "plymouth"
 CORE_IMAGE_BASE_INSTALL_append = " \
     kernel-modules \
     linux-firmware-rtl8192cu \
-    media-mountpoint \
     nano \
     set-hostname \
     systemd-analyze \
