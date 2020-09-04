@@ -43,8 +43,8 @@ SOTA_CLIENT_FEATURES_append = " ubootenv"
 INITRAMFS_IMAGE = "initramfs-ostree-torizon-image"
 INITRAMFS_FSTYPES = "cpio.gz"
 BUILD_OSTREE_TARBALL = "0"
-# We do not need wic or ext4 images by default
-IMAGE_FSTYPES_REMOVE ?= "ota-ext4 wic"
+# We do not need teziimg, ota-ext4 or wic images by default
+IMAGE_FSTYPES_REMOVE ?= "teziimg ota-ext4 wic"
 IMAGE_FSTYPES_remove_sota = "${IMAGE_FSTYPES_REMOVE}"
 
 # No need to install kernel image/devicetrees into the boot partition

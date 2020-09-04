@@ -6,7 +6,7 @@ OSTREE_BOOTLOADER_genericx86-64 = "grub"
 EFI_PROVIDER_genericx86-64 = "grub-efi"
 SOTA_CLIENT_FEATURES_remove = "ubootenv"
 
-IMAGE_FSTYPES_REMOVE = "hddimg teziimg-distro"
+IMAGE_FSTYPES_REMOVE = "hddimg teziimg teziimg-distro"
 IMAGE_FSTYPES_append = " wic.vmdk wic.vdi"
 
 hostname_pn-base-files = "${MACHINE}"

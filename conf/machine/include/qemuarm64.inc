@@ -17,7 +17,7 @@ QB_DEFAULT_FSTYPE = "wic"
 QB_MEM_qemuarm64 = "-m 1057"
 QB_OPT_APPEND_qemuarm64 = "-show-cursor -device VGA,edid=on -device qemu-xhci -device usb-tablet -device usb-kbd -object rng-random,filename=/dev/urandom,id=rng0 -device virtio-rng-pci,rng=rng0 -no-acpi -bios ${DEPLOY_DIR_IMAGE}/u-boot.bin -d unimp -semihosting-config enable,target=native"
 
-IMAGE_FSTYPES_REMOVE = "teziimg-distro"
+IMAGE_FSTYPES_REMOVE = "teziimg teziimg-distro"
 
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"

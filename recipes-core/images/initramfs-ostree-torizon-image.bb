@@ -15,7 +15,7 @@ IMAGE_LINGUAS = ""
 LICENSE = "MIT"
 
 IMAGE_FSTYPES = "cpio.gz"
-IMAGE_FSTYPES_remove = "wic wic.gz wic.bmap wic.vmdk wic.vdi ext4 ext4.gz teziimg-distro"
+IMAGE_FSTYPES_remove = "wic wic.gz wic.bmap wic.vmdk wic.vdi ext4 ext4.gz teziimg teziimg-distro"
 
 IMAGE_CLASSES_remove = "image_type_torizon image_types_ostree image_types_ota image_repo_manifest license_image qemuboot"
 
