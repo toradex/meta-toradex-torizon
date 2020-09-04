@@ -1,0 +1,135 @@
+From 205150614acd538bf856059b0f58999a3e25c715 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Wed, 12 Aug 2020 19:10:21 +0200
+Subject: [PATCH] Allow to disable polkitd when using library alone
+
+Upstream-Status: Inappropriate [OE specific]
+
+Reference:
+https://gitlab.gnome.org/GNOME/gnome-disk-utility/-/merge_requests/32/diffs#diff-content-024f2e0d484b52f469190ef487285f4532e293a8
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ configure.ac                | 21 ++++++++++++++++-----
+ src/Makefile.am             |  6 +++++-
+ src/polkitagent/Makefile.am |  4 ++++
+ test/Makefile.am            |  6 +++++-
+ 4 files changed, 30 insertions(+), 7 deletions(-)
+
+diff --git a/configure.ac b/configure.ac
+index 62d8a0a..c15fb51 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -79,11 +79,12 @@ PKG_CHECK_MODULES(GLIB, [gmodule-2.0 gio-unix-2.0 >= 2.30.0])
+ AC_SUBST(GLIB_CFLAGS)
+ AC_SUBST(GLIB_LIBS)
+ 
+-PKG_CHECK_MODULES(LIBJS, [mozjs-60])
+-
+-AC_SUBST(LIBJS_CFLAGS)
+-AC_SUBST(LIBJS_CXXFLAGS)
+-AC_SUBST(LIBJS_LIBS)
++AS_IF([test x${enable_polkitd} = yes], [
++  PKG_CHECK_MODULES(LIBJS, [mozjs-60])
++  AC_SUBST(LIBJS_CFLAGS)
++  AC_SUBST(LIBJS_CXXFLAGS)
++  AC_SUBST(LIBJS_LIBS)
++])
+ 
+ EXPAT_LIB=""
+ AC_ARG_WITH(expat, [  --with-expat=<dir>      Use expat from here],
+@@ -236,6 +237,15 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
+ fi
+ AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$systemdsystemunitdir"])
+ 
++dnl ---------------------------------------------------------------------------
++dnl - Disable polkitd when using library alone
++dnl ---------------------------------------------------------------------------
++
++AC_ARG_ENABLE([polkitd],
++              [AS_HELP_STRING([--disable-polkitd], [Do not build polkitd])],
++              [enable_polkitd=$enableval], [enable_polkitd=yes])
++AM_CONDITIONAL(BUILD_POLKITD, [test x${enable_polkitd} = yes])
++
+ dnl ---------------------------------------------------------------------------
+ dnl - User for running polkitd
+ dnl ---------------------------------------------------------------------------
+@@ -579,6 +589,7 @@ echo "
+         Session tracking:           ${SESSION_TRACKING}
+         PAM support:                ${have_pam}
+         systemdsystemunitdir:       ${systemdsystemunitdir}
++        polkitd:                    ${enable_polkitd}
+         polkitd user:               ${POLKITD_USER}"
+ 
+ if test "$have_pam" = yes ; then
+diff --git a/src/Makefile.am b/src/Makefile.am
+index 09fc7b3..c6fe91b 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -1,5 +1,9 @@
+ 
+-SUBDIRS = polkit polkitbackend polkitagent programs
++SUBDIRS = polkit polkitagent programs
++
++if BUILD_POLKITD
++SUBDIRS += polkitbackend
++endif
+ 
+ if BUILD_EXAMPLES
+ SUBDIRS += examples
+diff --git a/src/polkitagent/Makefile.am b/src/polkitagent/Makefile.am
+index 49720db..d4903fa 100644
+--- a/src/polkitagent/Makefile.am
++++ b/src/polkitagent/Makefile.am
+@@ -79,6 +79,7 @@ libpolkit_agent_1_la_LIBADD =                               		\
+ 
+ libpolkit_agent_1_la_LDFLAGS = -export-symbols-regex '(^polkit_.*)'
+ 
++if !POLKIT_AUTHFW_NONE
+ libprivdir = $(prefix)/lib/polkit-1
+ libpriv_PROGRAMS = polkit-agent-helper-1
+ 
+@@ -112,6 +113,7 @@ polkit_agent_helper_1_LDFLAGS = 					\
+ 	$(SUID_LDFLAGS)							\
+ 	$(AM_LDFLAGS)							\
+ 	$(NULL)
++endif # !POLKIT_AUTHFW_NONE
+ 
+ if HAVE_INTROSPECTION
+ 
+@@ -142,6 +144,7 @@ include $(INTROSPECTION_MAKEFILE)
+ 
+ endif # HAVE_INTROSPECTION
+ 
++if !POLKIT_AUTHFW_NONE
+ # polkit-agent-helper-1 need to be setuid root because it's used to
+ # authenticate not only the invoking user, but possibly also root
+ # and/or other users.
+@@ -149,6 +152,7 @@ endif # HAVE_INTROSPECTION
+ install-data-hook:
+ 	-chown root $(DESTDIR)$(libprivdir)/polkit-agent-helper-1
+ 	-chmod 4755 $(DESTDIR)$(libprivdir)/polkit-agent-helper-1
++endif # !POLKIT_AUTHFW_NONE
+ 
+ EXTRA_DIST = polkitagentmarshal.list polkitagentenumtypes.h.template polkitagentenumtypes.c.template
+ CLEANFILES = $(gir_DATA) $(typelibs_DATA)
+diff --git a/test/Makefile.am b/test/Makefile.am
+index 59d0680..d43b0fe 100644
+--- a/test/Makefile.am
++++ b/test/Makefile.am
+@@ -1,7 +1,11 @@
+ 
+-SUBDIRS = mocklibc . polkit polkitbackend
++SUBDIRS = mocklibc . polkit
+ AM_CFLAGS = $(GLIB_CFLAGS)
+ 
++if BUILD_POLKITD
++SUBDIRS += polkitbackend
++endif
++
+ noinst_LTLIBRARIES = libpolkit-test-helper.la
+ libpolkit_test_helper_la_SOURCES = polkittesthelper.c polkittesthelper.h
+ libpolkit_test_helper_la_LIBADD = $(GLIB_LIBS)
+-- 
+2.28.0
+
