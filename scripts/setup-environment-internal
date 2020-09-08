@@ -20,7 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 env_cleanup() {
-    unset MACHINETABLE MACHLAYERS DISTRO_DIRNAME OEROOT
+    unset MACHLAYERS DISTLAYERS DISTRO_DEFAULT DISTRO_DIRNAME OEROOT
     unset ITEM MANIFESTS EULA EULA_MACHINE REPLY READ_EULA
     unset usage oldmach
 
@@ -32,12 +32,60 @@ env_cleanup() {
 usage () {
     cat >&2 <<EOF
 
-Usage: [MACHINE=<MACHINE>] source ${BASH_SOURCE[0]} [BUILDDIR]
+Usage: [DISTRO=<DISTRO>] [MACHINE=<MACHINE>] source ${BASH_SOURCE[0]} [BUILDDIR]
 
+If no DISTRO is set, it defaults to 'torizon'.
 If no MACHINE is set, list all possible machines, and ask user to choose.
-If no BUILDIR is set, it will be set to build-$DISTRO.
+If no BUILDIR is set, it will be set to build-\$DISTRO.
 
 EOF
+}
+
+variable_validation() {
+    local LAYERS=$1
+    local -n VARREF=$2
+    local VARNAME=$(echo $2 | tr '[:upper:]' '[:lower:]')
+
+    if [ -z "${VARREF}" -o "${VARREF}" = "INVALID" ]; then
+        local VARTABLE=
+        for ITEM in ${LAYERS}; do
+            VARTABLE="${VARTABLE} $(echo "${ITEM}" | cut -d'(' -f1) \
+                      $(echo "${ITEM}" | cut -d'(' -f2 | cut -d')' -f1)"
+        done
+
+        # whiptail
+        which whiptail > /dev/null 2>&1
+        if [ $? -eq 0 ]; then
+            VARREF=$(whiptail --title "Available ${VARNAME}s" --menu \
+                     "Please choose a ${VARNAME}" 0 0 20 \
+                     ${VARTABLE} 3>&1 1>&2 2>&3)
+        fi
+
+        # dialog
+        if [ -z "${VARREF}" -o "${VARREF}" = "INVALID" ]; then
+            which dialog > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+                VARREF=$(dialog --title "Available ${VARNAME}s" --menu \
+                        "Please choose a ${VARNAME}" 0 0 20 ${VARTABLE} \
+                        3>&1 1>&2 2>&3)
+            fi
+        fi
+
+        # guard against Ctrl-D or cancel
+        if [  -z "${VARREF}" -o "${VARREF}" = "INVALID" ]; then
+            echo "To choose a ${VARNAME} interactively please install whiptail or dialog."
+            echo "To choose a ${VARNAME} non-interactively please use the following:"
+            echo "    ${!VARREF}=<your-${VARNAME}> . ./setup-environment"
+            echo ""
+            echo "Press <ENTER> to see a list of your choices"
+            read -r
+            echo "${LAYERS}" | sed -e 's/(/ (/g' | sed -e 's/)/)\n/g' |
+                    sed -e 's/^ */\t/g'
+            return 1
+        fi
+    fi
+
+    return 0
 }
 
 trap env_cleanup RETURN
@@ -61,9 +109,6 @@ elif [ -n "$BASH_VERSION" ]; then
     set +o noclobber
 fi
 
-# Set default distro to Linux microPlatform
-DISTRO=torizon
-
 # Create a common list of "<machine>(<layer>)", sorted by <machine>
 # Blacklist unsupported machines of Torizoncore
 MACHLAYERS=$(find layers -print | grep "conf/machine/.*\.conf" |
@@ -72,48 +117,26 @@ MACHLAYERS=$(find layers -print | grep "conf/machine/.*\.conf" |
             sed -e 's/\.conf//g' -e 's/layers\///' |
             awk -F'/conf/machine/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
 
-if [ -z "${MACHINE}" ]; then
-    # whiptail
-    which whiptail > /dev/null 2>&1
-    if [ $? -eq 0 ]; then
-        MACHINETABLE=
-        for ITEM in $MACHLAYERS; do
-            MACHINETABLE="${MACHINETABLE} $(echo "$ITEM" | cut -d'(' -f1) \
-                          $(echo "$ITEM" | cut -d'(' -f2 | cut -d')' -f1)"
-        done
-        MACHINE=$(whiptail --title "Available Machines" --menu \
-                 "Please choose a machine" 0 0 20 \
-                 ${MACHINETABLE} 3>&1 1>&2 2>&3)
-    fi
+# MACHINE sanity check
+echo $MACHLAYERS | grep -q "$MACHINE(.*)" || MACHINE="INVALID"
 
-    # dialog
-    if [ -z "$MACHINE" ]; then
-        which dialog > /dev/null 2>&1
-        if [ $? -eq 0 ]; then
-            MACHINETABLE=
-            for ITEM in $MACHLAYERS; do
-                MACHINETABLE="$MACHINETABLE $(echo "$ITEM" | cut -d'(' -f1) \
-                              $(echo "$ITEM" | cut -d'(' -f2 | cut -d')' -f1)"
-            done
-            MACHINE=$(dialog --title "Available Machines" --menu \
-                    "Please choose a machine" 0 0 20 $MACHINETABLE \
-                    3>&1 1>&2 2>&3)
-        fi
-    fi
-fi
+# Validate MACHINE
+variable_validation "$MACHLAYERS" "MACHINE" || return 1
 
-# guard against Ctrl-D or cancel
-if [ -z "$MACHINE" ]; then
-    echo "To choose a machine interactively please install whiptail or dialog."
-    echo "To choose a machine non-interactively please use the following:"
-    echo "    MACHINE=<your-machine> . ./setup-environment"
-    echo ""
-    echo "Press <ENTER> to see a list of your choices"
-    read -r
-    echo "$MACHLAYERS" | sed -e 's/(/ (/g' | sed -e 's/)/)\n/g' |
-            sed -e 's/^ */\t/g'
-    return 1
-fi
+# DISTRO defaults to 'torizon'
+DISTRO_DEFAULT="torizon"
+DISTRO=${DISTRO:-$DISTRO_DEFAULT}
+
+# Create a common list of "<distro>(<layer>)" supported by Torizoncore, sorted by <distro>
+DISTLAYERS=$(find layers/meta-toradex-torizon -print | grep "conf/distro/.*\.conf" |
+            sed -e 's/\.conf//g' -e 's/layers\///' |
+            awk -F'/conf/distro/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
+
+# DISTRO sanity check
+echo $DISTLAYERS | grep -q "$DISTRO(.*)" || DISTRO="INVALID"
+
+# Validate DISTRO
+variable_validation "$DISTLAYERS" "DISTRO" || return 1
 
 if [ -z "${SDKMACHINE}" ]; then
     SDKMACHINE='x86_64'
