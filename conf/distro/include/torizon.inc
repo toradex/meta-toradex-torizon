@@ -39,6 +39,7 @@ IMAGE_FSTYPES = "teziimg-distro"
 
 # SOTA
 OSTREE_OSNAME = "torizon"
+OSTREE_MULTI_DEVICETREE_SUPPORT = "1"
 SOTA_CLIENT_FEATURES_append = " ubootenv"
 INITRAMFS_IMAGE = "initramfs-ostree-torizon-image"
 INITRAMFS_FSTYPES = "cpio.gz"
