@@ -127,21 +127,32 @@ BUILDDIR=${1:-build-$DISTRO}
 # seems to have troubles if this makes it into OE variables.
 BUILDDIR=$OEROOT/${BUILDDIR%%/}
 
+# Set BBPATH for recipetool
+BBPATH=${BUILDDIR}
+
 # Clean up PATH, because if it includes tokens to current directories somehow,
 # wrong binaries can be used instead of the expected ones during task execution
-export PATH=$(echo "${PATH}" | sed 's/\(:.\|:\)*:/:/g;s/^.\?://;s/:.\?$//')
-export PATH="${OEROOT}/bitbake/bin:${OEROOT}/.repo/repo:${PATH}"
-export PATH="${OEROOT}/layers/openembedded-core/bitbake/bin:${PATH}"
-export PATH="${OEROOT}/layers/openembedded-core/scripts:${PATH}"
+PATH=$(echo "${PATH}" | sed 's/\(:.\|:\)*:/:/g;s/^.\?://;s/:.\?$//')
+PATH="${OEROOT}/bitbake/bin:${OEROOT}/.repo/repo:${PATH}"
+PATH="${OEROOT}/layers/openembedded-core/bitbake/bin:${PATH}"
+PATH="${OEROOT}/layers/openembedded-core/scripts:${PATH}"
 # Remove duplicate path entries
-export PATH=$(echo "$PATH" |
-        awk -F: '{for (i=1;i<=NF;i++) { if ( !x[$i]++ ) printf("%s:",$i); }}' |
-        sed 's/:$//')
-# Make sure Bitbake doesn't filter out the following variables from our env
-export BB_ENV_EXTRAWHITE="MACHINE DISTRO TCLIBC TCMODE GIT_PROXY_COMMAND \
-        http_proxy ftp_proxy https_proxy all_proxy ALL_PROXY no_proxy \
-        SSH_AGENT_PID SSH_AUTH_SOCK BB_SRCREV_POLICY SDKMACHINE \
-        BB_NUMBER_THREADS"
+PATH=$(echo "$PATH" |
+       awk -F: '{for (i=1;i<=NF;i++) { if ( !x[$i]++ ) printf("%s:",$i); }}' |
+       sed 's/:$//')
+
+BB_ENV_EXTRAWHITE_OE="MACHINE DISTRO TCMODE TCLIBC HTTP_PROXY http_proxy \
+HTTPS_PROXY https_proxy FTP_PROXY ftp_proxy FTPS_PROXY ftps_proxy ALL_PROXY \
+all_proxy NO_PROXY no_proxy SSH_AGENT_PID SSH_AUTH_SOCK BB_SRCREV_POLICY \
+SDKMACHINE BB_NUMBER_THREADS BB_NO_NETWORK PARALLEL_MAKE GIT_PROXY_COMMAND \
+SOCKS5_PASSWD SOCKS5_USER SCREENDIR STAMPS_DIR BBPATH_EXTRA BB_SETSCENE_ENFORCE"
+
+BB_ENV_EXTRAWHITE="$(echo $BB_ENV_EXTRAWHITE $BB_ENV_EXTRAWHITE_OE | tr ' ' '\n' | LC_ALL=C sort --unique | tr '\n' ' ')"
+
+export PATH
+export BUILDDIR
+export BBPATH
+export BB_ENV_EXTRAWHITE
 
 mkdir -p "${BUILDDIR}"/conf && cd "${BUILDDIR}"
 if [ -f "conf/auto.conf" ]; then
