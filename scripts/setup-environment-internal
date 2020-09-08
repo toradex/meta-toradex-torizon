@@ -34,7 +34,7 @@ usage () {
 
 Usage: [DISTRO=<DISTRO>] [MACHINE=<MACHINE>] source ${BASH_SOURCE[0]} [BUILDDIR]
 
-If no DISTRO is set, it defaults to 'torizon'.
+If no DISTRO is set, 'torizon|torizon-upstream' will be chosen depending on MACHINE.
 If no MACHINE is set, list all possible machines, and ask user to choose.
 If no BUILDIR is set, it will be set to build-\$DISTRO.
 
@@ -123,8 +123,9 @@ echo $MACHLAYERS | grep -q "$MACHINE(.*)" || MACHINE="INVALID"
 # Validate MACHINE
 variable_validation "$MACHLAYERS" "MACHINE" || return 1
 
-# DISTRO defaults to 'torizon'
-DISTRO_DEFAULT="torizon"
+# DISTRO defaults to 'torizon' for imx8/qemuarm64/genericx86-64 machines
+# DISTRO defaults to 'torizon-upstream' for other machines
+DISTRO_DEFAULT="torizon-upstream" && echo "$MACHINE" | grep -E -q '(imx8|qemuarm64|genericx86-64)' && DISTRO_DEFAULT="torizon"
 DISTRO=${DISTRO:-$DISTRO_DEFAULT}
 
 # Create a common list of "<distro>(<layer>)" supported by Torizoncore, sorted by <distro>
@@ -216,19 +217,6 @@ cat >> conf/auto.conf <<EOF
 DISTRO ?= "${DISTRO}"
 MACHINE ?= "${MACHINE}"
 SDKMACHINE ?= "${SDKMACHINE}"
-
-# Torizon enables upstream overrides by default, but could be disabled
-# for specific machines.
-UPSTREAMOVERRIDES = ":upstream"
-UPSTREAMOVERRIDES_apalis-imx8 = ""
-UPSTREAMOVERRIDES_apalis-imx8x = ""
-UPSTREAMOVERRIDES_apalis-imx8x-v11a = ""
-UPSTREAMOVERRIDES_colibri-imx8x = ""
-UPSTREAMOVERRIDES_colibri-imx8x-v10b = ""
-UPSTREAMOVERRIDES_verdin-imx8mm = ""
-UPSTREAMOVERRIDES_qemuarm64 = ""
-UPSTREAMOVERRIDES_genericx86-64 = ""
-DISTROOVERRIDES .= "\${UPSTREAMOVERRIDES}"
 
 # Extra options that can be changed by the user
 INHERIT += "rm_work"

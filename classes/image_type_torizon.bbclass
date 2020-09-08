@@ -5,9 +5,6 @@ TEZI_ROOT_SUFFIX = "ota.tar.zst"
 TEZI_BOOT_SUFFIX = "bootfs.tar.zst"
 TEZI_CONFIG_FORMAT = "3"
 
-SUMMARY_append_preempt-rt = " (PREEMPT_RT)"
-DESCRIPTION_append_preempt-rt = " Using a Linux kernel with PREEMPT_RT real-time patch applied."
-
 def get_tdx_ostree_purpose(purpose):
     return purpose.lower()
 
