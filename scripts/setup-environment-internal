@@ -65,11 +65,12 @@ fi
 DISTRO=torizon
 
 # Create a common list of "<machine>(<layer>)", sorted by <machine>
-# Blacklist OE-core, we only want BSP layers
+# Blacklist unsupported machines of Torizoncore
 MACHLAYERS=$(find layers -print | grep "conf/machine/.*\.conf" |
-            grep -v scripts | grep -v openembedded-core |
+            grep -E '(apalis.*\.conf|colibri.*\.conf|qemuarm64\.conf|genericx86-64\.conf)' |
+            grep -E -v '(imx7-emmc|imx7-nand)' |
             sed -e 's/\.conf//g' -e 's/layers\///' |
-            awk -F'/conf/machine/' '{print $NF "(" $1 ")"}' | LANG=C sort)
+            awk -F'/conf/machine/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
 
 if [ -z "${MACHINE}" ]; then
     # whiptail
