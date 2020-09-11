@@ -106,3 +106,26 @@ generate_diff_file () {
         fi
     fi
 }
+
+IMAGE_DATETIME_FILES ??= " \
+    ${sysconfdir}/issue \
+    ${sysconfdir}/issue.net \
+    ${sysconfdir}/os-release \
+    ${libdir}/os-release \
+"
+
+IMAGE_PREPROCESS_COMMAND += "adjust_rootfs_datetime;"
+
+# For the files listed in IMAGE_DATETIME_FILES that might contain DATETIME strings, substitute
+# them with the current ${DATETIME} of do_image task, to replace the potential older DATATIMEs
+# that installed from sstate.
+adjust_rootfs_datetime () {
+    for f in ${IMAGE_DATETIME_FILES}; do
+        file=${IMAGE_ROOTFS}$f
+        datetime=`grep -oE "[0-9]{4}(0[1-9]|1[0-2])(0[1-9]|[1-2][0-9]|3[0-1])(2[0-3]|[01][0-9])([0-5][0-9]){2}" $file | head -1`
+        if [ -n "$datetime" ]; then
+            sed -i -e "s#$datetime#${DATETIME}#g" $file
+        fi
+    done
+}
+adjust_rootfs_datetime[vardepsexclude] = "DATETIME"
