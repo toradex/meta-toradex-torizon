@@ -1,27 +1,27 @@
-From 041774829836e7381cc1123b76a9a595561e2372 Mon Sep 17 00:00:00 2001
-From: Stefan Agner <stefan.agner@toradex.com>
-Date: Thu, 19 Sep 2019 17:09:58 +0200
+From 0c56e507c671b752649582ad6c0d34f4637b095f Mon Sep 17 00:00:00 2001
+From: Sergio Prado <sergio.prado@toradex.com>
+Date: Fri, 11 Sep 2020 06:00:11 -0300
 Subject: [PATCH 3/4] colibri-imx6ull: use distro boot by default
 
 Use distro boot for raw NAND modules by default. This is required
 for TorizonCore.
 
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 ---
  include/configs/colibri-imx6ull.h | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index e2c31cd4e0..9c628ad39e 100644
+index 366d8b83771a..e8c2ec3d0167 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
-@@ -83,10 +83,11 @@
- 		"ubi read ${fdt_addr_r} dtb && " \
+@@ -70,9 +70,10 @@
  		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
  
--#define CONFIG_BOOTCOMMAND "run ubiboot; " \
-+#define CONFIG_BOOTCOMMAND \
- 	"setenv fdtfile " FDT_FILE " && run distro_bootcmd;"
+ /* Run Distro Boot script if ubiboot fails */
+-#define CONFIG_BOOTCOMMAND "run ubiboot || run distro_bootcmd;"
++#define CONFIG_BOOTCOMMAND "run distro_bootcmd;"
  
  #define BOOT_TARGET_DEVICES(func) \
 +	func(UBIFS, ubifs, 0) \
@@ -29,5 +29,5 @@ index e2c31cd4e0..9c628ad39e 100644
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
 -- 
-2.27.0
+2.17.1
 
