@@ -1,30 +1,32 @@
-From ad78158ab02e723de0d3587f63a1f5b228621d48 Mon Sep 17 00:00:00 2001
-From: Stefan Agner <stefan.agner@toradex.com>
-Date: Thu, 19 Sep 2019 10:44:18 +0200
-Subject: [PATCH 4/4] colibri_imx7: use distro boot by default
+From cd818a9975d40f188b588ee30bac16bc23fd6311 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 14 Sep 2020 11:01:08 +0200
+Subject: [PATCH] colibri_imx7: use distro boot by default
 
 Use distro boot for eMMC as well as raw NAND modules by default. This
 is required for TorizonCore.
 
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- include/configs/colibri_imx7.h | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/configs/colibri_imx7.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
-index 2acd7459eb..95b8061e52 100644
+index 4479e115c6..395e15f3e3 100644
 --- a/include/configs/colibri_imx7.h
 +++ b/include/configs/colibri_imx7.h
-@@ -77,7 +77,7 @@
+@@ -117,8 +117,7 @@
  		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
  
  #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
 -#define CONFIG_BOOTCOMMAND "run ubiboot ; echo ; echo ubiboot failed ; " \
-+#define CONFIG_BOOTCOMMAND \
- 	"setenv fdtfile ${soc}-colibri-${fdt_board}.dtb && run distro_bootcmd;"
+-	"run distro_bootcmd;"
++#define CONFIG_BOOTCOMMAND "run distro_bootcmd;" \
  #define MODULE_EXTRA_ENV_SETTINGS \
  	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0" \
-@@ -91,6 +91,7 @@
+ 	UBI_BOOTCMD
+@@ -130,6 +129,7 @@
  
  #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
  #define BOOT_TARGET_DEVICES(func) \
@@ -33,5 +35,5 @@ index 2acd7459eb..95b8061e52 100644
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
 -- 
-2.27.0
+2.28.0
 
