@@ -19,13 +19,23 @@ then
     env save
 fi
 
+env set kernel_image_type @@KERNEL_IMAGETYPE@@
+if test ${kernel_image_type} = "Image.gz"
+then
+    env set kernel_addr_load ${loadaddr}
+    env set bootcmd_unzip_k 'unzip $kernel_addr_load $kernel_addr_r'
+else
+    env set kernel_addr_load ${kernel_addr_r}
+    env set bootcmd_unzip_k ';'
+fi
+
 env set overlays_file "overlays.txt"
 env set load_overlay 'load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlays_file}; env import -t ${loadaddr} ${filesize}'
 env set apply_overlays 'fdt addr ${fdt_addr_r} && fdt resize 0x20000 && for overlay_file in ${fdt_overlays}; do echo "Applying Overlay: ${overlay_file}"
 && load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; done;'
 
 
-env set bootcmd_load_k 'load ${devtype} ${devnum}:2 ${kernel_addr_r} "/boot"${kernel_image}'
+env set bootcmd_load_k 'load ${devtype} ${devnum}:2 ${kernel_addr_load} "/boot"${kernel_image}'
 env set bootcmd_load_r 'load ${devtype} ${devnum}:2 ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}'
 
 if test ${devtype} != ubi
@@ -71,5 +81,5 @@ fi
 
 env set bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} ${fdt_path}; if test -e ${devtype} ${devnum}:${distro_bootpart} ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
 env set bootcmd_boot '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
-env set bootcmd_run 'run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_load_r && run bootcmd_boot'
+env set bootcmd_run 'run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot'
 run bootcmd_run
