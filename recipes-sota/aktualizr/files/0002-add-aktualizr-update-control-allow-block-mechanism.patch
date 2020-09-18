@@ -1,0 +1,237 @@
+From 55e06ea17f662567df6cd09f38b00917a01dc372 Mon Sep 17 00:00:00 2001
+From: Sergio Prado <sergio.prado@toradex.com>
+Date: Fri, 18 Sep 2020 17:25:27 +0000
+Subject: [PATCH] Add aktualizr update control (allow/block) mechanism
+
+Make it possible for the user to momentarily block the update via an
+advisory lock on /run/lock/aktualizr-lock (see flock man page to
+understand how to apply or remove an advisory lock on an open file).
+
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
+---
+ src/aktualizr_primary/CMakeLists.txt   |  4 +--
+ src/aktualizr_primary/main.cc          | 18 ++---------
+ src/aktualizr_primary/update_events.cc | 45 ++++++++++++++++++++++++++
+ src/aktualizr_primary/update_events.h  | 25 ++++++++++++++
+ src/aktualizr_primary/update_lock.cc   | 43 ++++++++++++++++++++++++
+ src/aktualizr_primary/update_lock.h    | 19 +++++++++++
+ 6 files changed, 137 insertions(+), 17 deletions(-)
+ create mode 100644 src/aktualizr_primary/update_events.cc
+ create mode 100644 src/aktualizr_primary/update_events.h
+ create mode 100644 src/aktualizr_primary/update_lock.cc
+ create mode 100644 src/aktualizr_primary/update_lock.h
+
+diff --git a/src/aktualizr_primary/CMakeLists.txt b/src/aktualizr_primary/CMakeLists.txt
+index 8f60c9ab0c61..df41795cdd79 100644
+--- a/src/aktualizr_primary/CMakeLists.txt
++++ b/src/aktualizr_primary/CMakeLists.txt
+@@ -1,5 +1,5 @@
+-set(SOURCES main.cc secondary_config.cc secondary.cc)
+-set(HEADERS secondary_config.h secondary.h)
++set(SOURCES main.cc secondary_config.cc secondary.cc update_events.cc update_lock.cc)
++set(HEADERS secondary_config.h secondary.h update_events.h update_lock.h)
+ 
+ add_executable(aktualizr ${SOURCES})
+ target_link_libraries(aktualizr aktualizr_lib virtual_secondary aktualizr-posix)
+diff --git a/src/aktualizr_primary/main.cc b/src/aktualizr_primary/main.cc
+index 97db0331de22..3ae14af27b51 100644
+--- a/src/aktualizr_primary/main.cc
++++ b/src/aktualizr_primary/main.cc
+@@ -13,6 +13,7 @@
+ #include "utilities/aktualizr_version.h"
+ #include "utilities/sig_handler.h"
+ #include "utilities/utils.h"
++#include "update_events.h"
+ 
+ namespace bpo = boost::program_options;
+ 
+@@ -87,20 +88,6 @@ bpo::variables_map parseOptions(int argc, char **argv) {
+   return vm;
+ }
+ 
+-void processEvent(const std::shared_ptr<event::BaseEvent> &event) {
+-  if (event->isTypeOf<event::DownloadProgressReport>() || event->variant == "UpdateCheckComplete") {
+-    // Do nothing; libaktualizr already logs it.
+-  } else if (event->variant == "AllDownloadsComplete") {
+-    const auto *downloads_complete = dynamic_cast<event::AllDownloadsComplete *>(event.get());
+-    LOG_INFO << "got " << event->variant << " event with status: " << downloads_complete->result.status;
+-  } else if (event->variant == "AllInstallsComplete") {
+-    const auto *installs_complete = dynamic_cast<event::AllInstallsComplete *>(event.get());
+-    LOG_INFO << "got " << event->variant << " event with status: " << installs_complete->result.dev_report.result_code;
+-  } else {
+-    LOG_INFO << "got " << event->variant << " event";
+-  }
+-}
+-
+ int main(int argc, char *argv[]) {
+   logger_init();
+   logger_set_threshold(boost::log::trivial::info);
+@@ -120,7 +107,8 @@ int main(int argc, char *argv[]) {
+     LOG_DEBUG << "Current directory: " << boost::filesystem::current_path().string();
+ 
+     Aktualizr aktualizr(config);
+-    std::function<void(std::shared_ptr<event::BaseEvent> event)> f_cb = processEvent;
++    UpdateEvents *events = events->getInstance(&aktualizr);
++    std::function<void(std::shared_ptr<event::BaseEvent> event)> f_cb = events->processEvent;
+     boost::signals2::scoped_connection conn;
+ 
+     conn = aktualizr.SetSignalHandler(f_cb);
+diff --git a/src/aktualizr_primary/update_events.cc b/src/aktualizr_primary/update_events.cc
+new file mode 100644
+index 000000000000..0daa8d5e6470
+--- /dev/null
++++ b/src/aktualizr_primary/update_events.cc
+@@ -0,0 +1,45 @@
++/*
++* Aktualizr event handlers
++* Complete list of events available in:
++* https://github.com/advancedtelematic/aktualizr/blob/master/include/libaktualizr/events.h
++*
++*/
++
++#include <iostream>
++#include "update_events.h"
++#include "logging/logging.h"
++
++UpdateEvents* UpdateEvents::instance = nullptr;
++
++UpdateEvents *UpdateEvents::getInstance(Aktualizr *a) {
++  if (instance == nullptr)
++    instance = new UpdateEvents(a);
++  return instance;
++}
++
++void UpdateEvents::processAllInstallsComplete() {
++  LOG_INFO << "Update install completed. Releasing the update lock...";
++  lock.free();
++}
++
++void UpdateEvents::processUpdateCheckComplete(const result::UpdateStatus status) {
++  lock.free();
++  if (status == result::UpdateStatus::kUpdatesAvailable) {
++    LOG_INFO << "Update available. Acquiring the update lock...";
++    lock.get();
++  }
++}
++
++void UpdateEvents::processEvent(const std::shared_ptr<event::BaseEvent> &event) {
++
++  LOG_INFO << "Event: " << event->variant;
++
++  UpdateEvents *e = getInstance(0);
++
++  if (event->variant == "UpdateCheckComplete") {
++    const auto *update_available = dynamic_cast<event::UpdateCheckComplete *>(event.get());
++    e->processUpdateCheckComplete(update_available->result.status);
++  } else if (event->variant == "AllInstallsComplete") {
++    e->processAllInstallsComplete();
++  }
++}
+diff --git a/src/aktualizr_primary/update_events.h b/src/aktualizr_primary/update_events.h
+new file mode 100644
+index 000000000000..17c454968f5c
+--- /dev/null
++++ b/src/aktualizr_primary/update_events.h
+@@ -0,0 +1,25 @@
++#ifndef UPDATE_EVENTS_H_
++#define UPDATE_EVENTS_H_
++
++#include "libaktualizr/aktualizr.h"
++#include "update_lock.h"
++
++class UpdateEvents {
++
++  boost::filesystem::path update_lock_file = "/run/lock/aktualizr-lock";
++
++  UpdateEvents(Aktualizr *a) : aktualizr(a), lock(update_lock_file) {}
++
++  static UpdateEvents *instance;
++  Aktualizr *aktualizr;
++  UpdateLock lock;
++
++  void processUpdateCheckComplete(const result::UpdateStatus status);
++  void processAllInstallsComplete();
++
++ public:
++  static UpdateEvents *getInstance(Aktualizr *a);
++  static void processEvent(const std::shared_ptr<event::BaseEvent> &event);
++};
++
++#endif  // UPDATE_EVENTS_H_
+diff --git a/src/aktualizr_primary/update_lock.cc b/src/aktualizr_primary/update_lock.cc
+new file mode 100644
+index 000000000000..c31b783640ba
+--- /dev/null
++++ b/src/aktualizr_primary/update_lock.cc
+@@ -0,0 +1,43 @@
++#include <sys/types.h>
++#include <sys/stat.h>
++#include <sys/file.h>
++#include <fcntl.h>
++
++#include "update_lock.h"
++#include "logging/logging.h"
++
++bool UpdateLock::get() {
++
++  if (!lockdesc) {
++    lockdesc = open(lockfile.c_str(), O_RDWR | O_CREAT | O_APPEND, 0666);
++    if (lockdesc < 0) {
++      LOG_ERROR << "Unable to open lock file: " << lockfile;
++      return false;
++    }
++  }
++
++  if (flock(lockdesc, LOCK_EX) < 0) {
++    LOG_ERROR << "Unable to acquire lock: " << lockfile;
++    return false;
++  }
++
++  return true;
++}
++
++bool UpdateLock::free() {
++
++  if (!lockdesc)
++    return false;
++
++  if (flock(lockdesc, LOCK_UN) < 0) {
++    LOG_INFO << "Unable to release lock: " << lockfile;
++    return false;
++  }
++
++  return true;
++}
++
++UpdateLock::~UpdateLock()
++{
++  close(lockdesc);
++}
+diff --git a/src/aktualizr_primary/update_lock.h b/src/aktualizr_primary/update_lock.h
+new file mode 100644
+index 000000000000..1aa8973aabe2
+--- /dev/null
++++ b/src/aktualizr_primary/update_lock.h
+@@ -0,0 +1,19 @@
++#ifndef UPDATE_LOCK_H_
++#define UPDATE_LOCK_H_
++
++#include "libaktualizr/aktualizr.h"
++
++class UpdateLock {
++
++  boost::filesystem::path lockfile;
++  int lockdesc;
++
++ public:
++  UpdateLock(boost::filesystem::path lock) : lockfile(lock), lockdesc(0) {}
++  ~UpdateLock();
++
++  bool get();
++  bool free();
++};
++
++#endif  // UPDATE_EVENTS_H_
+-- 
+2.17.1
+
