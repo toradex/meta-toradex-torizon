@@ -1,6 +1,6 @@
-From 55e06ea17f662567df6cd09f38b00917a01dc372 Mon Sep 17 00:00:00 2001
+From 4d1e41e711cb68d3659ab7d28ed0bdd77d25cdbf Mon Sep 17 00:00:00 2001
 From: Sergio Prado <sergio.prado@toradex.com>
-Date: Fri, 18 Sep 2020 17:25:27 +0000
+Date: Tue, 22 Sep 2020 15:56:52 +0000
 Subject: [PATCH] Add aktualizr update control (allow/block) mechanism
 
 Make it possible for the user to momentarily block the update via an
@@ -9,18 +9,45 @@ understand how to apply or remove an advisory lock on an open file).
 
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 ---
- src/aktualizr_primary/CMakeLists.txt   |  4 +--
- src/aktualizr_primary/main.cc          | 18 ++---------
- src/aktualizr_primary/update_events.cc | 45 ++++++++++++++++++++++++++
- src/aktualizr_primary/update_events.h  | 25 ++++++++++++++
- src/aktualizr_primary/update_lock.cc   | 43 ++++++++++++++++++++++++
- src/aktualizr_primary/update_lock.h    | 19 +++++++++++
- 6 files changed, 137 insertions(+), 17 deletions(-)
+ include/libaktualizr/aktualizr.h       |  7 +++
+ src/aktualizr_primary/CMakeLists.txt   |  4 +-
+ src/aktualizr_primary/main.cc          | 18 ++------
+ src/aktualizr_primary/update_events.cc | 48 +++++++++++++++++++++
+ src/aktualizr_primary/update_events.h  | 25 +++++++++++
+ src/aktualizr_primary/update_lock.cc   | 59 ++++++++++++++++++++++++++
+ src/aktualizr_primary/update_lock.h    | 20 +++++++++
+ src/libaktualizr/primary/aktualizr.cc  |  8 +++-
+ 8 files changed, 171 insertions(+), 18 deletions(-)
  create mode 100644 src/aktualizr_primary/update_events.cc
  create mode 100644 src/aktualizr_primary/update_events.h
  create mode 100644 src/aktualizr_primary/update_lock.cc
  create mode 100644 src/aktualizr_primary/update_lock.h
 
+diff --git a/include/libaktualizr/aktualizr.h b/include/libaktualizr/aktualizr.h
+index 4edc02df0590..397a7c8635b8 100644
+--- a/include/libaktualizr/aktualizr.h
++++ b/include/libaktualizr/aktualizr.h
+@@ -301,6 +301,11 @@ class Aktualizr {
+    */
+   void SetSecondaryData(const Uptane::EcuSerial& ecu, const std::string& data);
+ 
++  /* Make it possible for the client application to disable download/install of updates
++   * @param status true to disable updates and false to enable updates
++   */
++  void DisableUpdates(bool status);
++
+   /**
+    * Returns a list of the registered Secondaries, along with some associated
+    * metadata
+@@ -343,6 +348,8 @@ class Aktualizr {
+   std::shared_ptr<INvStorage> storage_;
+   std::shared_ptr<event::Channel> sig_;
+   std::unique_ptr<api::CommandQueue> api_queue_;
++
++  bool updates_disabled_;
+ };
+ 
+ #endif  // AKTUALIZR_H_
 diff --git a/src/aktualizr_primary/CMakeLists.txt b/src/aktualizr_primary/CMakeLists.txt
 index 8f60c9ab0c61..df41795cdd79 100644
 --- a/src/aktualizr_primary/CMakeLists.txt
@@ -78,10 +105,10 @@ index 97db0331de22..3ae14af27b51 100644
      conn = aktualizr.SetSignalHandler(f_cb);
 diff --git a/src/aktualizr_primary/update_events.cc b/src/aktualizr_primary/update_events.cc
 new file mode 100644
-index 000000000000..0daa8d5e6470
+index 000000000000..2bc6d1c09912
 --- /dev/null
 +++ b/src/aktualizr_primary/update_events.cc
-@@ -0,0 +1,45 @@
+@@ -0,0 +1,48 @@
 +/*
 +* Aktualizr event handlers
 +* Complete list of events available in:
@@ -110,7 +137,10 @@ index 000000000000..0daa8d5e6470
 +  lock.free();
 +  if (status == result::UpdateStatus::kUpdatesAvailable) {
 +    LOG_INFO << "Update available. Acquiring the update lock...";
-+    lock.get();
++    if (lock.try_get() == false)
++      aktualizr->DisableUpdates(true);
++    else
++      aktualizr->DisableUpdates(false);
 +  }
 +}
 +
@@ -160,10 +190,10 @@ index 000000000000..17c454968f5c
 +#endif  // UPDATE_EVENTS_H_
 diff --git a/src/aktualizr_primary/update_lock.cc b/src/aktualizr_primary/update_lock.cc
 new file mode 100644
-index 000000000000..c31b783640ba
+index 000000000000..9361d4661b8b
 --- /dev/null
 +++ b/src/aktualizr_primary/update_lock.cc
-@@ -0,0 +1,43 @@
+@@ -0,0 +1,59 @@
 +#include <sys/types.h>
 +#include <sys/stat.h>
 +#include <sys/file.h>
@@ -172,22 +202,37 @@ index 000000000000..c31b783640ba
 +#include "update_lock.h"
 +#include "logging/logging.h"
 +
-+bool UpdateLock::get() {
++bool UpdateLock::get(bool block) {
 +
++  int flags = LOCK_EX;
++
++  /* Open the lock file. If for some reason the lock file cannot be opened,
++   * we won't lock updates to prevent situations that could make the device
++   * no longer updateable, for example if the lock directory does not exist
++   * or is not writeable.
++   */
 +  if (!lockdesc) {
 +    lockdesc = open(lockfile.c_str(), O_RDWR | O_CREAT | O_APPEND, 0666);
 +    if (lockdesc < 0) {
 +      LOG_ERROR << "Unable to open lock file: " << lockfile;
-+      return false;
++      lockdesc = 0;
++      return true;
 +    }
 +  }
 +
-+  if (flock(lockdesc, LOCK_EX) < 0) {
++  if (block == false)
++    flags |= LOCK_NB;
++
++  if (flock(lockdesc, flags) < 0) {
 +    LOG_ERROR << "Unable to acquire lock: " << lockfile;
 +    return false;
 +  }
 +
 +  return true;
++}
++
++bool UpdateLock::try_get() {
++  return get(false);
 +}
 +
 +bool UpdateLock::free() {
@@ -205,14 +250,15 @@ index 000000000000..c31b783640ba
 +
 +UpdateLock::~UpdateLock()
 +{
-+  close(lockdesc);
++  if (lockdesc)
++    close(lockdesc);
 +}
 diff --git a/src/aktualizr_primary/update_lock.h b/src/aktualizr_primary/update_lock.h
 new file mode 100644
-index 000000000000..1aa8973aabe2
+index 000000000000..e4c2532f0263
 --- /dev/null
 +++ b/src/aktualizr_primary/update_lock.h
-@@ -0,0 +1,19 @@
+@@ -0,0 +1,20 @@
 +#ifndef UPDATE_LOCK_H_
 +#define UPDATE_LOCK_H_
 +
@@ -227,11 +273,40 @@ index 000000000000..1aa8973aabe2
 +  UpdateLock(boost::filesystem::path lock) : lockfile(lock), lockdesc(0) {}
 +  ~UpdateLock();
 +
-+  bool get();
++  bool get(bool block = true);
++  bool try_get();
 +  bool free();
 +};
 +
 +#endif  // UPDATE_EVENTS_H_
+diff --git a/src/libaktualizr/primary/aktualizr.cc b/src/libaktualizr/primary/aktualizr.cc
+index 52685cf70c9a..016ac0d6eea2 100644
+--- a/src/libaktualizr/primary/aktualizr.cc
++++ b/src/libaktualizr/primary/aktualizr.cc
+@@ -26,6 +26,8 @@ Aktualizr::Aktualizr(Config config, std::shared_ptr<INvStorage> storage_in,
+   storage_->importData(config_.import);
+ 
+   uptane_client_ = std::make_shared<SotaUptaneClient>(config_, storage_, http_in, sig_);
++
++  updates_disabled_ = false;
+ }
+ 
+ Aktualizr::~Aktualizr() { api_queue_.reset(nullptr); }
+@@ -35,9 +37,13 @@ void Aktualizr::Initialize() {
+   api_queue_->run();
+ }
+ 
++void Aktualizr::DisableUpdates(bool status) {
++  updates_disabled_ = status;
++}
++
+ bool Aktualizr::UptaneCycle() {
+   result::UpdateCheck update_result = CheckUpdates().get();
+-  if (update_result.updates.empty()) {
++  if (update_result.updates.empty() || updates_disabled_) {
+     if (update_result.status == result::UpdateStatus::kError) {
+       // If the metadata verification failed, inform the backend immediately.
+       SendManifest().get();
 -- 
 2.17.1
 
