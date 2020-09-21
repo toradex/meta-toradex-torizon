@@ -112,7 +112,7 @@ fi
 # Create a common list of "<machine>(<layer>)", sorted by <machine>
 # Blacklist unsupported machines of Torizoncore
 MACHLAYERS=$(find layers -print | grep "conf/machine/.*\.conf" |
-            grep -E '(apalis.*\.conf|colibri.*\.conf|qemuarm64\.conf|genericx86-64\.conf)' |
+            grep -E '(apalis.*\.conf|colibri.*\.conf|verdin.*\.conf|qemuarm64\.conf|genericx86-64\.conf)' |
             grep -E -v '(imx7-emmc|imx7-nand)' |
             sed -e 's/\.conf//g' -e 's/layers\///' |
             awk -F'/conf/machine/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
@@ -183,9 +183,11 @@ mkdir -p "${BUILDDIR}"/conf && cd "${BUILDDIR}"
 if [ -f "conf/auto.conf" ]; then
     oldmach=$(egrep "^MACHINE \?=" "conf/auto.conf" |
              sed -e 's%^MACHINE ?= %%' | sed -e 's/^"//' -e 's/"$//')
+    olddisto=$(egrep "^DISTRO \?=" "conf/auto.conf" |
+             sed -e 's%^DISTRO ?= %%' | sed -e 's/^"//' -e 's/"$//')
 fi
 
-if [ -e conf/checksum -a "${MACHINE}" = "$oldmach" ]; then
+if [ -e conf/checksum -a "${MACHINE}" = "$oldmach" -a "${DISTRO}" = "$olddisto" ]; then
     sha512sum --quiet -c conf/checksum > /dev/null 2>&1
     if [ $? -eq 0 ]; then
        return
