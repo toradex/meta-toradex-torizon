@@ -5,7 +5,7 @@ require linux-torizon.inc
 inherit toradex-kernel-config
 
 kernel_do_configure_append() {
-	# set kernel to reboot on panic and hung tasks
+	# kernel hacking
 	kernel_configure_variable DETECT_HUNG_TASK y
 	kernel_configure_variable DEFAULT_HUNG_TASK_TIMEOUT 120
 	kernel_configure_variable BOOTPARAM_HUNG_TASK_PANIC y
@@ -14,8 +14,19 @@ kernel_do_configure_append() {
 	kernel_configure_variable PANIC_ON_OOPS y
 	kernel_configure_variable PANIC_TIMEOUT 5
 
+	# general setup
 	kernel_configure_variable CFS_BANDWIDTH y
+
+	# networking
+	kernel_configure_variable CAN_J1939 m
+
+	# filesystem
+	kernel_configure_variable CIFS m
+
+	# drivers/hwmon
 	kernel_configure_variable SENSORS_SHT3x y
+
+	# drivers/input/touchscreen
 	kernel_configure_variable TOUCHSCREEN_ADS7846 y
 	kernel_configure_variable TOUCHSCREEN_PROPERTIES y
 	kernel_configure_variable TOUCHSCREEN_ADS7846 m
@@ -37,7 +48,6 @@ kernel_do_configure_append() {
 	kernel_configure_variable TOUCHSCREEN_EDT_FT5X06 y
 	kernel_configure_variable TOUCHSCREEN_MC13783 y
 	kernel_configure_variable TOUCHSCREEN_MAX11801 m
-	kernel_configure_variable SABRESD_MAX8903 n
 	kernel_configure_variable TOUCHSCREEN_MC13783 m
 	kernel_configure_variable TOUCHSCREEN_PENMOUNT m
 	kernel_configure_variable TOUCHSCREEN_PIXCIR m
@@ -56,4 +66,14 @@ kernel_do_configure_append() {
 	kernel_configure_variable TOUCHSCREEN_TSC2005 m
 	kernel_configure_variable TOUCHSCREEN_TSC2007 m
 	kernel_configure_variable TOUCHSCREEN_TSC2007_IIO y
+
+	# drivers/power
+	kernel_configure_variable SABRESD_MAX8903 n
+
+	# drivers/rtc
+	kernel_configure_variable RTC_DRV_ABX80X m
+
+	# drivers/pps
+	kernel_configure_variable PPS_CLIENT_LDISC m
+	kernel_configure_variable PPS_CLIENT_GPIO m
 }
