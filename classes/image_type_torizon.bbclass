@@ -80,7 +80,7 @@ EXTRA_OSTREE_COMMIT = " \
     --add-metadata-string=oe.arch="${TARGET_ARCH}" \
     --add-metadata-string=oe.package-arch="${TUNE_PKGARCH}" \
     --add-metadata-string=oe.kargs-default="${OSTREE_KERNEL_ARGS}" \
-    --add-metadata-string=oe.kernel-source="${OSTREE_KERNEL_SOURCE_META_DATA}" \
+    --add-metadata=oe.kernel-source="${OSTREE_KERNEL_SOURCE_META_DATA}" \
     --add-metadata-string=oe.garage-target-name="${GARAGE_TARGET_NAME}" \
     --add-metadata-string=oe.garage-target-version="${GARAGE_TARGET_VERSION}" \
     --add-metadata-string=oe.sota-hardware-id="${SOTA_HARDWARE_ID}" \
