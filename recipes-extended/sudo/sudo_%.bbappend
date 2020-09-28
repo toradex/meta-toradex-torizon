@@ -11,5 +11,5 @@ REQUIRED_DISTRO_FEATURES = "pam"
 
 do_install_append () {
     install -m 0755 -d ${D}${sysconfdir}/sudoers.d
-    install -m 0440 ${WORKDIR}/sudoers.torizon ${D}${sysconfdir}/sudoers.d/torizon
+    install -m 0440 ${WORKDIR}/sudoers.torizon ${D}${sysconfdir}/sudoers.d/50-torizon
 }
