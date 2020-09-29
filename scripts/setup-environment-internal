@@ -23,10 +23,6 @@ env_cleanup() {
     unset MACHLAYERS DISTLAYERS DISTRO_DEFAULT DISTRO_DIRNAME OEROOT
     unset ITEM MANIFESTS EULA EULA_MACHINE REPLY READ_EULA
     unset usage oldmach
-
-    if [ -n "$BUILDDIR" ]; then
-        export BUILDDIR
-    fi
 }
 
 usage () {
@@ -147,7 +143,7 @@ MANIFESTS="${OEROOT}"/.repo/manifests
 SCRIPTS="${OEROOT}"/layers/meta-toradex-torizon/scripts
 
 # We can be called with only 1 parameter max (build folder)
-BUILDDIR=${1:-build-$DISTRO}
+BUILDDIR=${1:-build}
 # Get rid of double slash. sed calls in OE staging_processfixme
 # seems to have troubles if this makes it into OE variables.
 BUILDDIR=$OEROOT/${BUILDDIR%%/}
