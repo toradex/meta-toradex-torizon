@@ -220,8 +220,7 @@ SDKMACHINE ?= "${SDKMACHINE}"
 INHERIT += "rm_work"
 EOF
 
-if [ ! -e conf/site.conf ]; then
-    cat > conf/site.conf <<_EOF
+cat > conf/site.conf <<_EOF
 SCONF_VERSION = "1"
 
 # Where to store sources
@@ -239,7 +238,6 @@ DEPLOY_DIR = "${BUILDDIR}/deploy"
 # Go through the Firewall
 #HTTP_PROXY = "http://${PROXYHOST}:${PROXYPORT}/"
 _EOF
-fi
 
 # Handle EULA , if needed. This is a generic method to handle BSPs
 # that might (or not) come with a EULA. If a machine has a EULA, we
