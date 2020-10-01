@@ -20,7 +20,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 env_cleanup() {
-    unset MACHLAYERS DISTLAYERS DISTRO_DEFAULT DISTRO_DIRNAME OEROOT
+    unset MACHLAYERS DISTLAYERS DISTRO_DEFAULT OEROOT
     unset ITEM MANIFESTS EULA EULA_MACHINE REPLY READ_EULA
     unset usage oldmach
 }
@@ -143,7 +143,7 @@ MANIFESTS="${OEROOT}"/.repo/manifests
 SCRIPTS="${OEROOT}"/layers/meta-toradex-torizon/scripts
 
 # We can be called with only 1 parameter max (build folder)
-BUILDDIR=${1:-build}
+BUILDDIR=${1:-build-$DISTRO}
 # Get rid of double slash. sed calls in OE staging_processfixme
 # seems to have troubles if this makes it into OE variables.
 BUILDDIR=$OEROOT/${BUILDDIR%%/}
@@ -200,8 +200,6 @@ ln -sf "${SCRIPTS}"/../conf/template/bblayers.conf conf/bblayers.conf
 ln -sf "${MANIFESTS}"/README.md README.md
 ln -sf "${MANIFESTS}" "${OEROOT}"/layers/
 
-DISTRO_DIRNAME=$(echo "${DISTRO}" | sed 's#[.-]#_#g')
-
 if [ "$(basename `readlink -f ${MANIFESTS}/../manifest.xml`)" != "default.xml" ]; then
     cat > conf/auto.conf <<EOF
 # This is needed when building on integration. With use-head-next you
@@ -230,7 +228,7 @@ DL_DIR ?= "${OEROOT}/downloads"
 SSTATE_DIR ?= "${OEROOT}/sstate-cache"
 
 # Where to save the build system work output
-TMPDIR = "${BUILDDIR}/tmp-${DISTRO_DIRNAME}"
+TMPDIR = "${BUILDDIR}/tmp"
 
 # Where to save the packages and images
 DEPLOY_DIR = "${BUILDDIR}/deploy"
