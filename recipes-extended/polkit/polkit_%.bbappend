@@ -7,3 +7,9 @@ SRC_URI_append = " \
 DEPENDS_remove = "mozjs"
 
 EXTRA_OECONF_append = " --disable-polkitd"
+
+do_install_append() {
+    # Avoid starting polkitd since we dont install it
+    sed -i -e 's,ExecStart=.*,ExecStart=/bin/true,g' ${D}${systemd_unitdir}/system/polkit.service
+    sed -i -e '/^ExecStart=.*$/aRemainAfterExit=yes' ${D}${systemd_unitdir}/system/polkit.service
+}
