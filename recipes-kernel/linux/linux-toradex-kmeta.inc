@@ -10,6 +10,8 @@ LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
 
 KMETA = "kernel-meta"
 
+KCONFIG_MODE = "alldefconfig"
+
 KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
 KMETAPROTOCOL="https"
 
