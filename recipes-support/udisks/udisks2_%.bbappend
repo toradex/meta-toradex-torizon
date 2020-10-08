@@ -1,5 +1,8 @@
 EXTRA_OECONF_append = " --enable-fhs-media"
 
+# We only need the polkit library which this recipe depends on anyways
+REQUIRED_DISTRO_FEATURES_remove = " polkit"
+
 do_install_append() {
     # udisks2 service by default is wanted by graphical.target, change it to multi-user.target.
     sed -i -e 's/WantedBy=.*/WantedBy=multi-user.target/' ${D}${systemd_system_unitdir}/${BPN}.service

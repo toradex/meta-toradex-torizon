@@ -4,6 +4,9 @@ SRC_URI_append = " \
     file://0001-Allow-to-disable-polkitd-when-using-library-alone.patch \
 "
 
+# We only want to use the polkit library
+REQUIRED_DISTRO_FEATURES_remove = " polkit"
+
 DEPENDS_remove = "mozjs"
 
 EXTRA_OECONF_append = " --disable-polkitd"
