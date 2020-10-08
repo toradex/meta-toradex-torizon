@@ -1,6 +1,6 @@
 require recipes-kernel/linux/linux-yocto.inc
 
-SRCREV_meta = "45ed8e95cf76700877552fd547672a9392409cbf"
+SRCREV_meta = "3142c87da373294f0ba04a4327ed2d4385f0e7dc"
 SRCREV_meta_use-head-next = "${AUTOREV}"
 
 KMETABRANCH = "toradex_5.4.y"
