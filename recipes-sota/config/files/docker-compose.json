@@ -1,0 +1,14 @@
+{
+    "docker-compose": [
+        {
+            "partial_verifying": false,
+            "ecu_hardware_id": "docker-compose",
+            "full_client_dir": "/var/sota/storage/docker-compose",
+            "ecu_private_key": "sec.private",
+            "ecu_public_key": "sec.public",
+            "firmware_path": "/var/sota/storage/docker-compose/docker-compose.yml",
+            "target_name_path": "/var/sota/storage/docker-compose/target_name",
+            "metadata_path": "/var/sota/storage/docker-compose/metadata"
+        }
+    ]
+}
