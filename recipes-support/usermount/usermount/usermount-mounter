@@ -1,0 +1,7 @@
+#!/bin/bash
+
+for dev in `fdisk -l 2>/dev/null | grep -o "^/dev/[[:alnum:]]*"`; do
+    if [[ "$dev" = "/dev/"@(loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*|hd*) ]]; then
+       udisksctl mount -b $dev 2>/dev/null || true
+    fi
+done

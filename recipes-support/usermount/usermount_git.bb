@@ -7,13 +7,14 @@ HOMEPAGE="https://github.com/tom5760/usermount"
 LICENSE = "GPLv2"
 
 DEPENDS = "udisks2"
-RDEPENDS_${PN} = "udisks2"
+RDEPENDS_${PN} = "udisks2 bash"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=74711154e9c987a4d5c87fc8d89e279f"
 
 SRC_URI = " \
     git://github.com/tom5760/usermount;protocol=https \
     file://usermount.service \
+    file://usermount-mounter \
 "
 
 SRCREV = "55fdfc7d3fcc0e7121c2ed9f01d0ab1271bb5fd3"
@@ -31,6 +32,7 @@ SYSTEMD_SERVICE_${PN} = "usermount.service"
 do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${S}/usermount ${D}${bindir}
+    install -m 0755 ${WORKDIR}/usermount-mounter ${D}${bindir}
 
     install -d ${D}${systemd_system_unitdir}
     install -m 644 ${WORKDIR}/usermount.service ${D}/${systemd_system_unitdir}

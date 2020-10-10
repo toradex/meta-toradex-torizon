@@ -1,8 +1,11 @@
 [Unit]
 Description=Disk device monitor based on udisks2
+Requires=udisks2.service
+After=udisks2.service
 
 [Service]
 ExecStart=/usr/bin/usermount
+ExecStartPost=/usr/bin/usermount-mounter
 Restart=on-failure
 RestartSec=0
 
