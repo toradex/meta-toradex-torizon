@@ -51,15 +51,6 @@ fi
 
 run bootcmd_otenv
 
-if test "${board}" = "apalis-imx8"
-then
-	echo "Loading HDMI firmware..."
-	env set hdp_file hdmitxfw.bin
-	load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${hdp_file}
-	hdp load ${loadaddr}
-	env set scriptargs pci=nomsi
-fi
-
 # check kernel_image2 to avoid booting from other then default emmc in case of 
 # bootlimit is reached and there is no other deployed image
 if test -n "${kernel_image2}" && test "${rollback}" = "1"
