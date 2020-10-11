@@ -10,6 +10,9 @@ SRC_URI_append = " \
 
 SYSTEMD_SERVICE_${PN} += "ostree-pending-reboot.path ostree-pending-reboot.service"
 
+DEPENDS_append_class-target = " u-boot-default-script"
+RDEPENDS_${PN}_append_class-target = " ostree-uboot-env"
+
 do_install_append () {
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/ostree-pending-reboot.service ${D}${systemd_system_unitdir}

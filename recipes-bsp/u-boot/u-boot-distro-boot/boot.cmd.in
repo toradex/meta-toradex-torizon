@@ -6,71 +6,15 @@ fi
 
 if test -z "${altbootcmd}"
 then
-       env set altbootcmd 'env set rollback 1; run bootcmd'
-       env save
-fi
-
-if test "${rollback}" = "1" && test "${upgrade_available}" = "1"
-then
-    # Make sure to reset upgrade_available to avoid unnecessary wear
-    # Note this also makes rollback permanent. aktualizr will reset rollback
-    # when a new (hopefully better) update comes in.
-    env set upgrade_available 0
+    env set altbootcmd 'env set rollback 1; run bootcmd'
     env save
 fi
 
-env set kernel_image_type @@KERNEL_IMAGETYPE@@
-if test ${kernel_image_type} = "Image.gz"
-then
-    env set kernel_addr_load ${loadaddr}
-    env set bootcmd_unzip_k 'unzip $kernel_addr_load $kernel_addr_r'
-else
-    env set kernel_addr_load ${kernel_addr_r}
-    env set bootcmd_unzip_k ';'
-fi
-
-env set overlays_file "overlays.txt"
-env set load_overlay 'load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlays_file}; env import -t ${loadaddr} ${filesize}'
-env set apply_overlays 'fdt addr ${fdt_addr_r} && fdt resize 0x20000 && for overlay_file in ${fdt_overlays}; do echo "Applying Overlay: ${overlay_file}"
-&& load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; done;'
-
-
-env set bootcmd_load_k 'load ${devtype} ${devnum}:2 ${kernel_addr_load} "/boot"${kernel_image}'
-env set bootcmd_load_r 'load ${devtype} ${devnum}:2 ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}'
-
 if test ${devtype} != ubi
 then
-# Load commands for regular block devices
-env set bootcmd_otenv 'ext4load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}'
-env set bootcmd_args 'env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${scriptargs} ${tdxargs}'
+    ext4load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 else
-# Load commands for raw NAND devices
-env set bootcmd_otenv 'ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}'
-env set bootcmd_args 'env set bootargs ubi.mtd=ubi root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}'
+    ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 fi
 
-run bootcmd_otenv
-
-# check kernel_image2 to avoid booting from other then default emmc in case of 
-# bootlimit is reached and there is no other deployed image
-if test -n "${kernel_image2}" && test "${rollback}" = "1"
-then
-    echo "Rollback enabled. Booting previously deployed version."
-    env set kernel_image ${kernel_image2}
-    env set ramdisk_image ${ramdisk_image2}
-    env set bootargs ${bootargs2}
-    env set fdtdir ${fdtdir2}
-    env set fdt_file ${fdt_file2}
-fi
-
-if test -n "${fdtdir}"
-then
-    env set fdt_path /boot${fdtdir}/${fdtfile}
-else
-    env set fdt_path /boot${fdt_file}
-fi
-
-env set bootcmd_dtb 'load ${devtype} ${devnum}:2 ${fdt_addr_r} ${fdt_path}; if test -e ${devtype} ${devnum}:${distro_bootpart} ${overlays_file}; then run load_overlay && run apply_overlays || true;fi || true'
-env set bootcmd_boot '@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}'
-env set bootcmd_run 'run bootcmd_dtb && run bootcmd_args && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot'
 run bootcmd_run
