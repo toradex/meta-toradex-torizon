@@ -5,6 +5,8 @@ TEZI_ROOT_SUFFIX = "ota.tar.zst"
 TEZI_BOOT_SUFFIX = "bootfs.tar.zst"
 TEZI_CONFIG_FORMAT = "3"
 
+TEZI_IMAGE_BOOTFS_PREFUNCS ?= "tezi_deploy_bootfs_files"
+
 def get_tdx_ostree_purpose(purpose):
     return purpose.lower()
 
