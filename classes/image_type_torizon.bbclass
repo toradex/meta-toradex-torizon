@@ -108,6 +108,8 @@ IMAGE_DATETIME_FILES ??= " \
     ${sysconfdir}/issue \
     ${sysconfdir}/issue.net \
     ${sysconfdir}/os-release \
+    ${sysconfdir}/timestamp \
+    ${sysconfdir}/version \
     ${libdir}/os-release \
 "
 
