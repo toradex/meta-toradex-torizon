@@ -10,6 +10,9 @@ LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
 
 KMETA = "kernel-meta"
 
+KMACHINE_apalis-imx8x-v11a = "apalis-imx8x"
+KMACHINE_colibri-imx8x-v10b = "colibri-imx8x"
+
 KCONFIG_MODE = "alldefconfig"
 
 KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
