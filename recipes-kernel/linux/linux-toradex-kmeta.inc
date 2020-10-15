@@ -1,19 +1,11 @@
-require recipes-kernel/linux/linux-yocto.inc
-
-SRCREV_meta = "3142c87da373294f0ba04a4327ed2d4385f0e7dc"
+SRCREV_meta = "6b7d9f74dca37554632edbc8c65fd29620568c49"
 SRCREV_meta_use-head-next = "${AUTOREV}"
 
 KMETABRANCH = "toradex_5.4.y"
-LINUX_KERNEL_TYPE = "standard"
-LINUX_KERNEL_TYPE_preempt-rt = "preempt-rt"
-LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
-
 KMETA = "kernel-meta"
 
 KMACHINE_apalis-imx8x-v11a = "apalis-imx8x"
 KMACHINE_colibri-imx8x-v10b = "colibri-imx8x"
-
-KCONFIG_MODE = "alldefconfig"
 
 KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
 KMETAPROTOCOL="https"
