@@ -1,6 +1,10 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
+DESCRIPTION_append_experimental = " This release is not a officially supported \
+build of TorizonCore, and is labeled experimental because of limited hardware \
+constraints such as storage or memory, or include software we are still evaluating."
+
 inherit core-image extrausers
 
 set_user_group_append () {
