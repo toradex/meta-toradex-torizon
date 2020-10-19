@@ -7,9 +7,6 @@ SRC_URI_append = " \
     file://92-toradex-spidev.rules \
     file://toradex-net-rename.sh \
 "
-SRC_URI_append_colibri-imx7 = " \
-    file://99-toradex-persistent-emmc-naming.rules \
-"
 
 do_install_append () {
     install -m 0644 ${WORKDIR}/10-toradex-net-rename.rules ${D}${sysconfdir}/udev/rules.d/
@@ -19,8 +16,4 @@ do_install_append () {
 
     install -d ${D}${bindir}
     install -m 0755 ${WORKDIR}/toradex-net-rename.sh ${D}${bindir}/
-}
-
-do_install_append_colibri-imx7 () {
-    install -m 0644 ${WORKDIR}/99-toradex-persistent-emmc-naming.rules ${D}${sysconfdir}/udev/rules.d/
 }

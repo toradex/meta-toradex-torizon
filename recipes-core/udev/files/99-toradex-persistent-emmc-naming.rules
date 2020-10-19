@@ -1,3 +1,0 @@
-KERNEL=="mmcblk[0-9]", ENV{DEVTYPE}=="disk", KERNELS=="30b60000.usdhc", SYMLINK+="emmc"
-KERNEL=="mmcblk[0-9]boot[0-9]", ENV{DEVTYPE}=="disk", KERNELS=="30b60000.usdhc", SYMLINK+="emmc-boot%n"
-KERNEL=="mmcblk[0-9]p[0-9]", ENV{DEVTYPE}=="partition", KERNELS=="30b60000.usdhc", SYMLINK+="emmc-part%n"
