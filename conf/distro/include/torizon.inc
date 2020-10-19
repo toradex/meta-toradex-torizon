@@ -85,4 +85,7 @@ BBMASK += " \
 DISTRO_FLAVOUR_append_mx8qxpc0 = " for V1.0C HW"
 
 # machines where TorizonCore is experimental
-DISTROOVERRIDES_append_colibri-imx6ull = ":experimental"
+EXPERIMENTALOVERRIDES = ""
+EXPERIMENTALOVERRIDES_colibri-imx6ull = ":experimental"
+EXPERIMENTALOVERRIDES_colibri-imx7 = ":experimental"
+DISTROOVERRIDES .= "${EXPERIMENTALOVERRIDES}"
