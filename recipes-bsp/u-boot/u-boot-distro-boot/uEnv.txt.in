@@ -3,17 +3,17 @@ overlays_file="overlays.txt"
 
 reset_upgrade_available=if test "${rollback}" = "1" && test "${upgrade_available}" = "1"; then \
                             # Make sure to reset upgrade_available to avoid unnecessary wear \
-			    # Note this also makes rollback permanent. aktualizr will reset rollback \
-			    # when a new (hopefully better) update comes in. \
-			    env set upgrade_available 0; \
+                            # Note this also makes rollback permanent. aktualizr will reset rollback \
+                            # when a new (hopefully better) update comes in. \
+                            env set upgrade_available 0; \
                             env save; \
                         fi || true
 
 set_bootargs=if test ${devtype} != ubi; then \
-		 # Load commands for regular block devices \
+                 # Load commands for regular block devices \
                  env set bootcmd_args env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${scriptargs} ${tdxargs}; \
              else \
-		 # Load commands for raw NAND devices \
+                 # Load commands for raw NAND devices \
                  env set bootcmd_args env set bootargs ubi.mtd=ubi root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
              fi || true
 
@@ -25,12 +25,12 @@ else \
     env set bootcmd_unzip_k ';'; \
 fi || true
 
-load_overlay=load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlays_file}; env import -t ${loadaddr} ${filesize}
+load_overlay=load ${devtype} ${devnum}:2 ${loadaddr} /boot${fdtdir}/${overlays_file}; env import -t ${loadaddr} ${filesize}
 apply_overlays=fdt addr ${fdt_addr_r} && fdt resize 0x20000 && \
-	       for overlay_file in ${fdt_overlays}; do \
-	           echo "Applying Overlay: ${overlay_file}" && \
-		   load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; \
-	       done;
+               for overlay_file in ${fdt_overlays}; do \
+                   echo "Applying Overlay: ${overlay_file}" && \
+                   load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; \
+               done;
 
 bootcmd_load_k=load ${devtype} ${devnum}:2 ${kernel_addr_load} "/boot"${kernel_image}
 bootcmd_load_r=load ${devtype} ${devnum}:2 ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}
@@ -53,9 +53,9 @@ set_fdt_path=if test -n "${fdtdir}"; then \
              fi || true
 
 bootcmd_dtb=load ${devtype} ${devnum}:2 ${fdt_addr_r} ${fdt_path}; \
-	    if test -e ${devtype} ${devnum}:${distro_bootpart} ${overlays_file}; then \
-		run load_overlay && run apply_overlays || true; \
-	    fi || true
+            if test -e ${devtype} ${devnum}:2 /boot${fdtdir}/${overlays_file}; then \
+                run load_overlay && run apply_overlays || true; \
+            fi || true
 
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
 bootcmd_run=run reset_upgrade_available && run set_bootargs && run check_rollback_needed && run set_fdt_path && run bootcmd_dtb && run bootcmd_args && run set_kernel_load_addr && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
