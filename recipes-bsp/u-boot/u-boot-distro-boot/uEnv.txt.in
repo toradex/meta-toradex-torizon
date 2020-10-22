@@ -52,10 +52,16 @@ set_fdt_path=if test -n "${fdtdir}"; then \
                 env set fdt_path /boot${fdt_file}; \
              fi || true
 
+set_board_extra=if test "${board}" = "apalis-imx8"; then \
+                    # Workaround apalis-imx8 not boot issue without setting fdt_high \
+                    env set fdt_high 0xffffffffffffffff; \
+                    env set scriptargs pci=nomsi; \
+                fi || true
+
 bootcmd_dtb=load ${devtype} ${devnum}:2 ${fdt_addr_r} ${fdt_path}; \
             if test -e ${devtype} ${devnum}:2 /boot${fdtdir}/${overlays_file}; then \
                 run load_overlay && run apply_overlays || true; \
             fi || true
 
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
-bootcmd_run=run reset_upgrade_available && run set_bootargs && run check_rollback_needed && run set_fdt_path && run bootcmd_dtb && run bootcmd_args && run set_kernel_load_addr && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
+bootcmd_run=run reset_upgrade_available && run set_bootargs && run check_rollback_needed && run set_fdt_path && run set_board_extra && run bootcmd_dtb && run bootcmd_args && run set_kernel_load_addr && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
