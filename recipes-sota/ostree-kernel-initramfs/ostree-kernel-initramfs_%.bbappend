@@ -24,4 +24,4 @@ do_install_append () {
         fi
     fi
 }
-do_install[depends] += "virtual/dtb:do_deploy"
+do_install[depends] += "${@'virtual/dtb:do_deploy' if '${PREFERRED_PROVIDER_virtual/dtb}' else ''}"
