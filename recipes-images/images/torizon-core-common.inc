@@ -51,7 +51,6 @@ CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
     kernel-module-imx-gpu-viv \
     mwifiexap \
-    backports \
 "
 
 nss_altfiles_set_users_groups () {
