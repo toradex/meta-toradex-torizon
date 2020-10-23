@@ -11,3 +11,5 @@ IMAGE_FSTYPES_append = " wic.vmdk wic.vdi"
 
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
+
+PREFERRED_PROVIDER_virtual/dtb = ""
