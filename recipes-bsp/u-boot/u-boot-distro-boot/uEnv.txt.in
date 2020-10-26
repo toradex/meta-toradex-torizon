@@ -1,6 +1,6 @@
 kernel_image_type=@@KERNEL_IMAGETYPE@@
 overlays_file="overlays.txt"
-otaroot=2
+otaroot=1
 
 reset_upgrade_available=if test "${rollback}" = "1" && test "${upgrade_available}" = "1"; then \
                             # Make sure to reset upgrade_available to avoid unnecessary wear \
@@ -15,7 +15,7 @@ set_bootargs=if test ${devtype} != ubi; then \
                  env set bootcmd_args env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${scriptargs} ${tdxargs}; \
              else \
                  # Load commands for raw NAND devices \
-                 env set bootcmd_args env set bootargs ubi.mtd=ubi root=/dev/ubi0_1 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
+                 env set bootcmd_args env set bootargs ubi.mtd=ubi root=/dev/ubi0_0 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
              fi || true
 
 set_kernel_load_addr=if test ${kernel_image_type} = "Image.gz"; then \

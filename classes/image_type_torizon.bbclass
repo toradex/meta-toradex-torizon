@@ -1,11 +1,69 @@
 inherit image_type_tezi
 
 TEZI_ROOT_LABEL = "otaroot"
+TEZI_ROOT_NAME = "ota"
 TEZI_ROOT_SUFFIX = "ota.tar.zst"
-TEZI_BOOT_SUFFIX = "bootfs.tar.zst"
+TEZI_USE_BOOTFILES = "false"
+
 TEZI_CONFIG_FORMAT = "3"
 
-TEZI_IMAGE_BOOTFS_PREFUNCS ?= "tezi_deploy_bootfs_files"
+def rootfs_tezi_rawnand(d):
+    from collections import OrderedDict
+    imagename = d.getVar('IMAGE_LINK_NAME')
+
+    uboot1 = OrderedDict({
+               "name": "u-boot1",
+               "content": {
+                 "rawfile": {
+                   "filename": d.getVar('UBOOT_BINARY_TEZI_RAWNAND'),
+                   "size": 1
+                 }
+               },
+             })
+
+    uboot2 = OrderedDict({
+               "name": "u-boot2",
+               "content": {
+                 "rawfile": {
+                   "filename": d.getVar('UBOOT_BINARY_TEZI_RAWNAND'),
+                   "size": 1
+                 }
+               }
+             })
+
+    env = OrderedDict({
+        "name": "u-boot-env",
+        "erase": True,
+        "content": {}
+    })
+
+    ubi = OrderedDict({
+            "name": "ubi",
+            "ubivolumes": [
+              {
+                "name": "rootfs",
+                "content": {
+                  "filesystem_type": "ubifs",
+                  "filename": imagename + "." + d.getVar('TEZI_ROOT_SUFFIX'),
+                  "uncompressed_size": get_uncompressed_size(d, d.getVar('TEZI_ROOT_NAME'))
+                }
+              }
+            ]
+          })
+
+    return [uboot1, uboot2, env, ubi]
+
+python adjust_tezi_artifacts() {
+    artifacts = d.getVar('TEZI_ARTIFACTS').replace(d.getVar('KERNEL_IMAGETYPE'), '').replace(d.getVar('KERNEL_DEVICETREE'), '')
+    d.setVar('TEZI_ARTIFACTS', artifacts)
+}
+
+TEZI_IMAGE_TEZIIMG_PREFUNCS_append = " adjust_tezi_artifacts"
+
+IMAGE_CMD_ota_prepend() {
+	cp -a ${DEPLOY_DIR_IMAGE}/boot.scr-${MACHINE} ${OTA_SYSROOT}/boot.scr
+}
+do_image_ota[depends] += "${@'u-boot-default-script:do_deploy' if d.getVar('OSTREE_BOOTLOADER') == 'u-boot' else ''}"
 
 def get_tdx_ostree_purpose(purpose):
     return purpose.lower()

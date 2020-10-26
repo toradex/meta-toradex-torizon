@@ -1,8 +1,8 @@
-if test ${distro_bootpart} != 1 && test ${devtype} != "ubi"
-then
-    echo "Boot partition needs to be the first partition"
-    exit
-fi
+# SPDX-License-Identifier: GPL-2.0+ OR MIT
+#
+# Copyright 2020 Toradex
+#
+# Torizoncore boot script.
 
 if test -z "${altbootcmd}"
 then
@@ -12,9 +12,9 @@ fi
 
 if test ${devtype} != ubi
 then
-    ext4load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
+    ext4load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 else
-    ubifsmount ubi${devnum}:rootfs && load ${devtype} ${devnum}:2 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
+    ubifsmount ${devtype}${devnum}:rootfs && load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 fi
 
 run bootcmd_run

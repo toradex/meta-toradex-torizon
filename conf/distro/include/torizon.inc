@@ -33,9 +33,6 @@ PACKAGECONFIG_append_pn-systemd = " seccomp"
 # Set default network configuration
 PREFERRED_RPROVIDER_network-configuration = "networkmanager"
 
-# Default image formats
-IMAGE_FSTYPES = "teziimg-distro"
-
 # SOTA
 OSTREE_OSNAME = "torizon"
 OSTREE_MULTI_DEVICETREE_SUPPORT = "1"
@@ -44,7 +41,7 @@ INITRAMFS_IMAGE = "initramfs-ostree-torizon-image"
 INITRAMFS_FSTYPES = "cpio.gz"
 BUILD_OSTREE_TARBALL = "0"
 # We do not need teziimg, ota-ext4 or wic images by default
-IMAGE_FSTYPES_REMOVE ?= "teziimg ota-ext4 wic"
+IMAGE_FSTYPES_REMOVE ?= "ota-ext4 wic wic.gz wic.bmap"
 IMAGE_FSTYPES_remove_sota = "${IMAGE_FSTYPES_REMOVE}"
 
 # No need to install kernel image/devicetrees into the boot partition

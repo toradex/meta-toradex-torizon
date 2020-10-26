@@ -6,17 +6,20 @@ Subject: [PATCH] colibri-imx6ull: use distro boot by default
 Use distro boot for raw NAND modules by default. This is required
 for TorizonCore.
 
+Also set bootubivol to rootfs.
+
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
- include/configs/colibri-imx6ull.h | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ include/configs/colibri-imx6ull.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index 366d8b8377..4112d5d671 100644
+index 7bce86b219..c2d680fda7 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
-@@ -69,10 +69,11 @@
+@@ -60,10 +60,11 @@
  		"ubi read ${fdt_addr_r} dtb && " \
  		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0" \
  
@@ -30,6 +33,14 @@ index 366d8b8377..4112d5d671 100644
  	func(MMC, mmc, 0) \
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
+@@ -78,6 +79,7 @@
+ 	UBOOT_UPDATE \
+ 	"boot_script_dhcp=boot.scr\0" \
+ 	"bootubipart=ubi\0" \
++	"bootubivol=rootfs\0" \
+ 	"console=ttymxc0\0" \
+ 	"defargs=user_debug=30\0" \
+ 	"dfu_alt_info=" DFU_ALT_NAND_INFO "\0" \
 -- 
-2.28.0
+2.29.0
 
