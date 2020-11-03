@@ -9,6 +9,8 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     docker-compose-up \
 "
 
+inherit extrausers
+
 EXTRA_USERS_PARAMS += "\
 usermod -a -G docker torizon; \
 "

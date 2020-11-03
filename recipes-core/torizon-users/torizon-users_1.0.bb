@@ -14,3 +14,7 @@ USERADD_PACKAGES = "${PN}"
 
 GROUPADD_PARAM_${PN} = "torizon"
 USERADD_PARAM_${PN} = "-G adm,sudo,users,plugdev -m -d /home/torizon -P torizon torizon"
+
+pkg_postinst_ontarget_${PN} () {
+    passwd -e torizon
+}

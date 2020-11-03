@@ -8,11 +8,7 @@ constraints such as storage or memory, or include software we are still evaluati
 DESCRIPTION_append_colibri-imx7-emmc = " This release is only for the IMX7D 1GB. \
 All other IMX7 variants should be using the experimental build."
 
-inherit core-image extrausers
-
-set_user_group_append () {
-	eval flock -x ${IMAGE_ROOTFS}${sysconfdir} -c \"$PSEUDO passwd -e -R ${IMAGE_ROOTFS} torizon\" || true
-}
+inherit core-image
 
 do_rootfs[cleandirs] += "${IMAGE_ROOTFS}"
 
