@@ -76,3 +76,7 @@ nss_altfiles_set_users_groups () {
 # include nss-altfiles support
 CORE_IMAGE_BASE_INSTALL_append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss-altfiles", "",d)}'
 IMAGE_PREPROCESS_COMMAND_append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss_altfiles_set_users_groups; ", "",d)}'
+
+# due to limited hardware resources, remove Colibri iMX6 Solo 256MB
+# from the list of supported IDs in the Tezi image
+TORADEX_PRODUCT_IDS_remove_colibri-imx6 = "0014 0016"
