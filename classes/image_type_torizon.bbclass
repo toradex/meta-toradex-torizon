@@ -24,9 +24,9 @@ OSTREE_KERNEL_SOURCE_META_DATA[vardepvalue] = "${OSTREE_KERNEL_SOURCE_URL}"
 OSTREE_KERNEL_SOURCE_META_DATA[vardepvalue] = "${OSTREE_KERNEL_SOURCE_BRANCH}"
 OSTREE_KERNEL_SOURCE_META_DATA[vardepvalue] = "${OSTREE_KERNEL_SOURCE_VERSION}"
 
-OSTREE_KERNEL_SOURCE_URL = "${@oe.utils.read_file('${STAGING_KERNEL_DIR}/.scmurl')}"
-OSTREE_KERNEL_SOURCE_BRANCH = "${@oe.utils.read_file('${STAGING_KERNEL_DIR}/.scmbranch')}"
-OSTREE_KERNEL_SOURCE_VERSION = "${@oe.utils.read_file('${STAGING_KERNEL_DIR}/.scmversion').replace('+git.', '')}"
+OSTREE_KERNEL_SOURCE_URL = "${@oe.utils.read_file('${DEPLOY_DIR_IMAGE}/.kernel_scmurl')}"
+OSTREE_KERNEL_SOURCE_BRANCH = "${@oe.utils.read_file('${DEPLOY_DIR_IMAGE}/.kernel_scmbranch')}"
+OSTREE_KERNEL_SOURCE_VERSION = "${@oe.utils.read_file('${DEPLOY_DIR_IMAGE}/.kernel_scmversion')}"
 
 # Create change log file inside ostree
 OSTREE_CHANGE_LOG_FILE = "${OSTREE_REPO}/${DISTRO}-${IMAGE_BASENAME}-diff.log"
