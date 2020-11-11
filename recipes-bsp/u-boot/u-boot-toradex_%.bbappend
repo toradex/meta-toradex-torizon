@@ -6,12 +6,14 @@ FW_ENV_CONFIG_colibri-imx7 = "fw_env-mtd.config"
 FW_ENV_CONFIG_qemuarm64 = "fw_env-sda.config"
 
 SRC_URI_append = " \
-    file://0001-apalis_imx6-use-distro-boot-by-default.patch \
-    file://0002-colibri-imx6ull-use-distro-boot-by-default.patch \
-    file://0003-colibri_imx7-use-distro-boot-by-default.patch \
+    file://bootcommand.cfg \
     file://bootcount.cfg \
     file://bootlimit.cfg \
     ${@oe.utils.ifelse('${FW_ENV_CONFIG}' != '', 'file://${FW_ENV_CONFIG}', '')} \
+"
+
+SRC_URI_append_use-mainline-bsp = " \
+    file://0001-colibri-imx6ull-colibri_imx7-add-ubifs-distro-boot-s.patch \
 "
 
 do_install_append () {
