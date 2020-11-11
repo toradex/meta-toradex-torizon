@@ -1,5 +1,6 @@
 kernel_image_type=@@KERNEL_IMAGETYPE@@
 overlays_file="overlays.txt"
+otaroot=2
 
 reset_upgrade_available=if test "${rollback}" = "1" && test "${upgrade_available}" = "1"; then \
                             # Make sure to reset upgrade_available to avoid unnecessary wear \
@@ -25,15 +26,15 @@ else \
     env set bootcmd_unzip_k ';'; \
 fi || true
 
-load_overlay=load ${devtype} ${devnum}:2 ${loadaddr} /boot${fdtdir}/${overlays_file}; env import -t ${loadaddr} ${filesize}
+load_overlay=load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/${overlays_file}; env import -t ${loadaddr} ${filesize}
 apply_overlays=fdt addr ${fdt_addr_r} && fdt resize 0x20000 && \
                for overlay_file in ${fdt_overlays}; do \
                    echo "Applying Overlay: ${overlay_file}" && \
-                   load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} ${overlay_file} && fdt apply ${loadaddr}; \
+                   load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/${overlay_file} && fdt apply ${loadaddr}; \
                done;
 
-bootcmd_load_k=load ${devtype} ${devnum}:2 ${kernel_addr_load} "/boot"${kernel_image}
-bootcmd_load_r=load ${devtype} ${devnum}:2 ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}
+bootcmd_load_k=load ${devtype} ${devnum}:${otaroot} ${kernel_addr_load} "/boot"${kernel_image}
+bootcmd_load_r=load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}
 
 # check kernel_image2 to avoid booting from other then default emmc in case of
 # bootlimit is reached and there is no other deployed image
@@ -58,8 +59,8 @@ set_board_extra=if test "${board}" = "apalis-imx8"; then \
                     env set scriptargs pci=nomsi; \
                 fi || true
 
-bootcmd_dtb=load ${devtype} ${devnum}:2 ${fdt_addr_r} ${fdt_path}; \
-            if test -e ${devtype} ${devnum}:2 /boot${fdtdir}/${overlays_file}; then \
+bootcmd_dtb=load ${devtype} ${devnum}:${otaroot} ${fdt_addr_r} ${fdt_path}; \
+            if test -e ${devtype} ${devnum}:${otaroot} /boot${fdtdir}/${overlays_file}; then \
                 run load_overlay && run apply_overlays || true; \
             fi || true
 
