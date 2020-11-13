@@ -23,7 +23,6 @@ SPLASH = "plymouth"
 # Base packages
 CORE_IMAGE_BASE_INSTALL_append = " \
     kernel-modules \
-    linux-firmware-rtl8192cu \
     usermount \
     nano \
     set-hostname \
@@ -33,20 +32,12 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     torizon-users \
     tzdata \
     udev-toradex-rules \
-    wireless-regdb-static \
     ostree-customize-plymouth \
     network-configuration \
 "
 
-CORE_IMAGE_BASE_INSTALL_append_colibri-imx6ull = " \
-    linux-firmware-sd8887 \
-    linux-firmware-sd8997 \
-    mwifiexap \
-"
-
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
     kernel-module-imx-gpu-viv \
-    mwifiexap \
 "
 
 nss_altfiles_set_users_groups () {
