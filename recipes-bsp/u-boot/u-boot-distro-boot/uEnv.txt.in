@@ -30,7 +30,7 @@ load_overlay=load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/${o
 apply_overlays=fdt addr ${fdt_addr_r} && fdt resize 0x20000 && \
                for overlay_file in ${fdt_overlays}; do \
                    echo "Applying Overlay: ${overlay_file}" && \
-                   load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/${overlay_file} && fdt apply ${loadaddr}; \
+                   load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/overlays/${overlay_file} && fdt apply ${loadaddr}; \
                done;
 
 bootcmd_load_k=load ${devtype} ${devnum}:${otaroot} ${kernel_addr_load} "/boot"${kernel_image}
