@@ -24,12 +24,14 @@ do_install_append () {
         done
 
         if [ -n "${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}" ]; then
+            overlays=
             for dtbo in ${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}; do
                 if [ ! -e $kerneldir/dtb/overlays/$dtbo ]; then
                     bbfatal "$dtbo is not installed in your rootfs, please make sure it's in TEZI_EXTERNAL_KERNEL_DEVICETREE or being provided by virtual/dtb."
                 fi
+                overlays="$overlays $dtbo"
             done
-            echo "fdt_overlays=$(echo "${TEZI_EXTERNAL_KERNEL_DEVICETREE_BOOT}")" > $kerneldir/dtb/overlays.txt
+            echo "fdt_overlays=$(echo $overlays)" > $kerneldir/dtb/overlays.txt
         fi
     fi
 }
