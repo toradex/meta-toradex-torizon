@@ -7,7 +7,6 @@ IMAGE_OVERHEAD_FACTOR = "2.3"
 
 # Base container packages
 CORE_IMAGE_BASE_INSTALL_append = " \
-    aktualizr-host-tools \
     ${@bb.utils.contains("MACHINE_FEATURES", "optee", "optee-test optee-client", "", d)} \
     coreutils \
     cpufrequtils \
