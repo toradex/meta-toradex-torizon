@@ -12,9 +12,9 @@ fi
 
 if test ${devtype} != ubi
 then
-    ext4load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
+    ext4load ${devtype} ${devnum}:0 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 else
-    ubifsmount ${devtype}${devnum}:rootfs && load ${devtype} ${devnum}:${distro_bootpart} ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
+    ubifsmount ${devtype}${devnum}:rootfs && load ${devtype} ${devnum}:0 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 fi
 
 run bootcmd_run
