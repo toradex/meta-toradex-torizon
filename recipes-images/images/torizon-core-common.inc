@@ -34,6 +34,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     udev-toradex-rules \
     ostree-customize-plymouth \
     network-configuration \
+    ${@bb.utils.contains('DISTRO_FEATURES', 'sota', 'aktualizr-cert-provider', ' ', d)} \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
