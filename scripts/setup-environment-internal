@@ -19,6 +19,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
+
 env_cleanup() {
     unset MACHLAYERS DISTLAYERS DISTRO_DEFAULT OEROOT
     unset ITEM MANIFESTS EULA EULA_MACHINE REPLY READ_EULA
@@ -184,9 +185,8 @@ if [ -f "conf/auto.conf" ]; then
 fi
 
 if [ -e conf/checksum -a "${MACHINE}" = "$oldmach" -a "${DISTRO}" = "$olddisto" ]; then
-    sha512sum --quiet -c conf/checksum > /dev/null 2>&1
-    if [ $? -eq 0 ]; then
-       return
+    if sha512sum --quiet -c conf/checksum >/dev/null 2>&1; then
+       return 0
     fi
 fi
 
