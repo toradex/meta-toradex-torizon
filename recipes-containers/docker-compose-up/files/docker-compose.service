@@ -10,6 +10,8 @@ WorkingDirectory=/var/sota/storage/docker-compose/
 ExecStart=/usr/bin/docker-compose -p torizon up -d --remove-orphans
 ExecStop=/usr/bin/docker-compose -p torizon down
 RemainAfterExit=yes
+Restart=on-failure
+RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
