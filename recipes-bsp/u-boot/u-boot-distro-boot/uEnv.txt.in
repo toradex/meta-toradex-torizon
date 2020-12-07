@@ -60,8 +60,10 @@ set_board_extra=if test "${board}" = "apalis-imx8"; then \
                 fi || true
 
 bootcmd_dtb=load ${devtype} ${devnum}:${otaroot} ${fdt_addr_r} ${fdt_path}; \
-            if test -e ${devtype} ${devnum}:${otaroot} /boot${fdtdir}/${overlays_file}; then \
-                run load_overlay && run apply_overlays || true; \
+            if test ${skip_fdt_overlays} != 1; then \
+                    if test -e ${devtype} ${devnum}:${otaroot} /boot${fdtdir}/${overlays_file}; then \
+                        run load_overlay && run apply_overlays || true; \
+                    fi || true; \
             fi || true
 
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
