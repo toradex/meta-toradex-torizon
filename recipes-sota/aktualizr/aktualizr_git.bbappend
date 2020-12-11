@@ -6,4 +6,4 @@ SRC_URI_append = " \
     file://0003-Integrate-Docker-Compose-with-Aktualizr.patch \
 "
 
-RDEPENDS_${PN}-configs += "aktualizr-docker-compose-sec"
+RDEPENDS_${PN}-configs += "aktualizr-docker-compose-sec aktualizr-polling-interval"

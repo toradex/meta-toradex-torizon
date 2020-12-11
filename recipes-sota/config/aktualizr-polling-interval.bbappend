@@ -1,0 +1,1 @@
+SOTA_POLLING_SEC = "300"
