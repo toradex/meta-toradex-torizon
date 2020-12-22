@@ -10,6 +10,15 @@ then
     env save
 fi
 
+if test "${rollback}" = "1" && test "${upgrade_available}" = "1"
+then
+    # Make sure to reset upgrade_available to avoid unnecessary wear
+    # Note this also makes rollback permanent. aktualizr will reset rollback
+    # when a new (hopefully better) update comes in.
+    env set upgrade_available 0
+    env save
+fi
+
 if test ${devtype} != ubi
 then
     ext4load ${devtype} ${devnum}:1 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
