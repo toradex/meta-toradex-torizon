@@ -59,4 +59,4 @@ bootcmd_dtb=load ${devtype} ${devnum}:${otaroot} ${fdt_addr_r} ${fdt_path}; \
             fi || true
 
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
-bootcmd_run=run set_bootargs && run check_rollback_needed && run set_fdt_path && run set_board_extra && run bootcmd_dtb && run bootcmd_args && run set_kernel_load_addr && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
+bootcmd_run=run check_rollback_needed && run set_bootargs && run set_fdt_path && run set_board_extra && run bootcmd_dtb && run bootcmd_args && run set_kernel_load_addr && run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
