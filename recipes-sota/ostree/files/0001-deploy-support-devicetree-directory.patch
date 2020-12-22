@@ -1,4 +1,4 @@
-From 7439aa0291b78d2946868b152852384adbd7ed32 Mon Sep 17 00:00:00 2001
+From 645c7a5ae50511a5794eacb18632dc97987fcbbc Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Tue, 4 Feb 2020 13:39:27 +0100
 Subject: [PATCH] deploy: support devicetree directory
@@ -23,17 +23,55 @@ to load a particular machines device tree from.
 
 Closes: #1900
 Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 ---
- src/libostree/ostree-bootloader-uboot.c |   4 +
+ src/libostree/ostree-bootloader-uboot.c |  38 +++++++
  src/libostree/ostree-sysroot-deploy.c   | 127 ++++++++++++++++++++++--
  tests/test-admin-deploy-uboot.sh        |  30 +++++-
- 3 files changed, 151 insertions(+), 10 deletions(-)
+ 3 files changed, 185 insertions(+), 10 deletions(-)
 
 diff --git a/src/libostree/ostree-bootloader-uboot.c b/src/libostree/ostree-bootloader-uboot.c
-index 4cd955d5..1e1f0371 100644
+index 4cd955d5f427..80c4e052a1e0 100644
 --- a/src/libostree/ostree-bootloader-uboot.c
 +++ b/src/libostree/ostree-bootloader-uboot.c
-@@ -144,6 +144,10 @@ create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
+@@ -103,6 +103,36 @@ append_system_uenv (OstreeBootloaderUboot   *self,
+   return TRUE;
+ }
+ 
++static gboolean
++search_fdtfile (const char  *line,
++                void        *data,
++                GError     **error)
++{
++  g_auto(GStrv) vars = g_strsplit(line, "=", -1);
++  if (!g_strcmp0 (vars[0], "fdtfile"))
++    {
++      gchar **val = data;
++      *val = g_strdup (vars[1]);
++      return 0;
++    }
++  return 1;
++}
++
++static const char *
++uboot_config_get_fdtfile (GCancellable  *cancellable,
++                          GError        **error)
++{
++  const char *cfgfile = "/usr/lib/ostree-boot/uEnv.txt";
++  const char *val = NULL;
++
++  if (!g_file_test(cfgfile, G_FILE_TEST_EXISTS))
++    return NULL;
++
++  ot_parse_file_by_line (cfgfile, search_fdtfile, &val, cancellable, error);
++
++  return val;
++}
++
+ static gboolean
+ create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
+                                         int                    bootversion,
+@@ -144,6 +174,14 @@ create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
        if (val)
          g_ptr_array_add (new_lines, g_strdup_printf ("fdt_file%s=%s", index_suffix, val));
  
@@ -41,11 +79,15 @@ index 4cd955d5..1e1f0371 100644
 +      if (val)
 +        g_ptr_array_add (new_lines, g_strdup_printf ("fdtdir%s=%s", index_suffix, val));
 +
++      val = uboot_config_get_fdtfile(cancellable, error);
++      if (val && i)
++        g_ptr_array_add (new_lines, g_strdup_printf ("fdtfile%s=%s", index_suffix, val));
++
        val = ostree_bootconfig_parser_get (config, "options");
        if (val)
          {
 diff --git a/src/libostree/ostree-sysroot-deploy.c b/src/libostree/ostree-sysroot-deploy.c
-index ee00c02c..cb593020 100644
+index ee00c02c5e5e..cb593020876c 100644
 --- a/src/libostree/ostree-sysroot-deploy.c
 +++ b/src/libostree/ostree-sysroot-deploy.c
 @@ -217,6 +217,79 @@ dirfd_copy_attributes_and_xattrs (int            src_parent_dfd,
@@ -212,7 +254,7 @@ index ee00c02c..cb593020 100644
    /* Note this is parsed in ostree-impl-system-generator.c */
    g_autofree char *ostree_kernel_arg = g_strdup_printf ("ostree=/ostree/boot.%d/%s/%s/%d",
 diff --git a/tests/test-admin-deploy-uboot.sh b/tests/test-admin-deploy-uboot.sh
-index 8ea37fe9..e3163cb0 100755
+index 8ea37fe90910..e3163cb0f5b6 100755
 --- a/tests/test-admin-deploy-uboot.sh
 +++ b/tests/test-admin-deploy-uboot.sh
 @@ -25,9 +25,11 @@ set -euo pipefail
@@ -258,5 +300,5 @@ index 8ea37fe9..e3163cb0 100755
 +
 +echo "ok deploying fdtdir"
 -- 
-2.27.0
+2.17.1
 

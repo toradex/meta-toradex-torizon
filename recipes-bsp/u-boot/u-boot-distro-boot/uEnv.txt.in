@@ -37,6 +37,11 @@ check_rollback_needed=if test -n "${kernel_image2}" && test "${rollback}" = "1";
     env set bootargs ${bootargs2}; \
     env set fdtdir ${fdtdir2}; \
     env set fdt_file ${fdt_file2}; \
+    if test -n "${fdtfile2}"; then \
+        env set fdtfile ${fdtfile2}; \
+    else \
+        env default fdtfile; \
+    fi || true; \
 fi || true
 
 set_fdt_path=if test -n "${fdtdir}"; then \
