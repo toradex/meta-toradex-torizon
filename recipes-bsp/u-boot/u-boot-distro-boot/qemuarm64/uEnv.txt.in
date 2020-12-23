@@ -1,14 +1,5 @@
 kernel_image_type=@@KERNEL_IMAGETYPE@@
 otaroot=1
-
-reset_upgrade_available=if test "${rollback}" = "1" && test "${upgrade_available}" = "1"; then \
-                            # Make sure to reset upgrade_available to avoid unnecessary wear \
-                            # Note this also makes rollback permanent. aktualizr will reset rollback \
-                            # when a new (hopefully better) update comes in. \
-                            env set upgrade_available 0; \
-                            env save; \
-                        fi || true
-
 bootcmd_args=env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs}
 bootcmd_load_k=load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} "/boot"${kernel_image}
 
@@ -21,4 +12,4 @@ check_rollback_needed=if test -n "${kernel_image2}" && test "${rollback}" = "1";
 fi || true
 
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${ramdisk_addr_r}#conf@ ${ramdisk_addr_r}#conf@ ${fdt_addr}
-bootcmd_run=run reset_upgrade_available && run check_rollback_needed && run bootcmd_args && run bootcmd_load_k && run bootcmd_boot
+bootcmd_run=run check_rollback_needed && run bootcmd_args && run bootcmd_load_k && run bootcmd_boot
