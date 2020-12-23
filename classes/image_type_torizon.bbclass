@@ -67,18 +67,12 @@ IMAGE_CMD_ota_prepend() {
 }
 do_image_ota[depends] += "${@'u-boot-default-script:do_deploy' if d.getVar('OSTREE_BOOTLOADER') == 'u-boot' else ''}"
 
-# Add metadata_csum option when making ext4 filesystem
-# https://github.com/advancedtelematic/meta-updater/pull/787
-IMAGE_CMD_ota-ext4_append() {
-	rm -f ${IMGDEPLOYDIR}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.ota-ext4
-	dd if=/dev/zero of=${IMGDEPLOYDIR}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.ota-ext4 seek=${OTA_ROOTFS_SIZE} count=${COUNT} bs=1024
-	mkfs.ext4 -O ^64bit,^metadata_csum ${IMGDEPLOYDIR}/${IMAGE_NAME}${IMAGE_NAME_SUFFIX}.ota-ext4 -L otaroot -i 4096 -d ${OTA_SYSROOT}
-}
-
 def get_tdx_ostree_purpose(purpose):
     return purpose.lower()
 
 TDX_OSTREE_PURPOSE ?= "${@get_tdx_ostree_purpose(d.getVar('TDX_PURPOSE'))}"
+
+EXTRA_IMAGECMD_ota-ext4_sota = "-O ^metadata_csum -L otaroot -t ext4 -i 4096"
 
 # Use new branch naming
 OSTREE_BRANCHNAME = "${TDX_MAJOR}/${MACHINE}/${DISTRO}/${IMAGE_BASENAME}/${TDX_OSTREE_PURPOSE}"
