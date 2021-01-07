@@ -26,7 +26,7 @@ python __anonymous() {
 
 SRCREV = "a11c4ead10177a66ef2810a0a92ea8ce2299da07"
 SRC_URI = " \
-    git://github.com/containers/libpod.git;branch=v2.0 \
+    git://github.com/containers/libpod.git;branch=v2.0;protocol=https \
 "
 
 LICENSE = "Apache-2.0"
