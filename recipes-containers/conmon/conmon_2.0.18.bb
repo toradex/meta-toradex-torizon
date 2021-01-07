@@ -8,7 +8,7 @@ DEPENDS = "glib-2.0"
 
 SRCREV = "7b3e303be8f1aea7e0d4a784c8e64a75c14756a4"
 SRC_URI = "\
-    git://github.com/containers/conmon.git \
+    git://github.com/containers/conmon.git;protocol=https \
 "
 
 PV = "2.0.18+git${SRCPV}"
