@@ -7,7 +7,7 @@ TCLIBCAPPEND = ""
 COPY_LIC_MANIFEST = "1"
 COPY_LIC_DIRS = "1"
 
-IMAGE_CLASSES += "image_type_torizon"
+IMAGE_CLASSES_append = " image_type_torizon"
 IMAGE_CLASSES_remove = "image_type_tezi image_types_fsl"
 
 IMAGE_BASENAME_SUFFIX ?= ""
