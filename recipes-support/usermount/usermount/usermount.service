@@ -7,7 +7,7 @@ After=udisks2.service
 ExecStart=/usr/bin/usermount
 ExecStartPost=/usr/bin/usermount-mounter
 Restart=on-failure
-RestartSec=0
+RestartSec=5
 
 [Install]
 WantedBy=multi-user.target

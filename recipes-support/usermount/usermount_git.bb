@@ -15,6 +15,7 @@ SRC_URI = " \
     git://github.com/tom5760/usermount;protocol=https \
     file://usermount.service \
     file://usermount-mounter \
+    file://mount-docker-dataroot \
 "
 
 SRCREV = "55fdfc7d3fcc0e7121c2ed9f01d0ab1271bb5fd3"
@@ -33,6 +34,7 @@ do_install() {
     install -d ${D}${bindir}
     install -m 0755 ${S}/usermount ${D}${bindir}
     install -m 0755 ${WORKDIR}/usermount-mounter ${D}${bindir}
+    install -m 0755 ${WORKDIR}/mount-docker-dataroot ${D}${bindir}
 
     install -d ${D}${systemd_system_unitdir}
     install -m 644 ${WORKDIR}/usermount.service ${D}/${systemd_system_unitdir}

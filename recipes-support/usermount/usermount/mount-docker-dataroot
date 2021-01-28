@@ -1,0 +1,24 @@
+#!/bin/bash
+
+source /etc/profile.d/docker.sh 2>&-
+
+if [ "$DOCKER_ON_EXTERNAL_STORAGE" != "1" ]; then
+    exit 0
+fi
+
+echo "Mounting Docker dataroot directory on external storage device..."
+
+if ! mount | grep -q "\/media\/docker .*ext4"; then
+    echo "Error: could not find the external media mountpoint!"
+    echo "Please make sure to connect a storage device formatted with ext4 and labeled 'docker'"
+    exit 1
+fi
+
+mkdir -p /var/lib/docker
+
+if ! mount --rbind /media/docker /var/lib/docker; then
+    echo "Error: could not bind mount Docker dataroot directory!"
+    exit 1
+fi
+
+echo "Docker dataroot directory successfully mounted at /media/docker."

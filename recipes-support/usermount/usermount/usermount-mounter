@@ -5,3 +5,9 @@ for dev in `fdisk -l 2>/dev/null | grep -o "^/dev/[[:alnum:]]*"`; do
        udisksctl mount -b $dev 2>/dev/null || true
     fi
 done
+
+# check if Docker dataroot directory should be
+# mounted on an external storage device
+/usr/bin/mount-docker-dataroot
+
+exit $?
