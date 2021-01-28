@@ -44,8 +44,10 @@ BUILD_OSTREE_TARBALL = "0"
 IMAGE_FSTYPES_REMOVE ?= "ota-ext4 wic wic.gz wic.bmap"
 IMAGE_FSTYPES_remove_sota = "${IMAGE_FSTYPES_REMOVE}"
 
-# No need to install kernel image/devicetrees into the boot partition
+# No need to install boot script, kernel image, devicetrees or firmware into the boot partition
 IMAGE_BOOT_FILES = ""
+IMAGE_BOOT_FILES_remove = "boot.scr-${MACHINE};boot.scr overlays.txt overlays/*;overlays/"
+IMAGE_BOOT_FILES_remove_apalis-imx8 = "hdmitxfw.bin dpfw.bin"
 
 # Use device provisioning. The signed device certificate will be stored on
 # the rootfs by aktualizr-cert-provider running in Toradex Easy Installer
