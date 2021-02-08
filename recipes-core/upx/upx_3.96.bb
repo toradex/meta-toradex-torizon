@@ -3,8 +3,8 @@ SUMMARY = "Ultimate executable compressor."
 
 SRC_URI = "https://github.com/upx/upx/releases/download/v${PV}/upx-${PV}-src.tar.xz"
 
-SRC_URI[md5sum] = "fa95336d9ddcaac3b494a1b6ae9d3557"
-SRC_URI[sha256sum] = "3b0f55468d285c760fcf5ea865a070b27696393002712054c69ff40d8f7f5592"
+SRC_URI[md5sum] = "bf5564f33fe9062bc48b53abd4b34223"
+SRC_URI[sha256sum] = "47774df5c958f2868ef550fb258b97c73272cb1f44fe776b798e393465993714"
 
 LICENSE = "GPLv2"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=353753597aa110e0ded3508408c6374a"
