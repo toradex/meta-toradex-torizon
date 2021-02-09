@@ -178,6 +178,17 @@ IMAGE_DATETIME_FILES ??= " \
     ${libdir}/os-release \
 "
 
+ROOTFS_POSTPROCESS_COMMAND += "tweak_os_release_variant ; "
+
+# Tweak /etc/os-release according to IMAGE_VARIANT defined in image recipe
+tweak_os_release_variant () {
+	if [ -n "${IMAGE_VARIANT}" ]; then
+		sed -i -e "s/^VARIANT=.*$/VARIANT=\"${IMAGE_VARIANT}\"/g" ${IMAGE_ROOTFS}${sysconfdir}/os-release
+	else
+		bbwarn "IMAGE_VARIANT is missing, would be better to define it for a Torizoncore image recipe."
+	fi
+}
+
 IMAGE_PREPROCESS_COMMAND += "adjust_rootfs_datetime;"
 
 # For the files listed in IMAGE_DATETIME_FILES that might contain DATETIME strings, substitute

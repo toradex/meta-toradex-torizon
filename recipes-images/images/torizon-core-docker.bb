@@ -9,6 +9,8 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     docker-compose-up \
 "
 
+IMAGE_VARIANT = "Docker"
+
 inherit extrausers
 
 EXTRA_USERS_PARAMS += "\

@@ -4,6 +4,8 @@ using Podman container engine."
 
 require torizon-core-container.inc
 
+IMAGE_VARIANT = "Podman"
+
 CORE_IMAGE_BASE_INSTALL_append = " \
     podman \
     podman-compose \
