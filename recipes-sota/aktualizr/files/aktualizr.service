@@ -8,6 +8,7 @@ ConditionPathExists=/var/sota/import/gateway.url
 [Service]
 RestartSec=10
 Restart=always
+Environment="DOCKER_CONFIG=/etc/docker"
 ExecStart=/usr/bin/aktualizr $AKTUALIZR_CMDLINE_PARAMETERS
 
 [Install]
