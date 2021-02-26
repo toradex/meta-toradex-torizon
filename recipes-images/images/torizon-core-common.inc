@@ -34,6 +34,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     udev-toradex-rules \
     ostree-customize-plymouth \
     network-configuration \
+    kernel-devsrc \
     ${@bb.utils.contains('DISTRO_FEATURES', 'sota', 'aktualizr-cert-provider aktualizr-configs', ' ', d)} \
 "
 
