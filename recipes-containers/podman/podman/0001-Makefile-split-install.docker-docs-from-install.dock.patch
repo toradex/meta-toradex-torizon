@@ -1,0 +1,39 @@
+From 80121e88facc894f5732a6a7100210291271fe23 Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Mon, 1 Mar 2021 15:50:08 +0100
+Subject: [PATCH] Makefile: split install.docker-docs from install.docker
+
+This allows end users to be able to choose to not install any docs.
+
+Upstream-Status: Submitted [ https://github.com/containers/podman/pull/9557 ]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ Makefile | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/src/import/Makefile b/src/import/Makefile
+index 0316ea284..bbf80296e 100644
+--- a/src/import/Makefile
++++ b/src/import/Makefile
+@@ -528,12 +528,15 @@ install.cni:
+ 
+ .PHONY: install.docker
+ install.docker: docker-docs
+-	install ${SELINUXOPT} -d -m 755 $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)/man1
+ 	install ${SELINUXOPT} -m 755 docker $(DESTDIR)$(BINDIR)/docker
+-	install ${SELINUXOPT} -m 644 docs/build/man/docker*.1 -t $(DESTDIR)$(MANDIR)/man1
+ 	install ${SELINUXOPT} -m 755 -d ${DESTDIR}${SYSTEMDDIR}  ${DESTDIR}${USERSYSTEMDDIR} ${DESTDIR}${TMPFILESDIR}
+ 	install ${SELINUXOPT} -m 644 contrib/systemd/system/podman-docker.conf -t ${DESTDIR}${TMPFILESDIR}
+ 
++.PHONY: install.docker-docs
++install.docker-docs: docker-docs
++	install ${SELINUXOPT} -d -m 755 $(DESTDIR)$(BINDIR) $(DESTDIR)$(MANDIR)/man1
++	install ${SELINUXOPT} -m 644 docs/build/man/docker*.1 -t $(DESTDIR)$(MANDIR)/man1
++
+ .PHONY: install.varlink
+ ifneq (,$(findstring varlink,$(BUILDTAGS)))
+ install.varlink:
+-- 
+2.29.0
+

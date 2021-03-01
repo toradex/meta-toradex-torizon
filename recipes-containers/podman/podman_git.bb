@@ -27,6 +27,7 @@ python __anonymous() {
 SRCREV = "a0d478edea7f775b7ce32f8eb1a01e75374486cb"
 SRC_URI = " \
     git://github.com/containers/libpod.git;branch=v2.2;protocol=https \
+    file://0001-Makefile-split-install.docker-docs-from-install.dock.patch \
 "
 
 LICENSE = "Apache-2.0"
@@ -63,6 +64,11 @@ EXTRA_OEMAKE = " \
 # build and install the docker wrapper. If docker is enabled in the
 # packageconfig, the podman package will rconfict with docker.
 PACKAGECONFIG ?= "docker"
+PACKAGECONFIG[docs] = ",,,"
+PACKAGECONFIG[docker] = ",,,"
+
+DEFAULT_MAKE_TARGET ?= "${@bb.utils.contains('PACKAGECONFIG','docs','all','binaries',d)}"
+DEFAULT_INSTALL_TARGET ?= "${@bb.utils.contains('PACKAGECONFIG','docs','install','install.bin install.remote install.cni install.systemd',d)}"
 
 do_compile() {
 	cd ${S}/src
@@ -89,7 +95,7 @@ do_compile() {
 	export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
 	export CGO_LDFLAGS="${LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
 
-	oe_runmake BUILDTAGS="${BUILDTAGS}"
+	oe_runmake BUILDTAGS="${BUILDTAGS}" ${DEFAULT_MAKE_TARGET}
 }
 
 do_install() {
@@ -99,15 +105,12 @@ do_install() {
 	export GOPATH="${S}/src/.gopath"
 	export GOROOT="${STAGING_DIR_NATIVE}/${nonarch_libdir}/${HOST_SYS}/go"
 
-	oe_runmake install DESTDIR="${D}"
+	oe_runmake ${DEFAULT_INSTALL_TARGET} DESTDIR="${D}"
 	if ${@bb.utils.contains('PACKAGECONFIG', 'docker', 'true', 'false', d)}; then
 		oe_runmake install.docker DESTDIR="${D}"
-	fi
-	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
-		install -d ${D}${systemd_unitdir}/system
-		install -m 644 ${S}/src/import/contrib/systemd/system/podman.service ${D}/${systemd_unitdir}/system
-		install -m 644 ${S}/src/import/contrib/systemd/system/podman.socket ${D}/${systemd_unitdir}/system
-		rm -f ${D}/${systemd_unitdir}/system/docker.service.rpm
+		if ${@bb.utils.contains('PACKAGECONFIG', 'docs', 'true', 'false', d)}; then
+			oe_runmake install.docker-docs DESTDIR="${D}"
+		fi
 	fi
 }
 
