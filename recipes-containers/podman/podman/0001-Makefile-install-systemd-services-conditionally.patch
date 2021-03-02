@@ -1,0 +1,39 @@
+From 9439f42752a3040753210f51a28a68efff3081af Mon Sep 17 00:00:00 2001
+From: Ming Liu <ming.liu@toradex.com>
+Date: Tue, 2 Mar 2021 13:38:13 +0100
+Subject: [PATCH] Makefile: install systemd services conditionally
+
+Only install systemd services provided that systemd is in BUILDTAGS.
+
+Upstream-Status: Submitted [ https://github.com/containers/podman/pull/9557 ]
+
+Signed-off-by: Ming Liu <ming.liu@toradex.com>
+---
+ Makefile | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/src/import/Makefile b/src/import/Makefile
+index bbf80296e..e29224d50 100644
+--- a/src/import/Makefile
++++ b/src/import/Makefile
+@@ -553,6 +553,7 @@ endif
+ 
+ 
+ .PHONY: install.systemd
++ifeq (,$(findstring systemd,$(BUILDTAGS)))
+ install.systemd: install.varlink
+ 	install ${SELINUXOPT} -m 755 -d ${DESTDIR}${SYSTEMDDIR}  ${DESTDIR}${USERSYSTEMDDIR}
+ 	# User services
+@@ -565,6 +566,9 @@ install.systemd: install.varlink
+ 	install ${SELINUXOPT} -m 644 contrib/systemd/auto-update/podman-auto-update.timer ${DESTDIR}${SYSTEMDDIR}/podman-auto-update.timer
+ 	install ${SELINUXOPT} -m 644 contrib/systemd/system/podman.socket ${DESTDIR}${SYSTEMDDIR}/podman.socket
+ 	install ${SELINUXOPT} -m 644 contrib/systemd/system/podman.service ${DESTDIR}${SYSTEMDDIR}/podman.service
++else
++install.systemd:
++endif
+ 
+ .PHONY: uninstall
+ uninstall:
+-- 
+2.29.0
+

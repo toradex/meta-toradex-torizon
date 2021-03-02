@@ -28,6 +28,8 @@ SRCREV = "a0d478edea7f775b7ce32f8eb1a01e75374486cb"
 SRC_URI = " \
     git://github.com/containers/libpod.git;branch=v2.2;protocol=https \
     file://0001-Makefile-split-install.docker-docs-from-install.dock.patch \
+    file://0001-Makefile-install-systemd-services-conditionally.patch \
+    file://0001-Makefile-avoid-building-podman-podman-remote-during-.patch \
 "
 
 LICENSE = "Apache-2.0"
