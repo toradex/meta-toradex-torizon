@@ -20,7 +20,7 @@ index bbf80296e..e29224d50 100644
  
  
  .PHONY: install.systemd
-+ifeq (,$(findstring systemd,$(BUILDTAGS)))
++ifneq (,$(findstring systemd,$(BUILDTAGS)))
  install.systemd: install.varlink
  	install ${SELINUXOPT} -m 755 -d ${DESTDIR}${SYSTEMDDIR}  ${DESTDIR}${USERSYSTEMDDIR}
  	# User services
