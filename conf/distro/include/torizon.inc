@@ -61,10 +61,6 @@ DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x1
 DISTRO_FEATURES_NATIVE_remove = "x11"
 DISTRO_FEATURES_NATIVESDK_remove = "x11"
 
-# TorizonCore does not use runtime package management, so version numbers going
-# backwards are not a problem for us.
-ERROR_QA_remove = "version-going-backwards"
-
 # Note, enable or disable the useradd-staticids in a configured system,
 # the TMPDIR/DEPLOY_DIR/SSTATE_DIR may contain incorrect uid/gid values.
 # Clearing them will correct this condition.
