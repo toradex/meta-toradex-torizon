@@ -22,6 +22,8 @@ SPLASH = "plymouth"
 
 # Base packages
 CORE_IMAGE_BASE_INSTALL_append = " \
+    aktualizr-cert-provider \
+    aktualizr-configs \
     kernel-modules \
     usermount \
     nano \
@@ -33,9 +35,9 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     tzdata \
     udev-toradex-rules \
     ostree-customize-plymouth \
+    ostree-devicetree-overlays \
     network-configuration \
     kernel-devsrc \
-    ${@bb.utils.contains('DISTRO_FEATURES', 'sota', 'aktualizr-cert-provider aktualizr-configs', ' ', d)} \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
