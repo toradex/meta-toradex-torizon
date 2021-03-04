@@ -1,15 +1,14 @@
 UBOOT_MACHINE = "qemu_arm64_defconfig"
 UBOOT_ENTRYPOINT = "0x40080000"
 
-KERNEL_CLASSES = "kernel-lmp-fitimage"
+KERNEL_CLASSES = "toradex-fitimage"
 KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
 
-WKS_FILE_DEPENDS_remove = "tezi-metadata device-tree-overlay-filter"
+WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 WKS_FILE_sota_qemuarm64 = "torizon-sota.wks"
 
 OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
-OSTREE_DEPLOY_DEVICETREE_qemuarm64 = "0"
 
 QB_MACHINE = "-machine virt"
 QB_DRIVE_TYPE = "/dev/vda"

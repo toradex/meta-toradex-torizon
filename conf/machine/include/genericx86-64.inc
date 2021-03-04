@@ -1,5 +1,5 @@
 WKS_FILE_sota_genericx86-64 = "efidisk-sota.wks"
-WKS_FILE_DEPENDS_remove = "tezi-metadata device-tree-overlay-filter"
+WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 
 OSTREE_KERNEL_ARGS_genericx86-64 = "console=ttyS0,115200 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_BOOTLOADER_genericx86-64 = "grub"
