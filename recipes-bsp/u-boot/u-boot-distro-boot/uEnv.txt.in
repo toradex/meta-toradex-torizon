@@ -2,13 +2,7 @@ kernel_image_type=@@KERNEL_IMAGETYPE@@
 overlays_file="overlays.txt"
 otaroot=1
 
-set_bootargs=if test ${devtype} != ubi; then \
-                 # Load commands for regular block devices \
-                 env set bootcmd_args env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${scriptargs} ${tdxargs}; \
-             else \
-                 # Load commands for raw NAND devices \
-                 env set bootcmd_args env set bootargs ubi.mtd=ubi root=/dev/ubi0_0 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
-             fi || true
+set_bootargs=env set bootcmd_args env set bootargs ${bootargs} ${scriptargs} ${tdxargs}
 
 set_kernel_load_addr=if test ${kernel_image_type} = "Image.gz"; then \
     env set kernel_addr_load ${loadaddr}; \

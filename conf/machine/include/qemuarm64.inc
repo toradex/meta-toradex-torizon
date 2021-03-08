@@ -7,7 +7,6 @@ KERNEL_IMAGETYPE_qemuarm64 = "fitImage"
 WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 WKS_FILE_sota_qemuarm64 = "torizon-sota.wks"
 
-OSTREE_KERNEL_ARGS_qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_KERNEL_qemuarm64 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 
 QB_MACHINE = "-machine virt"
