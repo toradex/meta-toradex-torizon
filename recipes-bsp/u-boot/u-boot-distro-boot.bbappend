@@ -10,7 +10,5 @@ do_install () {
     install -m 0644 ${WORKDIR}/uEnv.txt ${D}${libdir}/ostree-boot/
 }
 
-KERNEL_BOOTCMD_qemuarm64 ?= "bootm"
-
 PACKAGES = "ostree-uboot-env"
 FILES_ostree-uboot-env = "${libdir}/ostree-boot/uEnv.txt"
