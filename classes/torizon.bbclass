@@ -6,8 +6,7 @@
 # This boot arguments are supplied to OSTree deploy command. To
 # change kernel boot arguments in a deployed OSTree use:
 # ostree admin deploy --karg-none --karg="newargs" ...
-TORADEX_KERNEL_ARGS = "${@'ubi.mtd=ubi root=/dev/ubi0_0 rootfstype=ubifs ubi.fm_autoconvert=1' if (d.getVar('TORADEX_FLASH_TYPE') or '') == 'rawnand' else 'root=LABEL=otaroot rootfstype=ext4'}"
-OSTREE_KERNEL_ARGS = "${TORADEX_KERNEL_ARGS} quiet logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles splash"
+OSTREE_KERNEL_ARGS = "quiet logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles splash"
 OSTREE_KERNEL_ARGS_append_colibri-imx8x = " clk_ignore_unused"
 
 OSTREE_DEPLOY_DEVICETREE = "${@'0' if d.getVar('KERNEL_IMAGETYPE') == 'fitImage' else '1'}"
