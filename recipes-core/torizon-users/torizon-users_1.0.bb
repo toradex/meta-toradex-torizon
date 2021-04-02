@@ -16,5 +16,8 @@ GROUPADD_PARAM_${PN} = "torizon"
 USERADD_PARAM_${PN} = "-G adm,sudo,users,plugdev,audio,video,gpio,i2cdev,spidev,dialout,input -m -d /home/torizon -P torizon torizon"
 
 pkg_postinst_ontarget_${PN} () {
-    passwd -e torizon
+    if [ ! -e /etc/.passwd_changed ]; then
+        passwd -e torizon
+        touch /etc/.passwd_changed
+    fi
 }
