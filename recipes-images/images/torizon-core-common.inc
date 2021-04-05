@@ -40,6 +40,8 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     ostree-devicetree-overlays \
     network-configuration \
     kernel-devsrc \
+    kernel-module-wireguard \
+    wireguard-tools \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \

@@ -81,3 +81,9 @@ EXPERIMENTALOVERRIDES = ""
 EXPERIMENTALOVERRIDES_colibri-imx6ull = ":experimental"
 EXPERIMENTALOVERRIDES_colibri-imx7 = ":experimental"
 DISTROOVERRIDES .= "${EXPERIMENTALOVERRIDES}"
+
+# meta-lmp provides newer versions of wireguard recipes, but
+# those don't build with our current kernel version, so let's
+# use the versions provided by meta-networking
+PREFERRED_VERSION_wireguard-module = "1.0.20200401"
+PREFERRED_VERSION_wireguard-tools = "1.0.20200319"
