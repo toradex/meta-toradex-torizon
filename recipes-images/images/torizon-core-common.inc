@@ -40,6 +40,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     kernel-devsrc \
     kernel-module-wireguard \
     wireguard-tools \
+    fluent-bit \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
