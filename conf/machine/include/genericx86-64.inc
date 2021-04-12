@@ -15,3 +15,6 @@ CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 
 PREFERRED_PROVIDER_u-boot-default-script = ""
 PREFERRED_PROVIDER_virtual/dtb = ""
+
+PREFERRED_VERSION_wireguard-module_genericx86-64 = "1.0.20200729"
+PREFERRED_VERSION_wireguard-tools_genericx86-64 = "1.0.20200827"
