@@ -49,11 +49,6 @@ IMAGE_BOOT_FILES = ""
 IMAGE_BOOT_FILES_REMOVE_sota = "boot.scr-${MACHINE};boot.scr overlays.txt overlays/*;overlays/"
 IMAGE_BOOT_FILES_REMOVE_append_apalis-imx8 = " hdmitxfw.bin dpfw.bin"
 
-# Use device provisioning. The signed device certificate will be stored on
-# the rootfs by aktualizr-cert-provider running in Toradex Easy Installer
-SOTA_CLIENT_PROV ?= "aktualizr-device-prov"
-SOTA_DEPLOY_CREDENTIALS ?= "0"
-
 DISTRO_FEATURES_append = " virtualization stateless-system"
 DISTRO_FEATURES_remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x11 ptest multiarch opengl vulkan"
 
@@ -73,7 +68,6 @@ USERADD_ERROR_DYNAMIC = "skip"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-freescale/recipes-graphics/cairo \
-    /meta-lmp/meta-lmp-base/recipes-sota/aktualizr/aktualizr_%.bbappend \
 "
 
 # machines where TorizonCore is experimental
@@ -87,3 +81,11 @@ DISTROOVERRIDES .= "${EXPERIMENTALOVERRIDES}"
 # use the versions provided by meta-networking
 PREFERRED_VERSION_wireguard-module = "1.0.20200401"
 PREFERRED_VERSION_wireguard-tools = "1.0.20200319"
+
+# Use our variant of the aktualizr client instead of the
+# default from meta-updater
+PREFERRED_PROVIDER_aktualizr = "aktualizr-torizon"
+PREFERRED_PROVIDER_aktualizr-native = "aktualizr-torizon-native"
+PREFERRED_RPROVIDER_aktualizr = "aktualizr-torizon"
+PREFERRED_RPROVIDER_aktualizr-info = "aktualizr-torizon"
+PREFERRED_RPROVIDER_aktualizr-shared-prov = "aktualizr-torizon"

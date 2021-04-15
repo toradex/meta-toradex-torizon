@@ -82,7 +82,7 @@ rm -Rf "$LOGFILE"
 # if device is not provisioned, aktualizr will be inactive, so let's
 # manually clean-up U-Boot variables to confirm the update
 if [ ! -e /var/sota/import/gateway.url ]; then
-    echo "Aktualizr is inactive. Cleaning up U-Boot variables..."
+    echo "Aktualizr-Torizon is inactive. Cleaning up U-Boot variables..."
     fw_setenv upgrade_available 0
     fw_setenv bootcount 0
 fi

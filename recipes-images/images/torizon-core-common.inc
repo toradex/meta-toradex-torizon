@@ -22,8 +22,6 @@ SPLASH = "plymouth"
 
 # Base packages
 CORE_IMAGE_BASE_INSTALL_append = " \
-    aktualizr-cert-provider \
-    aktualizr-configs \
     evtest \
     i2c-tools \
     kernel-modules \
