@@ -14,22 +14,11 @@ DEPENDS = " \
     ${@bb.utils.filter('DISTRO_FEATURES', 'systemd', d)} \
 "
 
-python __anonymous() {
-    msg = ""
-    # ERROR: Nothing PROVIDES 'libseccomp' (but meta-virtualization/recipes-containers/podman/ DEPENDS on or otherwise requires it).
-    # ERROR: Required build target 'meta-world-pkgdata' has no buildable providers.
-    # Missing or unbuildable dependency chain was: ['meta-world-pkgdata', 'podman', 'libseccomp']
-    if 'security' not in d.getVar('BBFILE_COLLECTIONS').split():
-        msg += "Make sure meta-security should be present as it provides 'libseccomp'"
-        raise bb.parse.SkipRecipe(msg)
-}
+PNBLACKLIST[podman] ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'security', '', 'Depends on libseccomp from meta-security which is not included', d)}"
 
-SRCREV = "a0d478edea7f775b7ce32f8eb1a01e75374486cb"
+SRCREV = "713995bfc325250fefe2750e81d98eb1c65acaec"
 SRC_URI = " \
-    git://github.com/containers/libpod.git;branch=v2.2;protocol=https \
-    file://0001-Makefile-split-install.docker-docs-from-install.dock.patch \
-    file://0001-Makefile-install-systemd-services-conditionally.patch \
-    file://0001-Makefile-avoid-building-podman-podman-remote-during-.patch \
+    git://github.com/containers/libpod.git;branch=v3.1 \
 "
 
 LICENSE = "Apache-2.0"
@@ -39,7 +28,7 @@ GO_IMPORT = "import"
 
 S = "${WORKDIR}/git"
 
-PV = "2.2.1+git${SRCPV}"
+PV = "3.1.1+git${SRCPV}"
 
 PACKAGES =+ "${PN}-contrib"
 
@@ -66,11 +55,6 @@ EXTRA_OEMAKE = " \
 # build and install the docker wrapper. If docker is enabled in the
 # packageconfig, the podman package will rconfict with docker.
 PACKAGECONFIG ?= "docker"
-PACKAGECONFIG[docs] = ",,,"
-PACKAGECONFIG[docker] = ",,,"
-
-DEFAULT_MAKE_TARGET ?= "${@bb.utils.contains('PACKAGECONFIG','docs','all','binaries',d)}"
-DEFAULT_INSTALL_TARGET ?= "${@bb.utils.contains('PACKAGECONFIG','docs','install','install.bin install.remote install.cni install.systemd',d)}"
 
 do_compile() {
 	cd ${S}/src
@@ -86,10 +70,6 @@ do_compile() {
 
 	cd ${S}/src/.gopath/src/"${PODMAN_PKG}"
 
-	oe_runmake pkg/varlink/iopodman.go GO=go
-
-	chmod -R u+w ${S}/src/.gopath/pkg/mod/github.com/varlink
-
 	# Pass the needed cflags/ldflags so that cgo
 	# can find the needed headers files and libraries
 	export GOARCH=${TARGET_GOARCH}
@@ -97,7 +77,7 @@ do_compile() {
 	export CGO_CFLAGS="${CFLAGS} --sysroot=${STAGING_DIR_TARGET}"
 	export CGO_LDFLAGS="${LDFLAGS} --sysroot=${STAGING_DIR_TARGET}"
 
-	oe_runmake BUILDTAGS="${BUILDTAGS}" ${DEFAULT_MAKE_TARGET}
+	oe_runmake BUILDTAGS="${BUILDTAGS}"
 }
 
 do_install() {
@@ -107,12 +87,15 @@ do_install() {
 	export GOPATH="${S}/src/.gopath"
 	export GOROOT="${STAGING_DIR_NATIVE}/${nonarch_libdir}/${HOST_SYS}/go"
 
-	oe_runmake ${DEFAULT_INSTALL_TARGET} DESTDIR="${D}"
+	oe_runmake install DESTDIR="${D}"
 	if ${@bb.utils.contains('PACKAGECONFIG', 'docker', 'true', 'false', d)}; then
 		oe_runmake install.docker DESTDIR="${D}"
-		if ${@bb.utils.contains('PACKAGECONFIG', 'docs', 'true', 'false', d)}; then
-			oe_runmake install.docker-docs DESTDIR="${D}"
-		fi
+	fi
+	if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
+		install -d ${D}${systemd_unitdir}/system
+		install -m 644 ${S}/src/import/contrib/systemd/system/podman.service ${D}/${systemd_unitdir}/system
+		install -m 644 ${S}/src/import/contrib/systemd/system/podman.socket ${D}/${systemd_unitdir}/system
+		rm -f ${D}/${systemd_unitdir}/system/docker.service.rpm
 	fi
 }
 
@@ -126,5 +109,5 @@ FILES_${PN} += " \
 SYSTEMD_SERVICE_${PN} = "podman.service podman.socket"
 
 RDEPENDS_${PN} += "conmon virtual/runc iptables cni skopeo"
-RRECOMMENDS_${PN} += "slirp4netns"
+RRECOMMENDS_${PN} += "slirp4netns kernel-module-xt-masquerade kernel-module-xt-comment fuse-overlayfs"
 RCONFLICTS_${PN} = "${@bb.utils.contains('PACKAGECONFIG', 'docker', 'docker', '', d)}"
