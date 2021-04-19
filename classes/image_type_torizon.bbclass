@@ -60,6 +60,10 @@ python adjust_tezi_artifacts() {
 
 TEZI_IMAGE_TEZIIMG_PREFUNCS_append = " adjust_tezi_artifacts"
 
+# prefuncs/postfuncs of do_ostree_image need run under fakeroot
+# Reference: https://github.com/advancedtelematic/meta-updater/pull/808
+prepare_ostree_rootfs[fakeroot] = "1"
+
 IMAGE_CMD_ota_prepend() {
 	if [ "${OSTREE_BOOTLOADER}" = "u-boot" ]; then
 		cp -a ${DEPLOY_DIR_IMAGE}/boot.scr-${MACHINE} ${OTA_SYSROOT}/boot.scr
