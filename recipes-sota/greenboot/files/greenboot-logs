@@ -1,0 +1,36 @@
+#!/bin/bash
+
+LOGDIR="/var/lib/rollback-manager"
+LOGFILE="$LOGDIR/rollback.log"
+
+log_to_console() {
+    echo "$@"
+    echo "<1>$@" > /dev/kmsg
+}
+
+run_and_log() {
+    echo "# $@"
+    $@
+    echo
+}
+
+log_rollback_info() {
+    echo "Writing rollback log to $LOGFILE"
+
+    mkdir -p "$LOGDIR"
+
+    echo -e "Rollback triggered! Please check the output of the commands below for more information.\n" > "$LOGFILE"
+
+    run_and_log "date" >> "$LOGFILE"
+    run_and_log "uname -a" >> "$LOGFILE"
+    run_and_log "cat /etc/os-release" >> "$LOGFILE"
+    run_and_log "ps aux" >> "$LOGFILE"
+    run_and_log "ostree admin status" >> "$LOGFILE"
+    run_and_log "systemctl status greenboot-healthcheck" >> "$LOGFILE"
+    run_and_log "systemctl status boot-complete.target" >> "$LOGFILE"
+    run_and_log "systemctl list-units --failed" >> "$LOGFILE"
+    run_and_log "systemctl list-dependencies boot-complete.target" >> "$LOGFILE"
+    run_and_log "systemctl status docker" >> "$LOGFILE"
+    run_and_log "dmesg" >> "$LOGFILE"
+    run_and_log "journalctl --no-pager" >> "$LOGFILE"
+}

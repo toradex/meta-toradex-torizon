@@ -1,0 +1,27 @@
+#!/bin/bash
+
+. /usr/libexec/greenboot/greenboot-logs
+
+# make sure links for storage devices are available for a proper fw_printenv usage
+udevadm settle -t 30
+
+UPGRADE_AVAILABLE=$(fw_printenv upgrade_available | cut -d '=' -f 2)
+BOOTCOUNT=$(fw_printenv bootcount | cut -d '=' -f 2)
+BOOTLIMIT=$(fw_printenv bootlimit | cut -d '=' -f 2)
+
+# if update in progress, log message and reboot
+if [ "$UPGRADE_AVAILABLE" = "1" ]; then
+    log_to_console "Update error: boot checks failed (attempt $BOOTCOUNT of $BOOTLIMIT). Rebooting..."
+    log_rollback_info
+    reboot
+    exit 0
+fi
+
+# should never reach here (failed boot checks without doing an update). Maybe filesystem corruption?
+log_to_console "Critical error: boot checks failed but update not in progress. Device requires intervention!"
+
+# let's forcibly start Aktualizr-Torizon
+# if the device is provisioned, we can at least try to recover with a system update
+systemctl start --ignore-dependencies aktualizr-torizon
+
+exit 1

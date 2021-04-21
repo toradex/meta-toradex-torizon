@@ -6,8 +6,6 @@ SRC_URI = " \
   gitsm://github.com/toradex/aktualizr-torizon.git;protocol=https \
   file://0001-add-libaktualizr-update-control-allow-block-mechanism.patch \
   file://0002-fix-libaktualizr-install-path.patch \
-  file://rollback-manager \
-  file://rollback-manager.service \
   file://aktualizr-torizon.service \
 "
 
@@ -19,11 +17,11 @@ S = "${WORKDIR}/git"
 PV = "1.0+git${SRCPV}"
 
 DEPENDS = "boost curl openssl libarchive libsodium sqlite3 asn1c-native"
-RDEPENDS_${PN}_class-target = "aktualizr-hwid lshw bash aktualizr-docker-compose-sec aktualizr-polling-interval"
+RDEPENDS_${PN}_class-target = "aktualizr-hwid lshw bash aktualizr-docker-compose-sec aktualizr-polling-interval greenboot"
 
 inherit cmake pkgconfig systemd
 
-SYSTEMD_SERVICE_${PN} = "aktualizr-torizon.service rollback-manager.service"
+SYSTEMD_SERVICE_${PN} = "aktualizr-torizon.service"
 
 # For find_package(Git)
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
@@ -38,11 +36,7 @@ PROVIDES += "aktualizr"
 RPROVIDES_${PN} += "aktualizr aktualizr-info aktualizr-shared-prov"
 
 do_install_append() {
-    install -d ${D}${bindir}
-    install -m 0755 ${WORKDIR}/rollback-manager ${D}${bindir}/rollback-manager
-
     install -d ${D}${systemd_unitdir}/system
-    install -m 0644 ${WORKDIR}/rollback-manager.service ${D}${systemd_unitdir}/system/rollback-manager.service
     install -m 0644 ${WORKDIR}/aktualizr-torizon.service ${D}${systemd_unitdir}/system/aktualizr-torizon.service
 
     install -m 0700 -d ${D}${libdir}/sota/conf.d 
@@ -55,8 +49,6 @@ PACKAGES =+ "${PN}-misc"
 FILES_${PN} += " \
   ${bindir}/aktualizr-torizon \
   ${libdir}/libaktualizr.so \
-  ${bindir}/rollback-manager \
-  ${systemd_unitdir}/system/rollback-manager.service \
   ${systemd_unitdir}/system/aktualizr-torizon.service \
   ${sysconfdir}/sota/* \
   ${libdir}/sota/* \

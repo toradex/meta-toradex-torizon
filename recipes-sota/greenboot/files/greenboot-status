@@ -1,0 +1,36 @@
+#!/bin/bash
+set -eu
+IFS=$'\n\t'
+
+status=""
+
+# healthcheck logs from current boot
+healthcheck_info="$(journalctl -u greenboot-healthcheck.service -p 2 -b -0 -o cat)"||""
+if [ -n "$healthcheck_info" ]; then
+    status+="$healthcheck_info"$'\n'
+fi
+
+if [ "$(systemctl is-active boot-complete.target)" = "active" ]; then
+    # greenboot logs (post healthchecks) from current boot
+    greenboot_runner_info="$(journalctl -u greenboot-task-runner.service -p 5 -b -0 -o cat)"||""
+    if [ -n "$greenboot_runner_info" ]; then
+        status+="$greenboot_runner_info"$'\n'
+    fi
+else
+    # redboot logs (post healthchecks) from current boot
+    redboot_runner_info="$(journalctl -u redboot-task-runner.service -p 0 -b -0 -o cat)"||""
+    if [ -n "$redboot_runner_info" ]; then
+        status+="$redboot_runner_info"$'\n'
+    fi
+    # redboot-auto-reboot.service logs (post redboot-task-runner.service) from current boot
+    redboot_reboot_info="$(journalctl -u redboot-auto-reboot.service -p 1 -b -0 -o cat)"||""
+    if [ -n "$redboot_reboot_info" ]; then
+        status+="$redboot_reboot_info"$'\n'
+    fi
+fi
+
+if [ -z "$status" ]; then
+    status=$'WARNING: No greenboot logs were found!\n'
+fi
+
+echo -n "$status" | tee /run/boot-status

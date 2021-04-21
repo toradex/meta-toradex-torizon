@@ -1,0 +1,9 @@
+[Unit]
+Description=Generic green boot target
+Requires=boot-complete.target
+After=boot-complete.target
+OnFailure=redboot.target
+OnFailureJobMode=fail
+
+[Install]
+WantedBy=multi-user.target
