@@ -41,6 +41,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     kernel-module-wireguard \
     wireguard-tools \
     fluent-bit \
+    neofetch \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
