@@ -2,7 +2,7 @@
 #
 # Copyright 2020 Toradex
 #
-# Torizoncore boot script.
+# TorizonCore boot script.
 
 if test -z "${altbootcmd}"
 then

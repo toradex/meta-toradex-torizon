@@ -88,7 +88,7 @@ variable_validation() {
 trap env_cleanup RETURN
 
 if [ "$(whoami)" = "root" ]; then
-    echo "ERROR: do not build Torizoncore as root. Exiting..." >&2
+    echo "ERROR: do not build TorizonCore as root. Exiting..." >&2
     return 1
 fi
 
@@ -107,7 +107,7 @@ elif [ -n "$BASH_VERSION" ]; then
 fi
 
 # Create a common list of "<machine>(<layer>)", sorted by <machine>
-# Blacklist unsupported machines of Torizoncore
+# Blacklist unsupported machines of TorizonCore
 MACHLAYERS=$(find layers -print | grep "conf/machine/.*\.conf" |
             grep -E '(apalis.*\.conf|colibri.*\.conf|verdin.*\.conf|qemuarm64\.conf|genericx86-64\.conf)' |
             grep -E -v '(imx7-nand|colibri-vf)' |
@@ -125,7 +125,7 @@ variable_validation "$MACHLAYERS" "MACHINE" || return 1
 DISTRO_DEFAULT="torizon-upstream" && echo "$MACHINE" | grep -E -q '(imx8|qemuarm64|genericx86-64)' && DISTRO_DEFAULT="torizon"
 DISTRO=${DISTRO:-$DISTRO_DEFAULT}
 
-# Create a common list of "<distro>(<layer>)" supported by Torizoncore, sorted by <distro>
+# Create a common list of "<distro>(<layer>)" supported by TorizonCore, sorted by <distro>
 DISTLAYERS=$(find layers/meta-toradex-torizon -print | grep "conf/distro/.*\.conf" |
             sed -e 's/\.conf//g' -e 's/layers\///' |
             awk -F'/conf/distro/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
