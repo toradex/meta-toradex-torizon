@@ -1,0 +1,6 @@
+SUBSYSTEM=="pwm", ACTION=="add", RUN+="/bin/chgrp pwm '/sys%p/export'", RUN+="/bin/chmod g=u '/sys%p/export'"
+SUBSYSTEM=="pwm", ACTION=="add", RUN+="/bin/chgrp pwm '/sys%p/unexport'", RUN+="/bin/chmod g=u '/sys%p/unexport'"
+SUBSYSTEM=="pwm", ACTION=="change", RUN+="/bin/chgrp pwm '/sys%p/pwm$major/duty_cycle'", RUN+="/bin/chmod g=u '/sys%p/pwm$major/duty_cycle'"
+SUBSYSTEM=="pwm", ACTION=="change", RUN+="/bin/chgrp pwm '/sys%p/pwm$major/enable'", RUN+="/bin/chmod g=u '/sys%p/pwm$major/enable'"
+SUBSYSTEM=="pwm", ACTION=="change", RUN+="/bin/chgrp pwm '/sys%p/pwm$major/period'", RUN+="/bin/chmod g=u '/sys%p/pwm$major/period'"
+SUBSYSTEM=="pwm", ACTION=="change", RUN+="/bin/chgrp pwm '/sys%p/pwm$major/polarity'", RUN+="/bin/chmod g=u '/sys%p/pwm$major/polarity'"
