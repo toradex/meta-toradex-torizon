@@ -37,6 +37,7 @@ gpio:x:49:torizon
 staff:x:50:
 i2cdev:x:51:torizon
 spidev:x:52:torizon
+pwm:x:54:torizon
 games:x:60:
 shutdown:x:70:
 users:x:100:torizon

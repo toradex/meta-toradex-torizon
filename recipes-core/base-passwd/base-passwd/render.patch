@@ -12,7 +12,7 @@ Index: base-passwd-3.5.26/group.master
 ===================================================================
 --- base-passwd-3.5.26.orig/group.master
 +++ base-passwd-3.5.26/group.master
-@@ -35,7 +35,11 @@ video:*:44:
+@@ -35,7 +35,12 @@ video:*:44:
  sasl:*:45:
  plugdev:*:46:
  kvm:*:102:
@@ -21,6 +21,7 @@ Index: base-passwd-3.5.26/group.master
  staff:*:50:
 +i2cdev:*:51:
 +spidev:*:52:
++pwm:*:54:
  games:*:60:
  shutdown:*:70:
  users:*:100:
