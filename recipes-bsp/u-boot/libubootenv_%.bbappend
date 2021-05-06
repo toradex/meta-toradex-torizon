@@ -1,1 +1,4 @@
-SRCREV = "e663439e3d39a4cdbddb7e818245a99c485fa965"
+# tag v0.3.2
+SRCREV = "ba7564f5006d09bec51058cf4f5ac90d4dc18b3c"
+
+PV = "0.3.2"
