@@ -7,7 +7,6 @@
 # change kernel boot arguments in a deployed OSTree use:
 # ostree admin deploy --karg-none --karg="newargs" ...
 OSTREE_KERNEL_ARGS = "quiet logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles splash"
-OSTREE_KERNEL_ARGS_append_colibri-imx8x = " clk_ignore_unused"
 
 OSTREE_DEPLOY_DEVICETREE = "${@'0' if d.getVar('KERNEL_IMAGETYPE') == 'fitImage' else '1'}"
 
