@@ -4,10 +4,10 @@ otaroot=1
 
 set_bootargs=if test ${devtype} != ubi; then \
                  # Load commands for regular block devices \
-                 env set bootcmd_args env set bootargs root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${scriptargs} ${tdxargs}; \
+                 env set bootcmd_args env set bootargs ${defargs} root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${tdxargs}; \
              else \
                  # Load commands for raw NAND devices \
-                 env set bootcmd_args env set bootargs ubi.mtd=ubi root=/dev/ubi0_0 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
+                 env set bootcmd_args env set bootargs ${defargs} ubi.mtd=ubi root=/dev/ubi0_0 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
              fi || true
 
 set_kernel_load_addr=if test ${kernel_image_type} = "Image.gz"; then \
@@ -46,12 +46,6 @@ set_fdt_path=if test -n "${fdtdir}"; then \
                 env set fdt_path /boot${fdt_file}; \
              fi || true
 
-set_board_extra=if test "${board}" = "apalis-imx8"; then \
-                    # Workaround apalis-imx8 not boot issue without setting fdt_high \
-                    env set fdt_high 0xffffffffffffffff; \
-                    env set scriptargs pci=nomsi; \
-                fi || true
-
 bootcmd_dtb=load ${devtype} ${devnum}:${otaroot} ${fdt_addr_r} ${fdt_path}; \
             if test ${skip_fdt_overlays} != 1; then \
                     if test -e ${devtype} ${devnum}:${otaroot} /boot${fdtdir}/${overlays_file}; then \
@@ -70,6 +64,6 @@ set_bootargs_custom=if test -n "${fdt_overlays}"; then \
                     fi || true
 
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
-bootcmd_run=run check_rollback_needed && run set_bootargs && run set_fdt_path && run set_board_extra && \
+bootcmd_run=run check_rollback_needed && run set_bootargs && run set_fdt_path && \
             run bootcmd_dtb && run bootcmd_args && run set_bootargs_custom && run set_kernel_load_addr && \
             run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
