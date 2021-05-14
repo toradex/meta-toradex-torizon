@@ -21,4 +21,9 @@ do_install_append() {
 	COMPLETION_DIR=${D}${datadir}/bash-completion/completions
 	install -d ${COMPLETION_DIR}
 	install -m 0644 ${S}/src/import/components/cli/contrib/completion/bash/docker ${COMPLETION_DIR}
+
+	# systemd[1]: /usr/lib/systemd/system/docker.socket:6: ListenStream= references
+	# a path below legacy directory /var/run/, updating /var/run/docker.sock → /run/docker.sock;
+	# please update the unit file accordingly.
+	sed -i -e 's#ListenStream=/var#ListenStream=#' ${D}${systemd_system_unitdir}/docker.socket
 }
