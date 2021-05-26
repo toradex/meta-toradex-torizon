@@ -24,6 +24,7 @@ env_cleanup() {
     unset MACHLAYERS DISTLAYERS DISTRO_DEFAULT OEROOT
     unset ITEM MANIFESTS EULA EULA_MACHINE REPLY READ_EULA
     unset usage oldmach
+    unset MANIFEST_FILE INTEGRATION_BUILD
 }
 
 usage () {
@@ -200,7 +201,20 @@ ln -sf "${SCRIPTS}"/../conf/template/bblayers.conf conf/bblayers.conf
 ln -sf "${MANIFESTS}"/README.md README.md
 ln -sf "${MANIFESTS}" "${OEROOT}"/layers/
 
-if [ "$(basename `readlink -f ${MANIFESTS}/../manifest.xml`)" != "default.xml" ]; then
+MANIFEST_FILE="${MANIFESTS}"/../manifest.xml
+INTEGRATION_BUILD=0
+
+if [ -L "$MANIFEST_FILE" ]; then
+    if [ "$(basename `readlink -f "$MANIFEST_FILE"`)" != "default.xml" ]; then
+        INTEGRATION_BUILD=1
+    fi
+else
+    if ! cat $MANIFEST_FILE | grep -q "torizoncore/default.xml"; then
+        INTEGRATION_BUILD=1
+    fi
+fi
+
+if [ "$INTEGRATION_BUILD" = "1" ]; then
     cat > conf/auto.conf <<EOF
 # This is needed when building on integration. With use-head-next you
 # always get the newest kernel. Without use-head-next your build may fail.
