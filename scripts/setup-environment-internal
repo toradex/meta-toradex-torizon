@@ -109,7 +109,7 @@ fi
 
 # Create a common list of "<machine>(<layer>)", sorted by <machine>
 # Blacklist unsupported machines of TorizonCore
-MACHLAYERS=$(find layers -print | grep "conf/machine/.*\.conf" |
+MACHLAYERS=$(find layers/ -print | grep "conf/machine/.*\.conf" |
             grep -E '(apalis.*\.conf|colibri.*\.conf|verdin.*\.conf|qemuarm64\.conf|genericx86-64\.conf)' |
             grep -E -v '(imx7-nand|colibri-vf)' |
             sed -e 's/\.conf//g' -e 's/layers\///' |
