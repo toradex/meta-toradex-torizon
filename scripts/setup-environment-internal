@@ -146,9 +146,14 @@ SCRIPTS="${OEROOT}"/layers/meta-toradex-torizon/scripts
 
 # We can be called with only 1 parameter max (build folder)
 BUILDDIR=${1:-build-$DISTRO}
+# If current BUILDDIR is relative then prepend OEROOT
+case ${BUILDDIR} in
+    /* ) ;;
+    *  ) BUILDDIR=$OEROOT/${BUILDDIR};;
+esac
 # Get rid of double slash. sed calls in OE staging_processfixme
 # seems to have troubles if this makes it into OE variables.
-BUILDDIR=$OEROOT/${BUILDDIR%%/}
+BUILDDIR=${BUILDDIR%%/}
 
 # Set BBPATH for recipetool
 BBPATH=${BUILDDIR}
