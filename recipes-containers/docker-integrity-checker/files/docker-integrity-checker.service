@@ -1,0 +1,11 @@
+[Unit]
+Description=Verify Docker images integrity and recover from Docker data corruption
+ConditionPathExists=/var/sota/storage/docker-compose/docker-compose.yml
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/sota/storage/docker-compose/
+ExecStart=/usr/bin/docker-integrity-checker.sh
+
+[Install]
+WantedBy=multi-user.target

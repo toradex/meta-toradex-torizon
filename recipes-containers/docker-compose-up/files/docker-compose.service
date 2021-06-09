@@ -3,15 +3,14 @@ Description=Docker Compose service with docker compose
 Requires=docker.service
 After=docker.service
 ConditionPathExists=/var/sota/storage/docker-compose/docker-compose.yml
+OnFailure=docker-integrity-checker.service
 
 [Service]
-Type=oneshot
+Type=simple
 WorkingDirectory=/var/sota/storage/docker-compose/
 ExecStart=/usr/bin/docker-compose -p torizon up -d --remove-orphans
 ExecStop=/usr/bin/docker-compose -p torizon down
 RemainAfterExit=yes
-Restart=on-failure
-RestartSec=10s
 
 [Install]
 WantedBy=multi-user.target
