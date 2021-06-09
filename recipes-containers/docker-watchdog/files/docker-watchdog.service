@@ -1,0 +1,13 @@
+[Unit]
+Description=Monitor and restart unhealthy docker containers, labeled as "autoheal=true"
+Wants=docker-compose.service
+After=docker-compose.service
+ConditionPathExists=/var/sota/storage/docker-compose/docker-compose.yml
+
+[Service]
+Type=simple
+WorkingDirectory=/var/sota/storage/docker-compose/
+ExecStart=/usr/bin/docker-watchdog.sh autoheal
+
+[Install]
+WantedBy=multi-user.target

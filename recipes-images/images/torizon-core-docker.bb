@@ -8,6 +8,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     python3-docker-compose \
     docker-compose-up \
     docker-integrity-checker \
+    docker-watchdog \
 "
 
 IMAGE_VARIANT = "Docker"
