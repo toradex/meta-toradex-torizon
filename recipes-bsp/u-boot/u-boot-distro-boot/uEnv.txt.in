@@ -63,7 +63,19 @@ set_bootargs_custom=if test -n "${fdt_overlays}"; then \
                         done; \
                     fi || true
 
+board_fixups=if test "${board}" = "verdin-imx8mm"; then \
+                 if test "${fdtfile}" = "imx8mm-verdin-nonwifi-v1.1-dahlia.dtb"; then \
+                     env set fdtfile imx8mm-verdin-nonwifi-dahlia.dtb; \
+                 elif test "${fdtfile}" = "imx8mm-verdin-nonwifi-v1.1-dev.dtb"; then \
+                     env set fdtfile imx8mm-verdin-nonwifi-dev.dtb; \
+                 elif test "${fdtfile}" = "imx8mm-verdin-wifi-v1.1-dahlia.dtb"; then \
+                     env set fdtfile imx8mm-verdin-wifi-dahlia.dtb; \
+                 elif test "${fdtfile}" = "imx8mm-verdin-wifi-v1.1-dev.dtb"; then \
+                     env set fdtfile imx8mm-verdin-wifi-dev.dtb; \
+                 fi; \
+             fi || true
+
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
-bootcmd_run=run check_rollback_needed && run set_bootargs && run set_fdt_path && \
+bootcmd_run=run board_fixups && run check_rollback_needed && run set_bootargs && run set_fdt_path && \
             run bootcmd_dtb && run bootcmd_args && run set_bootargs_custom && run set_kernel_load_addr && \
             run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
