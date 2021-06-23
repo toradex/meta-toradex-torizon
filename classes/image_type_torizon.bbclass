@@ -70,8 +70,6 @@ IMAGE_CMD_ota_prepend() {
 	fi
 }
 do_image_ota[depends] += "${@'u-boot-default-script:do_deploy' if d.getVar('OSTREE_BOOTLOADER') == 'u-boot' else ''}"
-do_image_ota[lockfiles] += "${OSTREE_REPO}/ostree.lock"
-do_image_ostreepush[lockfiles] += "${OSTREE_REPO}/ostree.lock"
 
 def get_tdx_ostree_purpose(purpose):
     return purpose.lower()
