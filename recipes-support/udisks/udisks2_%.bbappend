@@ -1,3 +1,9 @@
+FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+
+SRC_URI_append = " \
+    file://0001-udisksdaemon-do-not-wait-for-polkit-authority.patch \
+"
+
 EXTRA_OECONF_append = " --enable-fhs-media"
 
 # We only need the polkit library which this recipe depends on anyways
