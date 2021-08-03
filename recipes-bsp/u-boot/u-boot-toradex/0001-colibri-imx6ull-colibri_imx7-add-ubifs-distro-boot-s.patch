@@ -1,6 +1,6 @@
-From 932df6a30bf6f5d2a80ba5563a2db9c1ef98060e Mon Sep 17 00:00:00 2001
-From: Ming Liu <ming.liu@toradex.com>
-Date: Tue, 10 Nov 2020 19:32:47 +0100
+From 00c72b477b2225a27549d4b7387ffadf6d37af96 Mon Sep 17 00:00:00 2001
+From: Sergio Prado <sergio.prado@toradex.com>
+Date: Tue, 3 Aug 2021 08:52:02 -0300
 Subject: [PATCH] colibri-imx6ull/colibri_imx7: add ubifs distro boot support
 
 Also drop the explicit definition of CONFIG_BOOTCOMMAND.
@@ -10,21 +10,26 @@ Upstream-Status: Inappropriate [Torizoncore specific]
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 ---
- include/configs/colibri-imx6ull.h | 4 +---
+ include/configs/colibri-imx6ull.h | 3 +--
  include/configs/colibri_imx7.h    | 3 +--
- 2 files changed, 2 insertions(+), 5 deletions(-)
+ 2 files changed, 2 insertions(+), 4 deletions(-)
 
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index d7bac0a6bda3..b36568c7461b 100644
+index a2f8d35f3af6..df1e1eb2c882 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
-@@ -74,10 +74,8 @@
- 		"run fdt_fixup && bootz ${kernel_addr_r} - ${fdt_addr_r}\0"
+@@ -85,8 +85,6 @@
  #endif /* CONFIG_TDX_EASY_INSTALLER */
  
+ #if defined(CONFIG_TARGET_COLIBRI_IMX6ULL_NAND)
 -/* Run Distro Boot script if ubiboot fails */
 -#define CONFIG_BOOTCOMMAND "run ubiboot || run distro_bootcmd;"
--
+ #define DFU_ALT_NAND_INFO "imx6ull-bcb part 0,1;u-boot1 part 0,2;u-boot2 part 0,3;u-boot-env part 0,4;ubi partubi 0,5"
+ #define MODULE_EXTRA_ENV_SETTINGS \
+ 	"dfu_alt_info=" DFU_ALT_NAND_INFO "\0" \
+@@ -98,6 +96,7 @@
+ 
+ #if defined(CONFIG_TARGET_COLIBRI_IMX6ULL_NAND)
  #define BOOT_TARGET_DEVICES(func) \
 +	func(UBIFS, ubifs, 0) \
  	func(MMC, mmc, 0) \
