@@ -20,7 +20,7 @@ IMX_DEFAULT_BSP_upstream = "mainline"
 SDK_NAME_PREFIX = "${DISTRO}"
 SDK_VERSION = "${DISTRO_VERSION}"
 
-# Torizon machine specific overrides
+# TorizonCore machine specific overrides
 INHERIT += "torizon toradex-sanity"
 
 # This also disables the static packageconfig. runc needs to be dynamically

@@ -1,4 +1,4 @@
-# Torizon configuration
+# TorizonCore configuration
 
 # Additional boot arguments are prepended by the U-Boot distro boot
 # boot flow in boot.cmd.

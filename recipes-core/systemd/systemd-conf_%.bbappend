@@ -11,7 +11,7 @@ do_install_append() {
 	# by default
 	rm -rf ${D}${systemd_unitdir}/network
 
-        # Install systemd configuration snippet for Torizon
+        # Install systemd configuration snippet for TorizonCore
 	install -D -m0644 ${WORKDIR}/system.conf-torizon ${D}${systemd_unitdir}/system.conf.d/10-${BPN}.conf
 
         sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${systemd_unitdir}/system.conf.d/10-${BPN}.conf 
