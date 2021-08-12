@@ -12,11 +12,13 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2ee41112a44fe7014dce33e26468ba93"
 SECTION = "net"
 
 SRC_URI = "\
-           http://fluentbit.io/releases/1.7/fluent-bit-${PV}.tar.gz \
+           http://fluentbit.io/releases/1.8/fluent-bit-${PV}.tar.gz \
+           file://0001-mbedtls-fix-issue-building-with-a-newer-GCC.patch \
+           file://0002-onigmo-fix-cross-compiling-issue.patch \
            file://fluent-bit.service \
            "
-SRC_URI[md5sum] = "f0e66d99e03d3a438a172aac61a55511"
-SRC_URI[sha256sum] = "1f80b21f98b51306caa7aa13db47803f0465ec8e09061f4a938586d0185025b8"
+SRC_URI[md5sum] = "182e9dbea7d0ab4fde32dde2bddd2205"
+SRC_URI[sha256sum] = "5b91481c46828799f5f079e3b013c2359811870db5c1570da3c4aa5e5c09aa74"
 
 DEPENDS = "zlib openssl bison-native flex-native"
 
@@ -30,7 +32,7 @@ OECMAKE_GENERATOR ?= "Unix Makefiles"
 EXTRA_OECMAKE += "-DFLB_DEBUG=Off "
 
 # Host related setup
-EXTRA_OECMAKE += "-DGNU_HOST=${HOST_SYS} "
+EXTRA_OECMAKE += "-DGNU_HOST=${HOST_SYS} -DHOST=${HOST_ARCH} "
 
 # Disable LuaJIT and filter_lua support
 EXTRA_OECMAKE += "-DFLB_LUAJIT=Off -DFLB_FILTER_LUA=Off "
