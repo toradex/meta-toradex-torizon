@@ -1,0 +1,13 @@
+[Unit]
+Description=Load mwifiex kernel modules
+After=network-online.target
+Wants=network-online.target
+ConditionCapability=CAP_SYS_MODULE
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/sbin/mwifiex-delay.sh
+
+[Install]
+WantedBy=multi-user.target

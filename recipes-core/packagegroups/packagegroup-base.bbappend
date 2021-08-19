@@ -6,3 +6,19 @@ RDEPENDS_packagegroup-base-wifi_append = " \
     hostapd \
     mwifiexap \
 "
+
+RDEPENDS_packagegroup-base-wifi_append_apalis-imx8 = " \
+    mwifiex-delay \
+"
+
+RDEPENDS_packagegroup-base-wifi_append_apalis-imx8x = " \
+    mwifiex-delay \
+"
+
+RDEPENDS_packagegroup-base-wifi_append_colibri-imx8x = " \
+    mwifiex-delay \
+"
+
+RDEPENDS_packagegroup-base-wifi_append_verdin-imx8mm = " \
+    mwifiex-delay \
+"
