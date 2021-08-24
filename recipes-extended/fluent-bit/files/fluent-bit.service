@@ -2,6 +2,7 @@
 Description=Fluent Bit
 Requires=network.target
 After=network.target
+ConditionPathExists=/etc/fluent-bit/enabled
 
 [Service]
 Type=simple

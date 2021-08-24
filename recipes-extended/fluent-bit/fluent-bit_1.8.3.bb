@@ -16,6 +16,7 @@ SRC_URI = "\
            file://0001-mbedtls-fix-issue-building-with-a-newer-GCC.patch \
            file://0002-onigmo-fix-cross-compiling-issue.patch \
            file://fluent-bit.service \
+           file://fluent-bit.conf \
            "
 SRC_URI[md5sum] = "182e9dbea7d0ab4fde32dde2bddd2205"
 SRC_URI[sha256sum] = "5b91481c46828799f5f079e3b013c2359811870db5c1570da3c4aa5e5c09aa74"
@@ -50,7 +51,6 @@ EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On "
 inherit cmake systemd
 
 SYSTEMD_SERVICE_${PN} = "fluent-bit.service"
-SYSTEMD_AUTO_ENABLE = "disable"
 
 do_install_append() {
     # fluent-bit unconditionally install init scripts, let's remove them to install our own
@@ -58,4 +58,6 @@ do_install_append() {
 
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${WORKDIR}/fluent-bit.service ${D}${systemd_unitdir}/system/fluent-bit.service
+    install -d ${D}${sysconfdir}/fluent-bit/
+    install -m 0755 ${WORKDIR}/fluent-bit.conf ${D}${sysconfdir}/fluent-bit/fluent-bit.conf
 }
