@@ -28,6 +28,7 @@ fi
 
 if [ ! -e /tmp/recovery-attempt.txt ]; then
    echo "1" > /tmp/recovery-attempt.txt
+   rm -f /tmp/validated-images.txt
 fi
 
 RECOVERY_ATTEMPT=$(cat /tmp/recovery-attempt.txt)
@@ -41,35 +42,40 @@ if [ "$RECOVERY_ATTEMPT" -le 10 ]; then
    for IMAGE in $IMAGE_SHA
       do
          echo "Checking the integrity of the Docker images..."
-         docker save "$IMAGE" > /dev/null
-         if [ $? != 0 ]; then
-            echo "Image $IMAGE seems to be corrupted."
-            DIGEST=$(echo $IMAGE | sed 's/^[^@]*@//g')
-            IMAGE_ID=$(echo $(docker images --format "{{.ID}}: {{.Digest}}" | grep $DIGEST | sed 's/:.*//'))
-            docker rmi -f $IMAGE_ID
-            if [ $? = 1 ]; then
-               docker rmi -f $IMAGE
-            fi
-            echo "Image $IMAGE was removed and will be re-pulled again."
-
-            PULL_ATTEMPT=0
-            PULL_LIMIT=3
-            while [ $PULL_ATTEMPT -lt $PULL_LIMIT ]
-            do
-               docker pull "$IMAGE"
-               if [ $? = 0 ]; then
-                  echo "Corrupted image $IMAGE has been re-pulled successfully."
-                  break
-               fi
-               PULL_ATTEMPT=$(expr $PULL_ATTEMPT + 1)
-               if [ $PULL_ATTEMPT = $PULL_LIMIT ]; then
-                  echo "Error pulling image $IMAGE. Please check your internet connection."
-                  break
-               fi
-               echo "Error pulling image $IMAGE. Attempt $PULL_ATTEMPT of $PULL_LIMIT."
-            done
-         else
+         if grep -qs $IMAGE "/tmp/validated-images.txt"; then
             echo "Docker image $IMAGE is OK."
+         else
+            docker save "$IMAGE" > /dev/null
+            if [ $? != 0 ]; then
+               echo "Image $IMAGE seems to be corrupted or it could not be pulled."
+               DIGEST=$(echo $IMAGE | sed 's/^[^@]*@//g')
+               IMAGE_ID=$(echo $(docker images --format "{{.ID}}: {{.Digest}}" | grep $DIGEST | sed 's/:.*//'))
+               docker rmi -f $IMAGE_ID
+               if [ $? = 1 ]; then
+                  docker rmi -f $IMAGE
+               fi
+               echo "Image $IMAGE was removed and will be re-pulled again."
+
+               PULL_ATTEMPT=0
+               PULL_LIMIT=3
+               while [ $PULL_ATTEMPT -lt $PULL_LIMIT ]
+               do
+                  docker pull "$IMAGE"
+                  if [ $? = 0 ]; then
+                     echo "Corrupted image $IMAGE has been re-pulled successfully."
+                     break
+                  fi
+                  PULL_ATTEMPT=$(expr $PULL_ATTEMPT + 1)
+                  if [ $PULL_ATTEMPT = $PULL_LIMIT ]; then
+                     echo "Error pulling image $IMAGE. Please check your internet connection."
+                     break
+                  fi
+                  echo "Error pulling image $IMAGE. Attempt $PULL_ATTEMPT of $PULL_LIMIT."
+               done
+            else
+               echo "Docker image $IMAGE is OK."
+               echo "$IMAGE" >>/tmp/validated-images.txt
+            fi
          fi
       done
    echo " Restarting docker-compose.service."
@@ -106,7 +112,7 @@ elif [ "$RECOVERY_ATTEMPT" -eq 14 ]; then
    echo "Restarting docker-compose.service."
    systemctl restart docker-compose
 elif [ "$RECOVERY_ATTEMPT" -gt 14 ]; then
-   echo "Docker seems to be broken beyond repair."
+   echo "Docker seems to be broken beyond repair. To manually recover your system, stop the Docker engine (systemctl stop docker), delete the entire /var/lib/docker directory and restart Docker engine (systemctl start docker). WARNING: That can result in losing important data."
    exit 0
 fi
 
