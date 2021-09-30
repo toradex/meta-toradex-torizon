@@ -17,7 +17,7 @@ PROVIDES = "virtual/psplash"
 RPROVIDES_${PN} = "virtual-psplash virtual-psplash-support"
 
 SRC_URI = " \
-    git://gitlab.freedesktop.org/plymouth/plymouth.git;protocol=https;branch=master \
+    git://gitlab.freedesktop.org/plymouth/plymouth.git;protocol=https;branch=main \
     file://0001-Make-full-path-to-systemd-tty-ask-password-agent-con.patch \
 "
 
