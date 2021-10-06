@@ -1,33 +1,22 @@
-From 00c72b477b2225a27549d4b7387ffadf6d37af96 Mon Sep 17 00:00:00 2001
+From 4e823b784f0e8f4379c65f29560480c6651813fa Mon Sep 17 00:00:00 2001
 From: Sergio Prado <sergio.prado@toradex.com>
-Date: Tue, 3 Aug 2021 08:52:02 -0300
+Date: Wed, 6 Oct 2021 11:44:11 +0000
 Subject: [PATCH] colibri-imx6ull/colibri_imx7: add ubifs distro boot support
-
-Also drop the explicit definition of CONFIG_BOOTCOMMAND.
 
 Upstream-Status: Inappropriate [Torizoncore specific]
 
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 ---
- include/configs/colibri-imx6ull.h | 3 +--
- include/configs/colibri_imx7.h    | 3 +--
- 2 files changed, 2 insertions(+), 4 deletions(-)
+ include/configs/colibri-imx6ull.h | 1 +
+ include/configs/colibri_imx7.h    | 1 +
+ 2 files changed, 2 insertions(+)
 
 diff --git a/include/configs/colibri-imx6ull.h b/include/configs/colibri-imx6ull.h
-index a2f8d35f3af6..df1e1eb2c882 100644
+index 944c44930e92..ade98e4fdbc7 100644
 --- a/include/configs/colibri-imx6ull.h
 +++ b/include/configs/colibri-imx6ull.h
-@@ -85,8 +85,6 @@
- #endif /* CONFIG_TDX_EASY_INSTALLER */
- 
- #if defined(CONFIG_TARGET_COLIBRI_IMX6ULL_NAND)
--/* Run Distro Boot script if ubiboot fails */
--#define CONFIG_BOOTCOMMAND "run ubiboot || run distro_bootcmd;"
- #define DFU_ALT_NAND_INFO "imx6ull-bcb part 0,1;u-boot1 part 0,2;u-boot2 part 0,3;u-boot-env part 0,4;ubi partubi 0,5"
- #define MODULE_EXTRA_ENV_SETTINGS \
- 	"dfu_alt_info=" DFU_ALT_NAND_INFO "\0" \
-@@ -98,6 +96,7 @@
+@@ -96,6 +96,7 @@
  
  #if defined(CONFIG_TARGET_COLIBRI_IMX6ULL_NAND)
  #define BOOT_TARGET_DEVICES(func) \
@@ -36,19 +25,10 @@ index a2f8d35f3af6..df1e1eb2c882 100644
  	func(USB, usb, 0) \
  	func(DHCP, dhcp, na)
 diff --git a/include/configs/colibri_imx7.h b/include/configs/colibri_imx7.h
-index 3f3d0078c797..3922fb2c12e7 100644
+index 9532da0429c5..91708d447b82 100644
 --- a/include/configs/colibri_imx7.h
 +++ b/include/configs/colibri_imx7.h
-@@ -122,8 +122,6 @@
- #endif /* CONFIG_TDX_EASY_INSTALLER */
- 
- #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
--#define CONFIG_BOOTCOMMAND "run ubiboot ; echo ; echo ubiboot failed ; " \
--	"run distro_bootcmd;"
- #define MODULE_EXTRA_ENV_SETTINGS \
- 	"mtdparts=" CONFIG_MTDPARTS_DEFAULT "\0" \
- 	UBI_BOOTCMD
-@@ -135,6 +133,7 @@
+@@ -133,6 +133,7 @@
  
  #if defined(CONFIG_TARGET_COLIBRI_IMX7_NAND)
  #define BOOT_TARGET_DEVICES(func) \
