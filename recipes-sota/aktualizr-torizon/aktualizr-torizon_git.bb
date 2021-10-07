@@ -9,7 +9,7 @@ SRC_URI = " \
   file://aktualizr-torizon.service \
 "
 
-SRCREV = "07110d4f1dc59742a70fc5ca07c4646061f112b6"
+SRCREV = "6fc191b1c1e5faeea6534d744bafe8b98b9c0fb8"
 SRCREV_use-head-next = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
@@ -62,6 +62,7 @@ FILES_${PN} += " \
 FILES_${PN}-dev = " \
   ${libdir}/libsota_tools.so \
   ${includedir}/libaktualizr \
+  ${libdir}/pkgconfig \
 "
 
 FILES_${PN}-misc = " \
