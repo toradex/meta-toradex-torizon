@@ -11,9 +11,6 @@ select_mwifiex_module () {
 		apalis-imx8)
 			MODULE=mwifiex_pcie
 			;;
-		apalis-imx8x)
-			MODULE=mwifiex_usb
-			;;
 		colibri-imx8x)
 			MODULE=mwifiex_pcie
 			;;
