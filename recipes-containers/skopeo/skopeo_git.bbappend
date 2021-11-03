@@ -1,7 +1,6 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
-SRC_URI = " \
-    git://github.com/containers/skopeo;branch=main \
+SRC_URI += " \
     file://storage.conf \
     file://registries.conf \
 "
