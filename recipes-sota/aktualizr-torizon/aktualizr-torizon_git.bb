@@ -4,12 +4,10 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=815ca599c9df247a0c7f619bab123dad"
 
 SRC_URI = " \
   gitsm://github.com/toradex/aktualizr-torizon.git;protocol=https \
-  file://0001-add-libaktualizr-update-control-allow-block-mechanism.patch \
-  file://0002-fix-libaktualizr-install-path.patch \
   file://aktualizr-torizon.service \
 "
 
-SRCREV = "6fc191b1c1e5faeea6534d744bafe8b98b9c0fb8"
+SRCREV = "10fc9918879c54a05dc06275512efddb44b99b19"
 SRCREV_use-head-next = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
