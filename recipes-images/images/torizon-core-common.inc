@@ -42,6 +42,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     wireguard-tools \
     fluent-bit \
     neofetch \
+    libpwquality \
 "
 
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
