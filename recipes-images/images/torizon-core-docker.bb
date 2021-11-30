@@ -9,6 +9,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     docker-compose-up \
     docker-integrity-checker \
     docker-watchdog \
+    docker-auto-prune \
 "
 
 IMAGE_VARIANT = "Docker"
