@@ -111,7 +111,7 @@ fi
 # Blacklist unsupported machines of TorizonCore
 MACHLAYERS=$(find layers/ -print | grep "conf/machine/.*\.conf" |
             grep -E '(apalis.*\.conf|colibri.*\.conf|verdin.*\.conf|qemuarm64\.conf|genericx86-64\.conf)' |
-            grep -E -v '(imx7-nand|colibri-vf)' |
+            grep -E -v '(imx7-nand|colibri-vf|tk1|colibri-imx7|colibri-imx6ull)\.conf' |
             sed -e 's/\.conf//g' -e 's/layers\///' |
             awk -F'/conf/machine/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
 

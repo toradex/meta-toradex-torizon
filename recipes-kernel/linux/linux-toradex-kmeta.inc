@@ -4,8 +4,6 @@ SRCREV_meta_use-head-next = "${AUTOREV}"
 KMETABRANCH = "toradex_5.4.y"
 KMETA = "kernel-meta"
 
-KMACHINE_colibri-imx7-emmc = "colibri-imx7"
-
 KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
 KMETAPROTOCOL="https"
 

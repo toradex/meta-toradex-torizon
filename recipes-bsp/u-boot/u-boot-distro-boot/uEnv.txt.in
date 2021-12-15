@@ -2,13 +2,7 @@ kernel_image_type=@@KERNEL_IMAGETYPE@@
 overlays_file="overlays.txt"
 otaroot=1
 
-set_bootargs=if test ${devtype} != ubi; then \
-                 # Load commands for regular block devices \
-                 env set bootcmd_args env set bootargs ${defargs} root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${tdxargs}; \
-             else \
-                 # Load commands for raw NAND devices \
-                 env set bootcmd_args env set bootargs ${defargs} ubi.mtd=ubi root=/dev/ubi0_0 rootfstype=ubifs ubi.fm_autoconvert=1 ${bootargs} ${tdxargs}; \
-             fi || true
+set_bootargs=env set bootcmd_args env set bootargs ${defargs} root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${tdxargs}
 
 set_kernel_load_addr=if test ${kernel_image_type} = "Image.gz"; then \
     env set kernel_addr_load ${loadaddr}; \
@@ -75,18 +69,7 @@ board_fixups=if test "${board}" = "verdin-imx8mm"; then \
                  fi; \
              fi || true
 
-nand_fixups=if test ${devtype} = ubi; then \
-    setexpr kernel_image sub "/boot" "" ${kernel_image}; \
-    setexpr ramdisk_image sub "/boot" "" ${ramdisk_image}; \
-    setexpr fdtdir sub "/boot" "" ${fdtdir}; \
-    if test -n "${kernel_image2}"; then \
-        setexpr kernel_image2 sub "/boot" "" ${kernel_image2}; \
-        setexpr ramdisk_image2 sub "/boot" "" ${ramdisk_image2}; \
-        setexpr fdtdir2 sub "/boot" "" ${fdtdir2}; \
-    fi || true; \
-fi || true
-
 bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
-bootcmd_run=run board_fixups && run nand_fixups && run check_rollback_needed && run set_bootargs && run set_fdt_path && \
+bootcmd_run=run board_fixups && run check_rollback_needed && run set_bootargs && run set_fdt_path && \
             run bootcmd_dtb && run bootcmd_args && run set_bootargs_custom && run set_kernel_load_addr && \
             run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot

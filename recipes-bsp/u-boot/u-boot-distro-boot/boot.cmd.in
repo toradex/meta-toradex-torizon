@@ -22,16 +22,11 @@ fi
 # save default U-Boot devicetree file to use in a rollback situation
 env set fdtfile2 "${fdtfile}"
 
-if test ${devtype} != ubi
+if test -n "${loadaddr}"
 then
-    if test -n "${loadaddr}"
-    then
-        ext4load ${devtype} ${devnum}:1 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
-    else
-        ext4load ${devtype} ${devnum}:1 ${scriptaddr} /boot/loader/uEnv.txt; env import -t ${scriptaddr} ${filesize}
-    fi
+    ext4load ${devtype} ${devnum}:1 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
 else
-    ubifsmount ${devtype}${devnum}:rootfs && load ${devtype} ${devnum}:0 ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
+    ext4load ${devtype} ${devnum}:1 ${scriptaddr} /boot/loader/uEnv.txt; env import -t ${scriptaddr} ${filesize}
 fi
 
 run bootcmd_run

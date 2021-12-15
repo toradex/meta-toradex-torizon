@@ -72,8 +72,8 @@ BBMASK += " \
 
 # machines where TorizonCore is experimental
 EXPERIMENTALOVERRIDES = ""
-EXPERIMENTALOVERRIDES_colibri-imx6ull = ":experimental"
-EXPERIMENTALOVERRIDES_colibri-imx7 = ":experimental"
+# Currently TorizonCore does not support any experimental machines, in future such machines can be added like below:
+#EXPERIMENTALOVERRIDES_colibri-imx6ull = ":experimental"
 DISTROOVERRIDES .= "${EXPERIMENTALOVERRIDES}"
 
 # meta-lmp provides newer versions of wireguard recipes, but

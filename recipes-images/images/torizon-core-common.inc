@@ -5,9 +5,6 @@ DESCRIPTION_append_experimental = " This release is not a officially supported \
 build of TorizonCore, and is labeled experimental because of limited hardware \
 constraints such as storage or memory, or include software we are still evaluating."
 
-DESCRIPTION_append_colibri-imx7-emmc = " This release is only for the IMX7D 1GB. \
-All other IMX7 variants should be using the experimental build."
-
 inherit core-image
 
 do_rootfs[cleandirs] += "${IMAGE_ROOTFS}"

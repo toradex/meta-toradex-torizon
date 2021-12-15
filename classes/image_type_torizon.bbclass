@@ -7,52 +7,6 @@ TEZI_USE_BOOTFILES = "false"
 
 TEZI_CONFIG_FORMAT = "3"
 
-def rootfs_tezi_rawnand(d):
-    from collections import OrderedDict
-    imagename = d.getVar('IMAGE_LINK_NAME')
-
-    uboot1 = OrderedDict({
-               "name": "u-boot1",
-               "content": {
-                 "rawfile": {
-                   "filename": d.getVar('UBOOT_BINARY_TEZI_RAWNAND'),
-                   "size": 1
-                 }
-               },
-             })
-
-    uboot2 = OrderedDict({
-               "name": "u-boot2",
-               "content": {
-                 "rawfile": {
-                   "filename": d.getVar('UBOOT_BINARY_TEZI_RAWNAND'),
-                   "size": 1
-                 }
-               }
-             })
-
-    env = OrderedDict({
-        "name": "u-boot-env",
-        "erase": True,
-        "content": {}
-    })
-
-    ubi = OrderedDict({
-            "name": "ubi",
-            "ubivolumes": [
-              {
-                "name": "rootfs",
-                "content": {
-                  "filesystem_type": "ubifs",
-                  "filename": imagename + "." + d.getVar('TEZI_ROOT_SUFFIX'),
-                  "uncompressed_size": get_uncompressed_size(d, d.getVar('TEZI_ROOT_NAME'))
-                }
-              }
-            ]
-          })
-
-    return [uboot1, uboot2, env, ubi]
-
 python adjust_tezi_artifacts() {
     artifacts = d.getVar('TEZI_ARTIFACTS').replace(d.getVar('KERNEL_IMAGETYPE'), '').replace(d.getVar('KERNEL_DEVICETREE'), '')
     d.setVar('TEZI_ARTIFACTS', artifacts)
