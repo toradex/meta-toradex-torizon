@@ -266,7 +266,7 @@ _EOF
 # without prompting the user.
 # FIXME: there is a potential issue if the same $MACHINE is set in
 # more than one layer.. but we should assert that earlier
-EULA=$(find ../layers -path "*/conf/eula/$MACHINE" -print | grep -v scripts |
+EULA=$(find ${OEROOT}/layers -path "*/conf/eula/$MACHINE" -print | grep -v scripts |
        grep -v openembedded-core || true)
 
 if [ -n "$EULA" ]; then
