@@ -13,7 +13,9 @@ inherit useradd
 USERADD_PACKAGES = "${PN}"
 
 GROUPADD_PARAM:${PN} = "torizon"
-USERADD_PARAM:${PN} = "-G adm,sudo,users,plugdev,audio,video,gpio,i2cdev,spidev,dialout,input,pwm -m -d /home/torizon -P torizon torizon"
+
+# default password is 'torizon', generated with the following command: 'openssl passwd torizon'
+USERADD_PARAM:${PN} = "-G adm,sudo,users,plugdev,audio,video,gpio,i2cdev,spidev,dialout,input,pwm -m -d /home/torizon -p GudJRR5U.mLp2 torizon"
 
 pkg_postinst_ontarget:${PN} () {
     if [ ! -e /etc/.passwd_changed ]; then
