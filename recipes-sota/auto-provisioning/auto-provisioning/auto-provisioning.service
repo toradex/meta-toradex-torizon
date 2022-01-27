@@ -1,0 +1,17 @@
+[Unit]
+Description=Automatically provision the device to the Platform Services
+After=network-online.target
+Wants=network-online.target
+ConditionPathExists=/var/sota/auto-provisioning.json
+ConditionPathExists=!/var/sota/import/gateway.url
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/sota
+ExecStart=/usr/sbin/auto-provisioning.sh
+RemainAfterExit=yes
+Restart=on-failure
+RestartSec=1800
+
+[Install]
+WantedBy=multi-user.target

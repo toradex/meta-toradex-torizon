@@ -42,6 +42,11 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     libpwquality \
 "
 
+# SOTA related packages
+CORE_IMAGE_BASE_INSTALL_append_sota = " \
+    auto-provisioning \
+"
+
 CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
     kernel-module-imx-gpu-viv \
 "
