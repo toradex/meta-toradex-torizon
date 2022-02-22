@@ -1,5 +1,5 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI += " \
-    file://render.patch \
+    file://0001-Add-TorizonCore-specific-groups.patch \
 "
