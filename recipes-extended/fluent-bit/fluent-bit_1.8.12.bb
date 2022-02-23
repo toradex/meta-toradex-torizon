@@ -17,8 +17,8 @@ SRC_URI = "\
            file://fluent-bit.service \
            file://fluent-bit.conf \
            "
-SRC_URI[md5sum] = "796569eb720431e449a6fde60e23f000"
-SRC_URI[sha256sum] = "a48bc7890c923260ce03cb9d79e5076b0c456e94fff446c181ea83192284fc58"
+SRC_URI[md5sum] = "5fb0f375c8a89bf1d876e74a822cdf9a"
+SRC_URI[sha256sum] = "97bc8f2bc2f9d443c08e57ddf7863cac5549571e7c96c32c482a075bbd219d86"
 
 DEPENDS = "zlib openssl bison-native flex-native"
 
