@@ -5,7 +5,7 @@ containers."
 LICENSE = "GPLv3+"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
-SRCREV = "0d53568a131af3f31e3609fe2ff61d0b5970a25a"
+SRCREV = "d01bdd73b6bd1ffccaa163ef3e2660e1838305cb"
 SRC_URI = "git://github.com/containers/fuse-overlayfs.git;nobranch=1"
 
 DEPENDS = "fuse3"
