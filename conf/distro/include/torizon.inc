@@ -70,6 +70,13 @@ BBMASK += " \
     /meta-freescale/recipes-graphics/cairo \
 "
 
+# containerd recipe from meta-lmp builds a new version that might only work
+# with Docker built from the Moby project, so for now, let's force the usage
+# of containerd from meta-virtualization
+BBMASK += " \
+    /meta-lmp/meta-lmp-base/recipes-containers/containerd \
+"
+
 # machines where TorizonCore is experimental
 EXPERIMENTALOVERRIDES = ""
 # Currently TorizonCore does not support any experimental machines, in future such machines can be added like below:
