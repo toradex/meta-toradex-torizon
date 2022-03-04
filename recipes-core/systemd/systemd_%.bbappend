@@ -40,3 +40,9 @@ pkg_postinst_${PN}_append () {
 		systemctl $OPTS mask systemd-networkd-wait-online.service
 	fi
 }
+
+do_install_append() {
+	# meta-lmp is moving 00-create-volatile.conf to /usr/lib, but we need this file to
+	# be writable for users to enable persistent logging, so let's move it back to /etc
+	mv ${D}${nonarch_libdir}/tmpfiles.d/00-create-volatile.conf ${D}${sysconfdir}/tmpfiles.d/00-create-volatile.conf
+}
