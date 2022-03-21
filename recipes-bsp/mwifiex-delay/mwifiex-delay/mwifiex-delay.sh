@@ -1,8 +1,7 @@
 #!/bin/sh
 
 check_target () {
-	TARGET=${HOSTNAME%-*}
-	echo ${TARGET}
+	echo ${MACHINE}
 }
 
 select_mwifiex_module () {
