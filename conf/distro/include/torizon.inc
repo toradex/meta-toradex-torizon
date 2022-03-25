@@ -77,6 +77,11 @@ BBMASK += " \
     /meta-lmp/meta-lmp-base/recipes-containers/containerd \
 "
 
+# we don't want meta-lmp variables in /etc/os-release
+BBMASK += " \
+    /meta-lmp/meta-lmp-base/recipes-core/os-release \
+"
+
 # machines where TorizonCore is experimental
 EXPERIMENTALOVERRIDES = ""
 # Currently TorizonCore does not support any experimental machines, in future such machines can be added like below:
