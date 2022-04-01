@@ -1,0 +1,58 @@
+From 12d25d76ee997cd257211c8f1c58b38974109b16 Mon Sep 17 00:00:00 2001
+From: Sergio Prado <sergio.prado@toradex.com>
+Date: Fri, 1 Apr 2022 15:17:54 +0000
+Subject: [PATCH] udiskslinuxfilesystem: fix mount flags
+
+Fix allow flags for ext2/3/4 (in a 'key'='value' mount option, the allow
+flags should have only the 'key').
+
+Also remove 'windows_names' mount option for NTFS so it doesn't depend
+on ntfs-3g.
+
+This patch can be dropped as soon as UDisks2 is bumped to 2.9.X, since
+it can be replaced by a configuration file.
+
+Upstream-Status: inappropriate [TorizonCore specific]
+
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
+---
+ src/udiskslinuxfilesystem.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/src/udiskslinuxfilesystem.c b/src/udiskslinuxfilesystem.c
+index eac8cab381a2..cb04f3cc474e 100644
+--- a/src/udiskslinuxfilesystem.c
++++ b/src/udiskslinuxfilesystem.c
+@@ -388,7 +388,7 @@ static const gchar *vfat_allow_gid_self[] = { "gid", NULL };
+ /* ---------------------- ntfs -------------------- */
+ /* this is assuming that ntfs-3g is used */
+ 
+-static const gchar *ntfs_defaults[] = { "uid=", "gid=", "windows_names", NULL };
++static const gchar *ntfs_defaults[] = { "uid=", "gid=", NULL };
+ static const gchar *ntfs_allow[] = { "umask", "dmask", "fmask", "locale", "norecover", "ignore_case", "windows_names", "compression", "nocompression", "big_writes", NULL };
+ static const gchar *ntfs_allow_uid_self[] = { "uid", NULL };
+ static const gchar *ntfs_allow_gid_self[] = { "gid", NULL };
+@@ -424,17 +424,17 @@ static const gchar *hfsplus_allow_gid_self[] = { "gid", NULL };
+ /* ---------------------- ext2 -------------------- */
+ 
+ static const gchar *ext2_defaults[] = { "errors=remount-ro", NULL };
+-static const gchar *ext2_allow[] = { "errors=remount-ro", NULL };
++static const gchar *ext2_allow[] = { "errors", NULL };
+ 
+ /* ---------------------- ext3 -------------------- */
+ 
+ static const gchar *ext3_defaults[] = { "errors=remount-ro", NULL };
+-static const gchar *ext3_allow[] = { "errors=remount-ro", NULL };
++static const gchar *ext3_allow[] = { "errors", NULL };
+ 
+ /* ---------------------- ext4 -------------------- */
+ 
+ static const gchar *ext4_defaults[] = { "errors=remount-ro", NULL };
+-static const gchar *ext4_allow[] = { "errors=remount-ro", NULL };
++static const gchar *ext4_allow[] = { "errors", NULL };
+ 
+ /* ------------------------------------------------ */
+ /* TODO: support context= */
+-- 
+2.25.1
+
