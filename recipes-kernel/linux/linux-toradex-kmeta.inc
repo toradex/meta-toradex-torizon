@@ -1,4 +1,4 @@
-SRCREV_meta = "9af15300c7f2160c17a6dbac9f043a5b51475f5d"
+SRCREV_meta = "d1af79b2a0742d0bd9efff58ce8678e5f4c9dc3f"
 SRCREV_meta_use-head-next = "${AUTOREV}"
 
 KMETABRANCH = "toradex_5.4.y"
