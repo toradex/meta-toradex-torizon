@@ -4,7 +4,7 @@ DESCRIPTION = "TorizonCore Linux with no containers pre-provisioned."
 require torizon-core-container.inc
 
 CORE_IMAGE_BASE_INSTALL_append = " \
-    docker-ce \
+    docker-moby \
     python3-docker-compose \
     docker-compose-up \
     docker-integrity-checker \

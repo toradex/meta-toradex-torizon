@@ -23,6 +23,9 @@ SDK_VERSION = "${DISTRO_VERSION}"
 # TorizonCore machine specific overrides
 INHERIT += "torizon toradex-sanity"
 
+# build Docker from the Moby project
+PREFERRED_PROVIDER_virtual/docker = "docker-moby"
+
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
 PACKAGECONFIG_remove_pn-${PREFERRED_PROVIDER_virtual/runc} = "static"
@@ -68,13 +71,6 @@ USERADD_ERROR_DYNAMIC = "skip"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-freescale/recipes-graphics/cairo \
-"
-
-# containerd recipe from meta-lmp builds a new version that might only work
-# with Docker built from the Moby project, so for now, let's force the usage
-# of containerd from meta-virtualization
-BBMASK += " \
-    /meta-lmp/meta-lmp-base/recipes-containers/containerd \
 "
 
 # we don't want meta-lmp variables in /etc/os-release
