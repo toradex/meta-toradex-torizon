@@ -76,8 +76,8 @@ def get_layer_revision_information(d):
         for path in paths:
             # Use relative path from ${OEROOT}/layers/ as layer name
             name = os.path.relpath(path, os.path.join(d.getVar('OEROOT'), "layers"))
-            rev, _ = bb.process.run('git rev-parse HEAD', cwd=path)
-            branch, _ = bb.process.run('git rev-parse --abbrev-ref HEAD', cwd=path)
+            rev, _ = bb.process.run('export PSEUDO_UNLOAD=1; git rev-parse HEAD', cwd=path)
+            branch, _ = bb.process.run('export PSEUDO_UNLOAD=1; git rev-parse --abbrev-ref HEAD', cwd=path)
             try:
                 subprocess.check_output("""cd %s; export PSEUDO_UNLOAD=1; set -e;
                                         git diff --quiet --no-ext-diff
