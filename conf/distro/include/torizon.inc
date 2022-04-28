@@ -73,22 +73,11 @@ BBMASK += " \
     /meta-freescale/recipes-graphics/cairo \
 "
 
-# we don't want meta-lmp variables in /etc/os-release
-BBMASK += " \
-    /meta-lmp/meta-lmp-base/recipes-core/os-release \
-"
-
 # machines where TorizonCore is experimental
 EXPERIMENTALOVERRIDES = ""
 # Currently TorizonCore does not support any experimental machines, in future such machines can be added like below:
 #EXPERIMENTALOVERRIDES_colibri-imx6ull = ":experimental"
 DISTROOVERRIDES .= "${EXPERIMENTALOVERRIDES}"
-
-# meta-lmp provides newer versions of wireguard recipes, but
-# those don't build with our current kernel version, so let's
-# use the versions provided by meta-networking
-PREFERRED_VERSION_wireguard-module = "1.0.20200401"
-PREFERRED_VERSION_wireguard-tools = "1.0.20200319"
 
 # Use our variant of the aktualizr client instead of the
 # default from meta-updater
