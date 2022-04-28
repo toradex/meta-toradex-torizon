@@ -1,5 +1,13 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
+ALTERNATIVE_PRIORITY[resolv-conf] = "300"
+
+SRC_URI_append = " \
+    file://0001-tmpfiles-tmp.conf-reduce-cleanup-age-to-half.patch \
+    file://0002-systemd-networkd-wait-online.service.in-use-any-by-d.patch \
+    file://systemd-timesyncd-update.service \
+"
+
 SRC_URI_append_genericx86-64 = " file://0001-rules-whitelist-hd-devices.patch"
 
 PACKAGECONFIG_append = " resolved networkd"
@@ -20,6 +28,9 @@ FILES_${PN}-udev-rules = " \
     ${rootlibexecdir}/udev/rules.d/73-seat-late.rules \
     ${rootlibexecdir}/udev/rules.d/99-systemd.rules \
 "
+
+# /var is expected to be rw, so drop volatile-binds service files
+RDEPENDS_${PN}_remove = "volatile-binds"
 
 DEF_FALLBACK_NTP_SERVERS="time.cloudflare.com time1.google.com time2.google.com time3.google.com time4.google.com"
 EXTRA_OEMESON += ' \
@@ -42,7 +53,15 @@ pkg_postinst_${PN}_append () {
 }
 
 do_install_append() {
-	# meta-lmp is moving 00-create-volatile.conf to /usr/lib, but we need this file to
-	# be writable for users to enable persistent logging, so let's move it back to /etc
-	mv ${D}${nonarch_libdir}/tmpfiles.d/00-create-volatile.conf ${D}${sysconfdir}/tmpfiles.d/00-create-volatile.conf
+    if [ ${@ oe.types.boolean('${VOLATILE_LOG_DIR}') } = True ]; then
+        sed -i '/^d \/var\/log /d' ${D}${nonarch_libdir}/tmpfiles.d/var.conf
+        echo 'L+ /var/log - - - - /var/volatile/log' >> ${D}${sysconfdir}/tmpfiles.d/00-create-volatile.conf
+    else
+        # Make sure /var/log is not a link to volatile (e.g. after system updates)
+        sed -i '/\[Service\]/aExecStartPre=-/bin/rm -f /var/log' ${D}${systemd_system_unitdir}/systemd-journal-flush.service
+    fi
+
+    # Workaround for https://github.com/systemd/systemd/issues/11329
+    install -m 0644 ${WORKDIR}/systemd-timesyncd-update.service ${D}${systemd_system_unitdir}
+    ln -sf ../systemd-timesyncd-update.service ${D}${systemd_system_unitdir}/sysinit.target.wants/systemd-timesyncd-update.service
 }
