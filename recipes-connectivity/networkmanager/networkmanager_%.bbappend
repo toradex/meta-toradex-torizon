@@ -1,6 +1,13 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
-SRC_URI += "file://toradex-nmconnection.conf file://network.nmconnection.in"
+SRC_URI += "\
+    file://0001-Add-client-build-support-for-editline-libedit.patch \
+    file://0002-85-nm-unmanaged.rules-do-not-manage-docker-bridges.patch \
+    file://toradex-nmconnection.conf file://network.nmconnection.in \
+"
+
+# Depend on libedit as it has a more friendly license than readline (GPLv3)
+DEPENDS += "libedit"
 
 PACKAGECONFIG_remove = "dnsmasq"
 
