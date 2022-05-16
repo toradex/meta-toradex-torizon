@@ -4,8 +4,7 @@ inherit bash-completion
 
 SRC_URI_append = " \
     file://0001-update-default-grub-cfg-header.patch \
-    file://0002-ostree-pull-set-request-timeout.patch \
-    file://0003-deploy-support-devicetree-directory.patch \
+    file://0002-deploy-support-devicetree-directory.patch \
     file://ostree-pending-reboot.service \
     file://ostree-pending-reboot.path \
 "

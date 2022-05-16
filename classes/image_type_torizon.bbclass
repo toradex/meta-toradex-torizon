@@ -14,17 +14,6 @@ python adjust_tezi_artifacts() {
 
 TEZI_IMAGE_TEZIIMG_PREFUNCS_append = " adjust_tezi_artifacts"
 
-python () {
-    prefuncs = d.getVarFlag("do_image_ostree", "prefuncs").replace("prepare_ostree_rootfs", "")
-    d.setVarFlag("do_image_ostree", "prefuncs", prefuncs)
-}
-
-IMAGE_CMD_ostree_prepend() {
-	# Copy required as we change permissions on some files.
-	tar --xattrs --xattrs-include='*' -cf - -S -C ${IMAGE_ROOTFS} -p . | tar --xattrs --xattrs-include='*' -xf - -C ${OSTREE_ROOTFS}
-}
-do_image_ostree[cleandirs] = "${OSTREE_ROOTFS}"
-
 IMAGE_CMD_ota_prepend() {
 	if [ "${OSTREE_BOOTLOADER}" = "u-boot" ]; then
 		cp -a ${DEPLOY_DIR_IMAGE}/boot.scr-${MACHINE} ${OTA_SYSROOT}/boot.scr
