@@ -12,13 +12,14 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2ee41112a44fe7014dce33e26468ba93"
 SECTION = "net"
 
 SRC_URI = "\
-           http://fluentbit.io/releases/1.8/fluent-bit-${PV}.tar.gz \
-           file://0001-onigmo-fix-cross-compiling-issue.patch \
+           git://github.com/fluent/fluent-bit.git;protocol=https;branch=master \
            file://fluent-bit.service \
            file://fluent-bit.conf \
            "
-SRC_URI[md5sum] = "5fb0f375c8a89bf1d876e74a822cdf9a"
-SRC_URI[sha256sum] = "97bc8f2bc2f9d443c08e57ddf7863cac5549571e7c96c32c482a075bbd219d86"
+SRCREV = "9eb4996b7d134227b568aefa5fa0f9ddd6a7b9ce"
+PV = "1.9.3+git${SRCPV}"
+
+S = "${WORKDIR}/git"
 
 DEPENDS = "zlib openssl bison-native flex-native"
 
