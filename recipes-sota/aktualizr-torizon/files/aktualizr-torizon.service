@@ -3,7 +3,8 @@ Description=Aktualizr SOTA Client
 After=network-online.target nss-lookup.target boot-complete.target
 Requires=boot-complete.target
 Wants=network-online.target
-ConditionPathExists=/var/sota/import/gateway.url
+ConditionPathExists=|/var/sota/import/gateway.url
+ConditionPathExists=|/var/sota/import/director/root.json
 
 [Service]
 RestartSec=10
