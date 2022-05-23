@@ -11,7 +11,7 @@ WorkingDirectory=/var/sota
 ExecStart=/usr/sbin/auto-provisioning.sh
 RemainAfterExit=yes
 Restart=on-failure
-RestartSec=1800
+RestartSec=300
 
 [Install]
 WantedBy=multi-user.target
