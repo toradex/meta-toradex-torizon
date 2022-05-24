@@ -33,11 +33,9 @@ DESCRIPTION = "Linux container runtime \
 #     to stop changing).
 #   - The common components of this recipe and docker-ce do need to be moved
 #     to a docker.inc recipe
-
-# commits based on v20.10.5
-SRCREV_moby = "363e9a88a11be517d9e8c65c998ff56f774eb4dc"
-SRCREV_libnetwork = "fa125a3512ee0f6187721c88582bf8c4378bd4d7"
-SRCREV_cli = "55c4c88966a912ddb365e2d73a4969e700fc458f"
+SRCREV_moby = "b0f5bc36fea9dfb9672e1e9b1278ebab797b9ee0"
+SRCREV_libnetwork = "339b972b464ee3d401b5788b2af9e31d09d6b7da"
+SRCREV_cli = "f0df35096d5f5e6b559b42c7fde6c65a2909f7c5"
 SRC_URI = "\
 	git://github.com/moby/moby.git;protocol=https;branch=20.10;name=moby \
 	git://github.com/moby/libnetwork.git;protocol=https;branch=master;name=libnetwork;destsuffix=git/libnetwork \
@@ -53,6 +51,9 @@ SRC_URI = "\
 	file://chrome.json \
 	"
 
+DOCKER_VERSION = "20.10.7"
+PV = "${DOCKER_VERSION}"
+
 require recipes-containers/docker/docker.inc
 require docker-torizon.inc
 
@@ -63,9 +64,6 @@ LIC_FILES_CHKSUM = "file://src/import/LICENSE;md5=4859e97a9c7780e77972d989f0823f
 GO_IMPORT = "import"
 
 S = "${WORKDIR}/git"
-
-DOCKER_VERSION = "20.10.5"
-PV = "${DOCKER_VERSION}"
 
 PACKAGES =+ "${PN}-contrib"
 

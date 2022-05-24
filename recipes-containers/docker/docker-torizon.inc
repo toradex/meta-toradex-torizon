@@ -1,8 +1,11 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
 
+inherit bash-completion
+
 SRC_URI_append = " \
     file://daemon.json.in \
     file://docker.service \
+    file://chrome.json \
 "
 
 DOCKER_MAX_CONCURRENT_DOWNLOADS ?= "3"
@@ -25,6 +28,15 @@ do_install_append() {
     if ${@bb.utils.contains('DISTRO_FEATURES','systemd','true','false',d)}; then
         install -m 644 ${WORKDIR}/docker.service ${D}/${systemd_unitdir}/system
     fi
+
+    if ${@bb.utils.contains('PACKAGECONFIG', 'seccomp', 'true', 'false', d)}; then
+        install -d ${D}${sysconfdir}/docker/seccomp
+        install -m 0644 ${WORKDIR}/chrome.json ${D}${sysconfdir}/docker/seccomp/chrome.json
+    fi
+
+    COMPLETION_DIR=${D}${datadir}/bash-completion/completions
+    install -d ${COMPLETION_DIR}
+    install -m 0644 ${S}/cli/contrib/completion/bash/docker ${COMPLETION_DIR}
 }
 
 # pigz takes advantage of both multiple CPUs and multiple CPU cores for higher
