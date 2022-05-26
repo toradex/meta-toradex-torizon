@@ -16,9 +16,9 @@ DEPENDS = " \
 
 PNBLACKLIST[podman] ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'security', '', 'Depends on libseccomp from meta-security which is not included', d)}"
 
-SRCREV = "a6493ae6904a5b7dde2395a374cb77fc45c8a3bc"
+SRCREV = "f8d2853259eae6ae82343c79df74dc926ba76b47"
 SRC_URI = " \
-    git://github.com/containers/libpod.git;branch=v3.4 \
+    git://github.com/containers/libpod.git;branch=v3.4;protocol=https \
 "
 
 LICENSE = "Apache-2.0"
@@ -28,7 +28,7 @@ GO_IMPORT = "import"
 
 S = "${WORKDIR}/git"
 
-PV = "3.4.1+git${SRCPV}"
+PV = "3.4.5+git${SRCPV}"
 
 PACKAGES =+ "${PN}-contrib"
 
