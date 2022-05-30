@@ -3,6 +3,7 @@ Description=Docker Compose service with docker compose
 Requires=docker.service
 After=docker.service
 ConditionPathExists=/var/sota/storage/docker-compose/docker-compose.yml
+ConditionPathExists=!/var/sota/storage/docker-compose/docker-compose.yml.tmp
 OnFailure=docker-integrity-checker.service
 
 [Service]
