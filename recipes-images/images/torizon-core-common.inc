@@ -40,6 +40,7 @@ CORE_IMAGE_BASE_INSTALL_append = " \
     fluent-bit \
     neofetch \
     libpwquality \
+    mmc-utils \
 "
 
 # SOTA related packages
