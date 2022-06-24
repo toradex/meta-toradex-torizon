@@ -14,7 +14,9 @@ PREFERRED_PROVIDER_u-boot-default-script_rpi = "u-boot-ostree-scr"
 PREFERRED_PROVIDER_u-boot-default-script_sota_rpi = "u-boot-ostree-scr-fit"
 
 PREFERRED_PROVIDER_virtual/dtb_rpi ?= "lmp-device-tree"
-IMAGE_FSTYPES_remove_rpi = "ext3 rpi-sdimg teziimg wic.bz2 wic.bmap"
+IMAGE_FSTYPES_remove_rpi = "ext3 rpi-sdimg teziimg"
+# We need ota-ext4 and wic for rpi
+IMAGE_FSTYPES_REMOVE = ""
 IMAGE_BOOT_FILES_rpi = "${BOOTFILES_DIR_NAME}/* u-boot.bin;${SDIMG_KERNELIMAGE} ${@make_dtb_boot_files(d)} boot.scr uEnv.txt"
 IMAGE_BOOT_FILES_sota_rpi = "${BOOTFILES_DIR_NAME}/* u-boot.bin;${SDIMG_KERNELIMAGE} ${@make_dtb_boot_files(d)} boot.itb"
 KERNEL_CLASSES_rpi = " toradex-fitimage "
