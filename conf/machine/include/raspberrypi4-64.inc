@@ -25,6 +25,16 @@ KERNEL_CLASSES_rpi = " toradex-fitimage "
 OSTREE_KERNEL_rpi = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 KERNEL_IMAGETYPE_rpi = "fitImage"
 
+## RPI: Use official raspberrypi downstream kernel
+PREFERRED_PROVIDER_virtual/kernel_rpi ?= "linux-lmp-dev"
+LINUX_VERSION_rpi ?= "4.19.y"
+KERNEL_REPO_rpi ?= "git://github.com/raspberrypi/linux.git"
+KERNEL_BRANCH_rpi ?= "rpi-4.19.y"
+KERNEL_COMMIT_rpi ?= "f6b3ac28f0a9137d4c24c0b8832e693bbd16f5b7"
+KERNEL_META_BRANCH_rpi ?= "linux-v4.19.y"
+KERNEL_META_COMMIT_rpi ?= "1e97ab775c4c499b995e7013ffc221d71844ba87"
+MACHINE_FEATURES_append_raspberrypi4 = " armstub"
+
 ## Mimic meta-raspberrypi behavior
 KERNEL_SERIAL_rpi ?= "${@oe.utils.conditional("ENABLE_UART", "1", "console=ttyS0,115200", "", d)}"
 KERNEL_SERIAL_raspberrypi-cm3 ?= "console=ttyAMA0,115200"
