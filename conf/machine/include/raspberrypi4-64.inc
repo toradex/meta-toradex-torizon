@@ -33,16 +33,11 @@ KERNEL_BRANCH_rpi ?= "rpi-4.19.y"
 KERNEL_COMMIT_rpi ?= "f6b3ac28f0a9137d4c24c0b8832e693bbd16f5b7"
 KERNEL_META_BRANCH_rpi ?= "linux-v4.19.y"
 KERNEL_META_COMMIT_rpi ?= "1e97ab775c4c499b995e7013ffc221d71844ba87"
-MACHINE_FEATURES_append_raspberrypi4 = " armstub"
 
 ## Mimic meta-raspberrypi behavior
 ENABLE_UART = "1"
 KERNEL_SERIAL_rpi ?= "${@oe.utils.conditional("ENABLE_UART", "1", "console=ttyS0,115200", "", d)}"
-KERNEL_SERIAL_raspberrypi-cm3 ?= "console=ttyAMA0,115200"
 OSTREE_KERNEL_ARGS_COMMON_RPI ?= "coherent_pool=1M 8250.nr_uarts=1 console=tty1 ${KERNEL_SERIAL} ${OSTREE_KERNEL_ARGS_COMMON}"
-OSTREE_KERNEL_ARGS_raspberrypi3 ?= "vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 ${OSTREE_KERNEL_ARGS_COMMON_RPI}"
-OSTREE_KERNEL_ARGS_raspberrypi-cm3 ?= "vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 ${OSTREE_KERNEL_ARGS_COMMON_RPI}"
-OSTREE_KERNEL_ARGS_raspberrypi4 ?= "video=HDMI-A-1:1280x720@60 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 ${OSTREE_KERNEL_ARGS_COMMON_RPI}"
 KERNEL_DEVICETREE_raspberrypi4-64_sota ?= " broadcom/bcm2711-rpi-4-b.dtb overlays/vc4-fkms-v3d.dtbo"
 SOTA_DT_OVERLAYS_raspberrypi4-64 ?= "vc4-fkms-v3d.dtbo"
 # This boot arguments are the same from torizon.bbclass
