@@ -1,6 +1,5 @@
 
 WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
-WKS_FILE_sota_rpi = "torizon-sota.wks"
 
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
