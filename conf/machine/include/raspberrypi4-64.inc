@@ -43,6 +43,8 @@ OSTREE_KERNEL_ARGS_COMMON_RPI ?= "coherent_pool=1M 8250.nr_uarts=1 console=tty1 
 OSTREE_KERNEL_ARGS_raspberrypi3 ?= "vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 ${OSTREE_KERNEL_ARGS_COMMON_RPI}"
 OSTREE_KERNEL_ARGS_raspberrypi-cm3 ?= "vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 ${OSTREE_KERNEL_ARGS_COMMON_RPI}"
 OSTREE_KERNEL_ARGS_raspberrypi4 ?= "video=HDMI-A-1:1280x720@60 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 ${OSTREE_KERNEL_ARGS_COMMON_RPI}"
+KERNEL_DEVICETREE_raspberrypi4-64_sota ?= " broadcom/bcm2711-rpi-4-b.dtb overlays/vc4-fkms-v3d.dtbo"
+SOTA_DT_OVERLAYS_raspberrypi4-64 ?= "vc4-fkms-v3d.dtbo"
 
 ## U-Boot entrypoints for rpi
 UBOOT_ENTRYPOINT_rpi = "0x00008000"
