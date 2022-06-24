@@ -2,9 +2,6 @@
 WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 WKS_FILE_sota_rpi = "torizon-sota.wks"
 
-# PREFERRED_PROVIDER_u-boot-default-script = ""
-# PREFERRED_PROVIDER_virtual/dtb = ""
-
 hostname_pn-base-files = "${MACHINE}"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 
@@ -38,3 +35,16 @@ UBOOT_ENTRYPOINT_rpi = "0x00008000"
 UBOOT_DTB_LOADADDRESS_rpi = "0x02600000"
 UBOOT_DTBO_LOADADDRESS_rpi = "0x026d0000"
 
+# Use meta-lmp but maintain compatibility
+BBMASK += " \
+    meta-lmp/meta-lmp-base/recipes-connectivity \
+    meta-lmp/meta-lmp-base/recipes-containers \
+    meta-lmp/meta-lmp-base/recipes-core \
+    meta-lmp/meta-lmp-base/recipes-devtools \
+    meta-lmp/meta-lmp-base/recipes-extended \
+    meta-lmp/meta-lmp-base/recipes-samples \
+    meta-lmp/meta-lmp-base/recipes-security \
+    meta-lmp/meta-lmp-base/recipes-sota \
+    meta-lmp/meta-lmp-base/recipes-support \
+    meta-toradex-torizon/recipes-bsp/u-boot \
+"
