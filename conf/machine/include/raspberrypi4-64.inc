@@ -2,6 +2,7 @@
 WKS_FILE_DEPENDS_remove = "tezi-metadata virtual/dtb"
 
 hostname_pn-base-files = "${MACHINE}"
+CORE_IMAGE_BASE_INSTALL_append = "resize-helper"
 CORE_IMAGE_BASE_INSTALL_remove = "set-hostname"
 
 # Raspberry Pi
