@@ -28,6 +28,7 @@ KERNEL_IMAGETYPE_rpi = "fitImage"
 
 ## RPI: Use official raspberrypi downstream kernel
 PREFERRED_PROVIDER_virtual/kernel_rpi ?= "linux-lmp-dev"
+LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
 LINUX_VERSION_rpi ?= "4.19.y"
 KERNEL_REPO_rpi ?= "git://github.com/raspberrypi/linux.git"
 KERNEL_BRANCH_rpi ?= "rpi-4.19.y"
