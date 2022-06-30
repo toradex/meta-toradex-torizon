@@ -23,8 +23,8 @@ SDK_VERSION = "${DISTRO_VERSION}"
 # TorizonCore machine specific overrides
 INHERIT += "torizon toradex-sanity"
 
-# build Docker from the Moby project
-PREFERRED_PROVIDER_virtual/docker = "docker-moby"
+# build Docker from the Docker-CE project
+PREFERRED_PROVIDER_virtual/docker = "docker-ce"
 
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
@@ -71,6 +71,13 @@ USERADD_ERROR_DYNAMIC = "skip"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-freescale/recipes-graphics/cairo \
+"
+
+# our containerd recipe builds a new version that might not work with
+# Docker-CE. So for now, let's force the usage of containerd from
+# meta-virtualization
+BBMASK += " \
+    /meta-toradex-torizon/recipes-containers/containerd \
 "
 
 # machines where TorizonCore is experimental
