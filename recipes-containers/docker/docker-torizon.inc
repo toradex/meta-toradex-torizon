@@ -6,6 +6,8 @@ SRC_URI_append = " \
     file://daemon.json.in \
     file://docker.service \
     file://chrome.json \
+    file://20-docker.conf \
+    file://docker.sh \
 "
 
 DOCKER_MAX_CONCURRENT_DOWNLOADS ?= "3"
@@ -41,6 +43,14 @@ do_install_append() {
         CLI_DIR="src/import/components/cli"
     fi
     install -m 0644 ${S}/${CLI_DIR}/contrib/completion/bash/docker ${COMPLETION_DIR}
+
+    # install systemd configuration snippet for Docker
+    install -d ${D}${systemd_unitdir}/system.conf.d/
+    install -m 0644 ${WORKDIR}/20-docker.conf ${D}${systemd_unitdir}/system.conf.d/
+
+    # install shell profile for Docker
+    install -d ${D}${sysconfdir}/profile.d
+    install -m 0755 ${WORKDIR}/docker.sh ${D}${sysconfdir}/profile.d/
 }
 
-FILES_${PN} += "${libdir}/docker"
+FILES_${PN} += "${libdir}/docker ${systemd_unitdir}/system.conf.d/*"

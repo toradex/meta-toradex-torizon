@@ -9,7 +9,6 @@ ConditionPathExists=|/var/sota/import/director/root.json
 [Service]
 RestartSec=10
 Restart=always
-Environment="DOCKER_CONFIG=/etc/docker"
 Environment="AKTUALIZR_DATAPROXY_PARAMETERS=--enable-data-proxy"
 ExecStart=/usr/bin/aktualizr-torizon $AKTUALIZR_CMDLINE_PARAMETERS $AKTUALIZR_DATAPROXY_PARAMETERS
 
