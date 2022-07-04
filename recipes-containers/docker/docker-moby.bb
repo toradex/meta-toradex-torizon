@@ -164,3 +164,7 @@ RDEPENDS_${PN}-contrib += "bash"
 CVE_PRODUCT = "docker"
 
 inherit bash-completion
+
+# pigz takes advantage of both multiple CPUs and multiple CPU cores for higher
+# compression and decompression speed, and also set at the official packages
+RDEPENDS_${PN} += "pigz"

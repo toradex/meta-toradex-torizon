@@ -36,10 +36,11 @@ do_install_append() {
 
     COMPLETION_DIR=${D}${datadir}/bash-completion/completions
     install -d ${COMPLETION_DIR}
-    install -m 0644 ${S}/cli/contrib/completion/bash/docker ${COMPLETION_DIR}
+    CLI_DIR="cli"
+    if [ ${BPN} = "docker-ce" ]; then
+        CLI_DIR="src/import/components/cli"
+    fi
+    install -m 0644 ${S}/${CLI_DIR}/contrib/completion/bash/docker ${COMPLETION_DIR}
 }
 
-# pigz takes advantage of both multiple CPUs and multiple CPU cores for higher
-# compression and decompression speed, and also set at the official packages
-RDEPENDS_${PN} += "pigz"
 FILES_${PN} += "${libdir}/docker"
