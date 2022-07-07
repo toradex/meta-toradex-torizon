@@ -179,20 +179,20 @@ get_bootpart() {
 # output: version or empty string if not available (no failure case)
 get_bl_cur_version() {
     local src="/proc/device-tree/chosen/u-boot,version"
-    local ver=$(CAT "$src" 2>&- | TR -d '\0')
+    local ver=$(CAT "$src" 2>/dev/null | TR -d '\0')
     echo "$ver"
     return 0
 }
 
 get_bl_new_version() {
     # Primary source of information: field 'bootloader.dtVersion'
-    local dt_version=$(echo "$SECONDARY_CUSTOM_METADATA" | JQ -r '.bootloader.dtVersion' 2>&-)
+    local dt_version=$(echo "$SECONDARY_CUSTOM_METADATA" | JQ -r '.bootloader.dtVersion' 2>/dev/null)
     if [ $? -eq 0 -a "$dt_version" != "null" ]; then
         echo "$dt_version"
         return 0
     fi
     # Secondary source of information: field 'version'
-    local pkg_version=$(echo "$SECONDARY_CUSTOM_METADATA" | JQ -r '.version' 2>&-)
+    local pkg_version=$(echo "$SECONDARY_CUSTOM_METADATA" | JQ -r '.version' 2>/dev/null)
     if [ $? -eq 0 -a "$pkg_version" != "null" ]; then
         echo "$pkg_version"
         return 0
@@ -204,7 +204,7 @@ get_bl_new_version() {
 get_dd_options() {
     # Primary source of information: field 'bootloader.ddOptions'
     local dd_deflt="$1"
-    local dd_opts0=$(echo "$SECONDARY_CUSTOM_METADATA" | JQ -r '.bootloader.ddOptions' 2>&-)
+    local dd_opts0=$(echo "$SECONDARY_CUSTOM_METADATA" | JQ -r '.bootloader.ddOptions' 2>/dev/null)
     if [ $? -eq 0 -a "$dd_opts0" != "null" ]; then
         if [ "${dd_opts0:0:1}" = "!" ]; then
             # If string starts with an exclamation mark use it as is (ignore defaults).
@@ -327,7 +327,7 @@ do_install() {
     #       writing speed does not seem to change much with the block size anyway.
     maybe_run DD $dd_options_wr \
               if="$SECONDARY_FIRMWARE_PATH" \
-              of="/dev/${other_bootpart}" 2>&-
+              of="/dev/${other_bootpart}" 2>/dev/null
     local dd_res1="$?"
 
     # 3.3: Lock destination partition.
@@ -343,7 +343,7 @@ do_install() {
                          $dd_options_rd \
                          if="/dev/${other_bootpart}" \
                          iflag=count_bytes \
-                         count="$fwsize" 2>&- | SHA256SUM)
+                         count="$fwsize" 2>/dev/null | SHA256SUM)
     local part_sha256=$(echo "${part_sha256_}" | SED -Ene 's/^\s*([0-9a-f]{64})\s*.*$/\1/p')
     local dd_res2="$?"
     [ "$dd_res2" -eq 0 ] || die "Could not verify data in boot partition"
@@ -385,7 +385,7 @@ do_install() {
     if [ "$DRY_RUN" = "2" ]; then
         log "Not rebooting in dry-run mode"
     else
-        maybe_run SHUTDOWN -r +1 2>&-
+        maybe_run SHUTDOWN -r +1 2>/dev/null
         local shdwn_res="$?"
         # Do not die here since almost all work has been done.
         [ "$shdwn_res" -eq 0 ] || log "Could not schedule reboot"
