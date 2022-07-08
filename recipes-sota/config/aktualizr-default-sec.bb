@@ -13,6 +13,7 @@ SRC_URI = " \
             "
 
 RDEPENDS_${PN} += "bash coreutils jq util-linux mmc-utils sed u-boot-fw-utils"
+RDEPENDS_${PN}_remove_genericx86-64 = "u-boot-fw-utils"
 
 do_install_append () {
     install -m 0700 -d ${D}${libdir}/sota/conf.d
