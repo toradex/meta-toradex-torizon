@@ -19,7 +19,43 @@ LOG_FILE="${LOG_DIR}/bootloader-update.log"
 shopt -s expand_aliases
 set -o pipefail
 
-_die() { kill -USR1 0; }
+# ---
+# Error handling support
+# ---
+
+# _die: Exit script even from subshells while not evaluating the "die" handler.
+# die:  Exit script even from subshells while evaluating "die" handler.
+# before_dying: Define expression to evaluate when before dying.
+
+_die_handler=''
+_exit_handler() {
+    local ec=$?
+    if [ "$ec" -eq 113 ]; then
+        exit "$ec"
+    elif [ "$ec" -ge 64 -a "$ec" -le 112 ]; then
+	if [ "$$" -eq "$BASHPID" -a -n "$_die_handler" ]; then
+	    # This is the top-level shell (run it and use its exit code).
+	    eval "$_die_handler"
+	    exit "$?"
+	fi
+	# Any exit code in the "user-defined" range propagates to the parent shell.
+        exit "$ec"
+    fi
+}
+set -E; trap '_exit_handler' ERR
+
+_die() { exit 113; }
+die() {
+    log "FATAL: $@"
+    if [ "$$" -eq "$BASHPID" -a -n "$_die_handler" ]; then
+        # This is the top-level shell (run it and use its exit code).
+	eval "$_die_handler"
+	exit "$?"
+    fi
+    exit 112;
+}
+before_dying() { _die_handler="$1"; }
+# ---
 
 req_program() {
     if [ ! -x "$1" ]; then
@@ -68,7 +104,7 @@ log() {
 
 log_action() {
     if [ "$LOG_ENABLED" = "1" ]; then
-        echo ""
+       (echo ""
         echo "---"
         echo "Date: $(DATE)"
         echo "Event: $1"
@@ -81,13 +117,8 @@ log_action() {
         if [ "$LOG_VARS" = "1" ]; then
             echo "Environment variables:"
             env
-        fi
-    fi >>$LOG_FILE
-}
-
-die() {
-    log "FATAL: $@"
-    _die
+        fi) >>$LOG_FILE
+    fi
 }
 
 # ---
@@ -282,8 +313,8 @@ check_install_vars() {
 }
 
 do_install() {
-    # Note: if die is called a USR1 signal is generated which is trapped here.
-    trap 'on_install_failed' USR1
+    # Note: if die is called from this point on the die handler will be called.
+    before_dying 'on_install_failed'
 
     check_install_vars
     local emmc_dev=$(get_emmc_dev)
@@ -403,9 +434,9 @@ do_complete_install() {
 	return 0
     fi
 
-    # Note: if die is called a USR1 signal is generated which is trapped here; any failure here will
-    # send a status of 'failed' to aktualizr (see 'on_install_failed()')
-    trap 'on_install_failed' USR1
+    # Note: if die is called from this point on the die handler will be called.; any failure here
+    # will send a status of 'failed' to aktualizr (see 'on_install_failed()')
+    before_dying 'on_install_failed'
 
     check_install_vars
     local emmc_dev=$(get_emmc_dev)
