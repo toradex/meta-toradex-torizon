@@ -14,7 +14,7 @@ LIC_FILES_CHKSUM = "file://COPYING;md5=94d55d512a9ba36caa9b7df079bae19f"
 
 DEPENDS = "libcap libpng cairo dbus udev intltool-native"
 PROVIDES = "virtual/psplash"
-RPROVIDES_${PN} = "virtual-psplash virtual-psplash-support"
+RPROVIDES:${PN} = "virtual-psplash virtual-psplash-support"
 
 SRC_URI = " \
     git://gitlab.freedesktop.org/plymouth/plymouth.git;protocol=https;branch=main \
@@ -33,8 +33,8 @@ EXTRA_OECONF += " --enable-shared --disable-static --disable-gtk --disable-docum
 "
 
 PACKAGECONFIG ??= "pango initrd"
-PACKAGECONFIG_append_x86 = " drm"
-PACKAGECONFIG_append_x86-64 = " drm"
+PACKAGECONFIG:append:x86 = " drm"
+PACKAGECONFIG:append:x86-64 = " drm"
 
 PACKAGECONFIG[drm] = "--enable-drm,--disable-drm,libdrm"
 PACKAGECONFIG[pango] = "--enable-pango,--disable-pango,pango"
@@ -45,7 +45,7 @@ LOGO ??= "${datadir}/plymouth/bizcom.png"
 
 inherit autotools gettext pkgconfig systemd
 
-do_configure_prepend() {
+do_configure:prepend() {
     # Fix
     # configure.ac:19: error: required file 'build-tools/config.rpath' not found
     # ...
@@ -55,7 +55,7 @@ do_configure_prepend() {
     touch ${S}/ABOUT-NLS
 }
 
-do_install_append() {
+do_install:append() {
     # Remove /var/run from package as plymouth will populate it on startup
     rm -fr "${D}${localstatedir}/run"
 
@@ -67,14 +67,14 @@ do_install_append() {
 PACKAGES =. "${@bb.utils.contains('PACKAGECONFIG', 'initrd', '${PN}-initrd ', '', d)}"
 PACKAGES =+ "${PN}-set-default-theme"
 
-FILES_${PN}-initrd = "${libexecdir}/plymouth/*"
-FILES_${PN}-set-default-theme = "${sbindir}/plymouth-set-default-theme"
+FILES:${PN}-initrd = "${libexecdir}/plymouth/*"
+FILES:${PN}-set-default-theme = "${sbindir}/plymouth-set-default-theme"
 
-FILES_${PN} += "${systemd_unitdir}/system/*"
-FILES_${PN}-dbg += "${libdir}/plymouth/renderers/.debug"
+FILES:${PN} += "${systemd_unitdir}/system/*"
+FILES:${PN}-dbg += "${libdir}/plymouth/renderers/.debug"
 
 
-RDEPENDS_${PN}-initrd = "bash dracut"
-RDEPENDS_${PN}-set-default-theme = "bash"
+RDEPENDS:${PN}-initrd = "bash dracut"
+RDEPENDS:${PN}-set-default-theme = "bash"
 
-SYSTEMD_SERVICE_${PN} = "plymouth-start.service"
+SYSTEMD_SERVICE:${PN} = "plymouth-start.service"

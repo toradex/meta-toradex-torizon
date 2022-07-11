@@ -8,18 +8,18 @@ SRC_URI = " \
 "
 
 SRCREV = "31e531ea13c28a13c405754b7424b9953930add6"
-SRCREV_use-head-next = "${AUTOREV}"
+SRCREV:use-head-next = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
 
 PV = "1.0+git${SRCPV}"
 
 DEPENDS = "boost curl openssl libarchive libsodium sqlite3 asn1c-native"
-RDEPENDS_${PN}_class-target = "aktualizr-hwid lshw bash aktualizr-default-sec aktualizr-polling-interval greenboot"
+RDEPENDS:${PN}:class-target = "aktualizr-hwid lshw bash aktualizr-default-sec aktualizr-polling-interval greenboot"
 
 inherit cmake pkgconfig systemd
 
-SYSTEMD_SERVICE_${PN} = "aktualizr-torizon.service"
+SYSTEMD_SERVICE:${PN} = "aktualizr-torizon.service"
 
 # For find_package(Git)
 OECMAKE_FIND_ROOT_PATH_MODE_PROGRAM = "BOTH"
@@ -28,12 +28,12 @@ PACKAGECONFIG ?= "ostree ${@bb.utils.filter('SOTA_CLIENT_FEATURES', 'hsm serialc
 PACKAGECONFIG[warning-as-error] = "-DWARNING_AS_ERROR=ON,-DWARNING_AS_ERROR=OFF,"
 PACKAGECONFIG[ostree] = "-DBUILD_OSTREE=ON,-DBUILD_OSTREE=OFF,ostree,"
 PACKAGECONFIG[ubootenv] = ",,u-boot-fw-utils,u-boot-fw-utils"
-PACKAGECONFIG_remove_class-native = "ubootenv"
+PACKAGECONFIG:remove:class-native = "ubootenv"
 
 PROVIDES += "aktualizr"
-RPROVIDES_${PN} += "aktualizr aktualizr-info aktualizr-shared-prov"
+RPROVIDES:${PN} += "aktualizr aktualizr-info aktualizr-shared-prov"
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${systemd_unitdir}/system
     install -m 0644 ${WORKDIR}/aktualizr-torizon.service ${D}${systemd_unitdir}/system/aktualizr-torizon.service
 
@@ -44,7 +44,7 @@ do_install_append() {
 
 PACKAGES =+ "${PN}-misc"
 
-FILES_${PN} += " \
+FILES:${PN} += " \
   ${bindir}/aktualizr-torizon \
   ${libdir}/libaktualizr.so \
   ${systemd_unitdir}/system/aktualizr-torizon.service \
@@ -57,13 +57,13 @@ FILES_${PN} += " \
   ${binddir}/aktualizr-cert-provider \
 "
 
-FILES_${PN}-dev = " \
+FILES:${PN}-dev = " \
   ${libdir}/libsota_tools.so \
   ${includedir}/libaktualizr \
   ${libdir}/pkgconfig \
 "
 
-FILES_${PN}-misc = " \
+FILES:${PN}-misc = " \
   ${bindir}/aktualizr \
   ${bindir}/aktualizr-secondary \ 
   ${libdir}/libaktualizr_secondary.so \

@@ -99,15 +99,15 @@ do_install() {
 	fi
 }
 
-FILES_${PN} += " \
+FILES:${PN} += " \
     ${systemd_unitdir}/system/* \
     ${systemd_unitdir}/user/* \
     ${nonarch_libdir}/tmpfiles.d/* \
     ${sysconfdir}/cni \
 "
 
-SYSTEMD_SERVICE_${PN} = "podman.service podman.socket"
+SYSTEMD_SERVICE:${PN} = "podman.service podman.socket"
 
-RDEPENDS_${PN} += "conmon virtual/runc iptables cni skopeo"
-RRECOMMENDS_${PN} += "slirp4netns kernel-module-xt-masquerade kernel-module-xt-comment fuse-overlayfs"
-RCONFLICTS_${PN} = "${@bb.utils.contains('PACKAGECONFIG', 'docker', 'docker', '', d)}"
+RDEPENDS:${PN} += "conmon virtual/runc iptables cni skopeo"
+RRECOMMENDS:${PN} += "slirp4netns kernel-module-xt-masquerade kernel-module-xt-comment fuse-overlayfs"
+RCONFLICTS:${PN} = "${@bb.utils.contains('PACKAGECONFIG', 'docker', 'docker', '', d)}"

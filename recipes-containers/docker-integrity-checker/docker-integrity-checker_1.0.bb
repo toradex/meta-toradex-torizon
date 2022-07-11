@@ -12,9 +12,9 @@ S = "${WORKDIR}"
 
 inherit systemd
 
-SYSTEMD_PACKAGES_${PN} = "docker-integrity-checker"
+SYSTEMD_PACKAGES:${PN} = "docker-integrity-checker"
 
-SYSTEMD_SERVICE_${PN} = "docker-integrity-checker.service"
+SYSTEMD_SERVICE:${PN} = "docker-integrity-checker.service"
 SYSTEMD_AUTO_ENABLE = "disable"
 
 do_install() {

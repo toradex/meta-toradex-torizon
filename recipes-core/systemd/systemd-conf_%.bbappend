@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI += "\
     file://system.conf-torizon \
@@ -6,7 +6,7 @@ SRC_URI += "\
 
 PACKAGE_ARCH = "${MACHINE_ARCH}"
 
-do_install_append() {
+do_install:append() {
 	# Do not install default config file for wired networks, we use NetworkManager
 	# by default
 	rm -rf ${D}${systemd_unitdir}/network

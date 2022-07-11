@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://10-toradex-net-rename.rules \
     file://90-toradex-gpio.rules \
     file://91-toradex-i2cdev.rules \
@@ -10,7 +10,7 @@ SRC_URI_append = " \
     file://toradex-net-rename.sh \
 "
 
-do_install_append () {
+do_install:append () {
     install -m 0644 ${WORKDIR}/10-toradex-net-rename.rules ${D}${sysconfdir}/udev/rules.d/
     install -m 0644 ${WORKDIR}/90-toradex-gpio.rules ${D}${sysconfdir}/udev/rules.d/
     install -m 0644 ${WORKDIR}/91-toradex-i2cdev.rules ${D}${sysconfdir}/udev/rules.d/

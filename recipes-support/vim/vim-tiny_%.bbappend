@@ -1,12 +1,12 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += "\
     file://defaults.vim \
 "
 
-do_install_append() {
+do_install:append() {
     install -d ${D}/${datadir}/vim
     install -m 0644 ${WORKDIR}/defaults.vim ${D}/${datadir}/vim/
 }
 
-FILES_${PN} += "${datadir}/vim/*"
+FILES:${PN} += "${datadir}/vim/*"

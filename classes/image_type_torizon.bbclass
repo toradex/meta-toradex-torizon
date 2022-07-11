@@ -12,9 +12,9 @@ python adjust_tezi_artifacts() {
     d.setVar('TEZI_ARTIFACTS', artifacts)
 }
 
-TEZI_IMAGE_TEZIIMG_PREFUNCS_append = " adjust_tezi_artifacts"
+TEZI_IMAGE_TEZIIMG_PREFUNCS:append = " adjust_tezi_artifacts"
 
-IMAGE_CMD_ota_prepend() {
+IMAGE_CMD:ota:prepend() {
 	if [ "${OSTREE_BOOTLOADER}" = "u-boot" ]; then
 		cp -a ${DEPLOY_DIR_IMAGE}/boot.scr-${MACHINE} ${OTA_SYSROOT}/boot.scr
 	fi
@@ -103,7 +103,7 @@ EXTRA_OSTREE_COMMIT = " \
     --add-metadata=oe.layers="${@get_layer_revision_information(d)} " \
 "
 
-IMAGE_CMD_ostreecommit[vardepsexclude] += "EXTRA_OSTREE_COMMIT OSTREE_COMMIT_SUBJECT"
+IMAGE_CMD:ostreecommit[vardepsexclude] += "EXTRA_OSTREE_COMMIT OSTREE_COMMIT_SUBJECT"
 
 do_image_ostreecommit[postfuncs] += " generate_diff_file"
 generate_diff_file[lockfiles] += "${OSTREE_REPO}/ostree.lock"

@@ -156,10 +156,10 @@ do_install() {
 	install -m 0644 ${S}/cli/contrib/completion/bash/docker ${COMPLETION_DIR}
 }
 
-FILES_${PN} += "${systemd_unitdir}/system/* ${sysconfdir}/docker"
+FILES:${PN} += "${systemd_unitdir}/system/* ${sysconfdir}/docker"
 
-FILES_${PN}-contrib += "${datadir}/docker/check-config.sh"
-RDEPENDS_${PN}-contrib += "bash"
+FILES:${PN}-contrib += "${datadir}/docker/check-config.sh"
+RDEPENDS:${PN}-contrib += "bash"
 
 CVE_PRODUCT = "docker"
 
@@ -167,4 +167,4 @@ inherit bash-completion
 
 # pigz takes advantage of both multiple CPUs and multiple CPU cores for higher
 # compression and decompression speed, and also set at the official packages
-RDEPENDS_${PN} += "pigz"
+RDEPENDS:${PN} += "pigz"

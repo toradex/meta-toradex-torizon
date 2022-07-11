@@ -50,9 +50,9 @@ EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On "
 
 inherit cmake systemd
 
-SYSTEMD_SERVICE_${PN} = "fluent-bit.service"
+SYSTEMD_SERVICE:${PN} = "fluent-bit.service"
 
-do_install_append() {
+do_install:append() {
     # fluent-bit unconditionally install init scripts, let's remove them to install our own
     rm -Rf ${D}/lib ${D}/etc/init
 

@@ -8,7 +8,7 @@ SRC_URI[sha256sum] = "d916a26b62970e7c2f554110ed6af04c7ccff8e9f81ad17d0d40c75637
 
 DEPENDS += "${PYTHON_PN}-pip-native"
 
-RDEPENDS_${PN} += " \
+RDEPENDS:${PN} += " \
         ${PYTHON_PN}-misc \
         ${PYTHON_PN}-six \
         ${PYTHON_PN}-docker-pycreds \
@@ -18,6 +18,6 @@ RDEPENDS_${PN} += " \
 
 inherit pypi setuptools3
 
-SRC_URI_append = "\
+SRC_URI:append = "\
     file://0001-config-Include-usr-lib-docker-in-search-path.patch \
 "

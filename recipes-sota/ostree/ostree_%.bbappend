@@ -1,8 +1,8 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit bash-completion
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://0001-update-default-grub-cfg-header.patch \
     file://0002-deploy-support-devicetree-directory.patch \
     file://ostree-pending-reboot.service \
@@ -14,14 +14,14 @@ SRC_URI_append = " \
 PTEST_ENABLED = "0"
 
 # gpgme is not required, and it brings GPLv3 dependencies
-PACKAGECONFIG_remove = "gpgme"
+PACKAGECONFIG:remove = "gpgme"
 
-SYSTEMD_SERVICE_${PN} += "ostree-pending-reboot.path ostree-pending-reboot.service"
+SYSTEMD_SERVICE:${PN} += "ostree-pending-reboot.path ostree-pending-reboot.service"
 
-DEPENDS_append_class-target = " ${@'u-boot-default-script' if '${PREFERRED_PROVIDER_u-boot-default-script}' else ''}"
-RDEPENDS_${PN}_append_class-target = " ${@'ostree-uboot-env' if '${PREFERRED_PROVIDER_u-boot-default-script}' else ''}"
+DEPENDS:append:class-target = " ${@'u-boot-default-script' if '${PREFERRED_PROVIDER_u-boot-default-script}' else ''}"
+RDEPENDS:${PN}:append:class-target = " ${@'ostree-uboot-env' if '${PREFERRED_PROVIDER_u-boot-default-script}' else ''}"
 
-do_install_append () {
+do_install:append () {
     install -d ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/ostree-pending-reboot.service ${D}${systemd_system_unitdir}
     install -m 0644 ${WORKDIR}/ostree-pending-reboot.path ${D}${systemd_system_unitdir}

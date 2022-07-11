@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += " \
     file://0001-docker-config-support-default-system-config.patch \
@@ -6,7 +6,7 @@ SRC_URI += " \
     file://registries.conf \
 "
 
-do_install_append() {
+do_install:append() {
     install ${WORKDIR}/storage.conf ${D}/${sysconfdir}/containers/storage.conf
     install ${WORKDIR}/registries.conf ${D}/${sysconfdir}/containers/registries.conf
 }

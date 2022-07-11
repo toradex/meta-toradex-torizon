@@ -13,7 +13,7 @@ inherit systemd
 
 SYSTEMD_PACKAGES = "docker-compose-up"
 
-SYSTEMD_SERVICE_${PN} = " docker-compose.service"
+SYSTEMD_SERVICE:${PN} = " docker-compose.service"
 
 do_install() {
 	install -d ${D}${nonarch_base_libdir}/systemd/system

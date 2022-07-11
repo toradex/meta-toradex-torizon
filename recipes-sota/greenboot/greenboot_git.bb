@@ -23,12 +23,12 @@ S = "${WORKDIR}/git"
 SRCREV = "2756418be8b95b6c5428d2a70d12b2ea844fe4bf"
 PV = "0.11+git${SRCPV}"
 
-RDEPENDS_${PN} = "bash"
+RDEPENDS:${PN} = "bash"
 
 inherit systemd
 
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN} = "\
+SYSTEMD_SERVICE:${PN} = "\
     greenboot-healthcheck.service \
     greenboot-status.service \
     greenboot-task-runner.service \

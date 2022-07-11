@@ -12,9 +12,9 @@ S = "${WORKDIR}"
 
 inherit systemd
 
-SYSTEMD_PACKAGES_${PN} = "docker-watchdog"
+SYSTEMD_PACKAGES:${PN} = "docker-watchdog"
 
-SYSTEMD_SERVICE_${PN} = "docker-watchdog.service"
+SYSTEMD_SERVICE:${PN} = "docker-watchdog.service"
 SYSTEMD_AUTO_ENABLE = "disable"
 
 do_install() {

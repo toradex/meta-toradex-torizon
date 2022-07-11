@@ -1,8 +1,8 @@
-PACKAGES_prepend = "ostree-devicetree-overlays "
-ALLOW_EMPTY_ostree-devicetree-overlays = "1"
-FILES_ostree-devicetree-overlays = "${nonarch_base_libdir}/modules/*/dtb/*.dtbo ${nonarch_base_libdir}/modules/*/dtb/overlays.txt"
+PACKAGES:prepend = "ostree-devicetree-overlays "
+ALLOW_EMPTY:ostree-devicetree-overlays = "1"
+FILES:ostree-devicetree-overlays = "${nonarch_base_libdir}/modules/*/dtb/*.dtbo ${nonarch_base_libdir}/modules/*/dtb/overlays.txt"
 
-do_install_append () {
+do_install:append () {
     if [ ${@ oe.types.boolean('${OSTREE_DEPLOY_DEVICETREE}')} = True ]; then
         install -d $kerneldir/dtb/overlays
         if [ ! -e ${DEPLOY_DIR_IMAGE}/overlays/none_deployed ]; then

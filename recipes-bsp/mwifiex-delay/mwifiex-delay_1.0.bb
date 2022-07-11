@@ -12,7 +12,7 @@ SRC_URI = " \
     file://mwifiex-delay.sh \
 "
 
-SYSTEMD_SERVICE_${PN} = "mwifiex-delay.service"
+SYSTEMD_SERVICE:${PN} = "mwifiex-delay.service"
 
 do_install () {
     install -d ${D}${sysconfdir}/modprobe.d/

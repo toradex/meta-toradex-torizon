@@ -11,11 +11,11 @@ SRC_URI = " \
 
 S = "${WORKDIR}"
 
-RDEPENDS_${PN} = "bash jq"
+RDEPENDS:${PN} = "bash jq"
 
 inherit allarch systemd
 
-SYSTEMD_SERVICE_${PN} = "auto-provisioning.service"
+SYSTEMD_SERVICE:${PN} = "auto-provisioning.service"
 
 do_install() {
     install -d ${D}${systemd_unitdir}/system

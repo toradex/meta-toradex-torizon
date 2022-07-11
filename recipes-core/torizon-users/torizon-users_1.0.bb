@@ -6,16 +6,16 @@ LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda
 EXCLUDE_FROM_WORLD = "1"
 INHIBIT_DEFAULT_DEPS = "1"
 
-ALLOW_EMPTY_${PN} = "1"
+ALLOW_EMPTY:${PN} = "1"
 
 inherit useradd
 
 USERADD_PACKAGES = "${PN}"
 
-GROUPADD_PARAM_${PN} = "torizon"
-USERADD_PARAM_${PN} = "-G adm,sudo,users,plugdev,audio,video,gpio,i2cdev,spidev,dialout,input,pwm -m -d /home/torizon -P torizon torizon"
+GROUPADD_PARAM:${PN} = "torizon"
+USERADD_PARAM:${PN} = "-G adm,sudo,users,plugdev,audio,video,gpio,i2cdev,spidev,dialout,input,pwm -m -d /home/torizon -P torizon torizon"
 
-pkg_postinst_ontarget_${PN} () {
+pkg_postinst_ontarget:${PN} () {
     if [ ! -e /etc/.passwd_changed ]; then
         passwd -e torizon
         touch /etc/.passwd_changed

@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI += "\
     file://0001-Add-client-build-support-for-editline-libedit.patch \
@@ -9,12 +9,12 @@ SRC_URI += "\
 # Depend on libedit as it has a more friendly license than readline (GPLv3)
 DEPENDS += "libedit"
 
-PACKAGECONFIG_remove = "dnsmasq"
+PACKAGECONFIG:remove = "dnsmasq"
 
-PACKAGECONFIG_append = " modemmanager ppp"
-RPROVIDES_${PN} = "network-configuration"
+PACKAGECONFIG:append = " modemmanager ppp"
+RPROVIDES:${PN} = "network-configuration"
 
-do_install_append() {
+do_install:append() {
     install -m 0600 ${WORKDIR}/toradex-nmconnection.conf ${D}${nonarch_libdir}/NetworkManager/conf.d
 
     sed -e "s/@NET_NUM@/0/g" \

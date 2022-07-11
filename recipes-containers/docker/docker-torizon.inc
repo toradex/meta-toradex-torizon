@@ -1,8 +1,8 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 inherit bash-completion
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://daemon.json.in \
     file://docker.service \
     file://chrome.json \
@@ -14,15 +14,15 @@ DOCKER_MAX_CONCURRENT_DOWNLOADS ?= "3"
 DOCKER_MAX_DOWNLOAD_ATTEMPTS ?= "5"
 
 # Prefer docker.service instead of docker.socket as this is a critical service
-SYSTEMD_SERVICE_${PN} = "${@bb.utils.contains('DISTRO_FEATURES','systemd','docker.service','',d)}"
+SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('DISTRO_FEATURES','systemd','docker.service','',d)}"
 
-do_install_prepend() {
+do_install:prepend() {
     sed -e 's/@@MAX_CONCURRENT_DOWNLOADS@@/${DOCKER_MAX_CONCURRENT_DOWNLOADS}/' \
         -e 's/@@MAX_DOWNLOAD_ATTEMPTS@@/${DOCKER_MAX_DOWNLOAD_ATTEMPTS}/' \
         ${WORKDIR}/daemon.json.in > ${WORKDIR}/daemon.json
 }
 
-do_install_append() {
+do_install:append() {
     install -d ${D}${libdir}/docker
     install -m 0644 ${WORKDIR}/daemon.json ${D}${libdir}/docker/
 
@@ -53,4 +53,4 @@ do_install_append() {
     install -m 0755 ${WORKDIR}/docker.sh ${D}${sysconfdir}/profile.d/
 }
 
-FILES_${PN} += "${libdir}/docker ${systemd_unitdir}/system.conf.d/*"
+FILES:${PN} += "${libdir}/docker ${systemd_unitdir}/system.conf.d/*"

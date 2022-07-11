@@ -6,7 +6,7 @@ IMAGE_FEATURES += "ssh-server-openssh bash-completion-pkgs"
 IMAGE_OVERHEAD_FACTOR = "2.3"
 
 # Base container packages
-CORE_IMAGE_BASE_INSTALL_append = " \
+CORE_IMAGE_BASE_INSTALL:append = " \
     cpufrequtils \
     curl \
     htop \

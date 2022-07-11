@@ -1,4 +1,4 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/files:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 SRC_URI += " \
     file://plymouth \
@@ -8,20 +8,20 @@ SRC_URI += " \
     file://0002-redirect-console-when-conosle-null.patch \
 "
 
-PACKAGES_append = " \
+PACKAGES:append = " \
     initramfs-module-plymouth \
     initramfs-module-ostree \
 "
 
-SUMMARY_initramfs-module-plymouth = "initramfs support for plymouth"
-RDEPENDS_initramfs-module-plymouth = "${PN}-base plymouth ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-udev-rules', '', d)}"
-FILES_initramfs-module-plymouth = "/init.d/02-plymouth"
+SUMMARY:initramfs-module-plymouth = "initramfs support for plymouth"
+RDEPENDS:initramfs-module-plymouth = "${PN}-base plymouth ${@bb.utils.contains('DISTRO_FEATURES', 'systemd', 'systemd-udev-rules', '', d)}"
+FILES:initramfs-module-plymouth = "/init.d/02-plymouth"
 
-SUMMARY_initramfs-module-ostree = "initramfs support for ostree based filesystems"
-RDEPENDS_initramfs-module-ostree = "${PN}-base ostree-switchroot"
-FILES_initramfs-module-ostree = "/init.d/98-ostree"
+SUMMARY:initramfs-module-ostree = "initramfs support for ostree based filesystems"
+RDEPENDS:initramfs-module-ostree = "${PN}-base ostree-switchroot"
+FILES:initramfs-module-ostree = "/init.d/98-ostree"
 
-do_install_append() {
+do_install:append() {
         install -m 0755 ${WORKDIR}/plymouth ${D}/init.d/02-plymouth
         install -m 0755 ${WORKDIR}/ostree ${D}/init.d/98-ostree
 }

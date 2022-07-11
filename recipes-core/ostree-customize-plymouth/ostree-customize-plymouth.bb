@@ -15,5 +15,5 @@ do_install() {
     install -m 0755 ${S}/ostree-customize-plymouth.sh ${D}${bindir}/
 }
 
-RDEPENDS_${PN} = "bash"
+RDEPENDS:${PN} = "bash"
 INHIBIT_DEFAULT_DEPS = "1"

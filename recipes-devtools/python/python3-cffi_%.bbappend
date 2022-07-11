@@ -1,5 +1,5 @@
 PACKAGES =+ "${PN}-backend"
 
-FILES_${PN}-backend = "${PYTHON_SITEPACKAGES_DIR}/*.so"
+FILES:${PN}-backend = "${PYTHON_SITEPACKAGES_DIR}/*.so"
 
-RDEPENDS_${PN}_append_class-target = " ${PN}-backend"
+RDEPENDS:${PN}:append:class-target = " ${PN}-backend"

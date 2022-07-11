@@ -7,7 +7,7 @@ HOMEPAGE="https://github.com/tom5760/usermount"
 LICENSE = "GPLv2"
 
 DEPENDS = "udisks2"
-RDEPENDS_${PN} = "udisks2 bash"
+RDEPENDS:${PN} = "udisks2 bash"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=74711154e9c987a4d5c87fc8d89e279f"
 
@@ -28,7 +28,7 @@ inherit pkgconfig systemd
 EXTRA_OEMAKE += "ENABLE_LIBNOTIFY=0"
 
 SYSTEMD_PACKAGES = "${PN}"
-SYSTEMD_SERVICE_${PN} = "usermount.service"
+SYSTEMD_SERVICE:${PN} = "usermount.service"
 
 do_install() {
     install -d ${D}${bindir}

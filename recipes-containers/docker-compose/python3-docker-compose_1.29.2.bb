@@ -14,7 +14,7 @@ SRC_URI += "file://0001-setup.py-remove-maximum-version-requirements.patch \
 
 DEPENDS += "${PYTHON_PN}-fastentrypoints-native"
 
-RDEPENDS_${PN} = "\
+RDEPENDS:${PN} = "\
     ${PYTHON_PN}-cached-property \
     ${PYTHON_PN}-certifi \
     ${PYTHON_PN}-chardet \
@@ -42,4 +42,4 @@ RDEPENDS_${PN} = "\
 
 # We dont support docker[ssh], hence could drop paramiko dependency,
 # see file/0001-setup.py-remove-maximum-version-requirements.patch.
-RDEPENDS_${PN}_remove = "${PYTHON_PN}-paramiko"
+RDEPENDS:${PN}:remove = "${PYTHON_PN}-paramiko"

@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://sudoers.torizon \
 "
 
@@ -9,7 +9,7 @@ inherit features_check
 
 REQUIRED_DISTRO_FEATURES = "pam"
 
-do_install_append () {
+do_install:append () {
     install -m 0755 -d ${D}${sysconfdir}/sudoers.d
     install -m 0440 ${WORKDIR}/sudoers.torizon ${D}${sysconfdir}/sudoers.d/50-torizon
 }

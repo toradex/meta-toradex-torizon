@@ -1,7 +1,7 @@
 LICENSE = "MIT"
 LIC_FILES_CHKSUM = "file://${COMMON_LICENSE_DIR}/MIT;md5=0835ade698e0bcf8506ecda2f7b4f302"
 
-DESCRIPTION_append_experimental = " This release is not a officially supported \
+DESCRIPTION:append:experimental = " This release is not a officially supported \
 build of TorizonCore, and is labeled experimental because of limited hardware \
 constraints such as storage or memory, or include software we are still evaluating."
 
@@ -18,7 +18,7 @@ IMAGE_FEATURES += "splash"
 SPLASH = "plymouth"
 
 # Base packages
-CORE_IMAGE_BASE_INSTALL_append = " \
+CORE_IMAGE_BASE_INSTALL:append = " \
     evtest \
     i2c-tools \
     kernel-modules \
@@ -44,11 +44,11 @@ CORE_IMAGE_BASE_INSTALL_append = " \
 "
 
 # SOTA related packages
-CORE_IMAGE_BASE_INSTALL_append_sota = " \
+CORE_IMAGE_BASE_INSTALL:append:sota = " \
     auto-provisioning \
 "
 
-CORE_IMAGE_BASE_INSTALL_append_mx8 = " \
+CORE_IMAGE_BASE_INSTALL:append:mx8 = " \
     kernel-module-imx-gpu-viv \
 "
 
@@ -76,10 +76,10 @@ nss_altfiles_set_users_groups () {
 }
 
 # include nss-altfiles support
-CORE_IMAGE_BASE_INSTALL_append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss-altfiles", "",d)}'
-IMAGE_PREPROCESS_COMMAND_append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss_altfiles_set_users_groups; ", "",d)}'
-PSEUDO_PASSWD_prepend = "${@bb.utils.contains('DISTRO_FEATURES', 'stateless-system', '${WORKDIR}/pseudo-rootfs:', '', d)}"
+CORE_IMAGE_BASE_INSTALL:append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss-altfiles", "",d)}'
+IMAGE_PREPROCESS_COMMAND:append = ' ${@bb.utils.contains("DISTRO_FEATURES", "stateless-system", "nss_altfiles_set_users_groups; ", "",d)}'
+PSEUDO_PASSWD:prepend = "${@bb.utils.contains('DISTRO_FEATURES', 'stateless-system', '${WORKDIR}/pseudo-rootfs:', '', d)}"
 
 # due to limited hardware resources, remove Colibri iMX6 Solo 256MB
 # from the list of supported IDs in the Tezi image
-TORADEX_PRODUCT_IDS_remove_colibri-imx6 = "0014 0016"
+TORADEX_PRODUCT_IDS:remove:colibri-imx6 = "0014 0016"

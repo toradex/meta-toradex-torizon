@@ -1,6 +1,6 @@
-FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://uEnv.txt.in \
 "
 
@@ -11,4 +11,4 @@ do_install () {
 }
 
 PACKAGES = "ostree-uboot-env"
-FILES_ostree-uboot-env = "${libdir}/ostree-boot/uEnv.txt"
+FILES:ostree-uboot-env = "${libdir}/ostree-boot/uEnv.txt"
