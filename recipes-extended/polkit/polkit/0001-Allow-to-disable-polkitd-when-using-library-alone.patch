@@ -1,13 +1,14 @@
-From 205150614acd538bf856059b0f58999a3e25c715 Mon Sep 17 00:00:00 2001
-From: Ming Liu <ming.liu@toradex.com>
-Date: Wed, 12 Aug 2020 19:10:21 +0200
+From fec68d81e6ba94dea22e708384dc104ffd3b2d73 Mon Sep 17 00:00:00 2001
+From: Sergio Prado <sergio.prado@toradex.com>
+Date: Tue, 12 Jul 2022 20:27:40 -0300
 Subject: [PATCH] Allow to disable polkitd when using library alone
 
-Upstream-Status: Inappropriate [OE specific]
+Upstream-Status: Inappropriate [TorizonCore specific]
 
 Reference:
 https://gitlab.gnome.org/GNOME/gnome-disk-utility/-/merge_requests/32/diffs#diff-content-024f2e0d484b52f469190ef487285f4532e293a8
 
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 Signed-off-by: Ming Liu <ming.liu@toradex.com>
 ---
  configure.ac                | 21 ++++++++++++++++-----
@@ -17,28 +18,28 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
  4 files changed, 30 insertions(+), 7 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 62d8a0a..c15fb51 100644
+index 0f87ea0e8a26..e2e9bae6ef7a 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -79,11 +79,12 @@ PKG_CHECK_MODULES(GLIB, [gmodule-2.0 gio-unix-2.0 >= 2.30.0])
- AC_SUBST(GLIB_CFLAGS)
- AC_SUBST(GLIB_LIBS)
- 
--PKG_CHECK_MODULES(LIBJS, [mozjs-60])
+@@ -89,11 +89,12 @@ AS_IF([test x${with_duktape} == xyes], [
+   AC_SUBST(LIBJS_CFLAGS)
+   AC_SUBST(LIBJS_LIBS)
+ ], [
+-  PKG_CHECK_MODULES(LIBJS, [mozjs-78])
 -
--AC_SUBST(LIBJS_CFLAGS)
--AC_SUBST(LIBJS_CXXFLAGS)
--AC_SUBST(LIBJS_LIBS)
-+AS_IF([test x${enable_polkitd} = yes], [
-+  PKG_CHECK_MODULES(LIBJS, [mozjs-60])
-+  AC_SUBST(LIBJS_CFLAGS)
-+  AC_SUBST(LIBJS_CXXFLAGS)
-+  AC_SUBST(LIBJS_LIBS)
-+])
+-  AC_SUBST(LIBJS_CFLAGS)
+-  AC_SUBST(LIBJS_CXXFLAGS)
+-  AC_SUBST(LIBJS_LIBS)
++  AS_IF([test x${enable_polkitd} = yes], [
++    PKG_CHECK_MODULES(LIBJS, [mozjs-60])
++    AC_SUBST(LIBJS_CFLAGS)
++    AC_SUBST(LIBJS_CXXFLAGS)
++    AC_SUBST(LIBJS_LIBS)
++  ])
+ ])
+ AM_CONDITIONAL(USE_DUKTAPE, [test x$with_duktape == xyes], [Using duktape as javascript engine library])
  
- EXPAT_LIB=""
- AC_ARG_WITH(expat, [  --with-expat=<dir>      Use expat from here],
-@@ -236,6 +237,15 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
+@@ -254,6 +255,15 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
  fi
  AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$systemdsystemunitdir"])
  
@@ -54,16 +55,16 @@ index 62d8a0a..c15fb51 100644
  dnl ---------------------------------------------------------------------------
  dnl - User for running polkitd
  dnl ---------------------------------------------------------------------------
-@@ -579,6 +589,7 @@ echo "
+@@ -597,6 +607,7 @@ echo "
          Session tracking:           ${SESSION_TRACKING}
          PAM support:                ${have_pam}
          systemdsystemunitdir:       ${systemdsystemunitdir}
 +        polkitd:                    ${enable_polkitd}
          polkitd user:               ${POLKITD_USER}"
- 
- if test "$have_pam" = yes ; then
+ if test "x${with_duktape}" = xyes; then
+ echo "
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 09fc7b3..c6fe91b 100644
+index b31382646143..5800930a970c 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
 @@ -1,5 +1,9 @@
@@ -78,7 +79,7 @@ index 09fc7b3..c6fe91b 100644
  if BUILD_EXAMPLES
  SUBDIRS += examples
 diff --git a/src/polkitagent/Makefile.am b/src/polkitagent/Makefile.am
-index 49720db..d4903fa 100644
+index c98f29def6e6..20f7ee276808 100644
 --- a/src/polkitagent/Makefile.am
 +++ b/src/polkitagent/Makefile.am
 @@ -79,6 +79,7 @@ libpolkit_agent_1_la_LIBADD =                               		\
@@ -111,10 +112,10 @@ index 49720db..d4903fa 100644
  	-chmod 4755 $(DESTDIR)$(libprivdir)/polkit-agent-helper-1
 +endif # !POLKIT_AUTHFW_NONE
  
- EXTRA_DIST = polkitagentmarshal.list polkitagentenumtypes.h.template polkitagentenumtypes.c.template
- CLEANFILES = $(gir_DATA) $(typelibs_DATA)
+ EXTRA_DIST =				\
+ 	polkitagentmarshal.list		\
 diff --git a/test/Makefile.am b/test/Makefile.am
-index 59d0680..d43b0fe 100644
+index aacc892a4026..6d82fa3c18c8 100644
 --- a/test/Makefile.am
 +++ b/test/Makefile.am
 @@ -1,7 +1,11 @@
@@ -131,5 +132,5 @@ index 59d0680..d43b0fe 100644
  libpolkit_test_helper_la_SOURCES = polkittesthelper.c polkittesthelper.h
  libpolkit_test_helper_la_LIBADD = $(GLIB_LIBS)
 -- 
-2.28.0
+2.25.1
 
