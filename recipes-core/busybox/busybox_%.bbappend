@@ -13,8 +13,9 @@ busybox_cfg_variable() {
 do_prepare_config:append() {
     CONF_SED_SCRIPT=""
 
-    # No need for klogd as that is provided by systemd
+    # No need for klogd/syslogd as that is provided by systemd
     busybox_cfg_variable KLOGD n
+    busybox_cfg_variable SYSLOGD n
 
     sed -i -e "${CONF_SED_SCRIPT}" ${S}/.config
 }
