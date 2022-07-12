@@ -14,7 +14,7 @@ DEPENDS = " \
     ${@bb.utils.filter('DISTRO_FEATURES', 'systemd', d)} \
 "
 
-PNBLACKLIST[podman] ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'security', '', 'Depends on libseccomp from meta-security which is not included', d)}"
+SKIP_RECIPE[podman] ?= "${@bb.utils.contains('BBFILE_COLLECTIONS', 'security', '', 'Depends on libseccomp from meta-security which is not included', d)}"
 
 SRCREV = "f8d2853259eae6ae82343c79df74dc926ba76b47"
 SRC_URI = " \
