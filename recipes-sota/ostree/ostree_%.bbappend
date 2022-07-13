@@ -4,7 +4,7 @@ inherit bash-completion
 
 SRC_URI:append = " \
     file://0001-update-default-grub-cfg-header.patch \
-    file://0002-deploy-support-devicetree-directory.patch \
+    file://0002-Add-support-for-the-fdtfile-variable-in-uEnv.txt.patch \
     file://ostree-pending-reboot.service \
     file://ostree-pending-reboot.path \
 "
