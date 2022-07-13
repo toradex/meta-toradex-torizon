@@ -10,18 +10,5 @@
             "target_name_path": "/var/sota/storage/docker-compose/target_name",
             "metadata_path": "/var/sota/storage/docker-compose/metadata"
         }
-    ],
-    "torizon-generic": [
-        {
-            "partial_verifying": false,
-            "ecu_hardware_id": "@@MACHINE@@-bootloader",
-            "full_client_dir": "/var/sota/storage/bootloader",
-            "ecu_private_key": "sec.private",
-            "ecu_public_key": "sec.public",
-            "firmware_path": "/var/sota/storage/bootloader/u-boot.img",
-            "target_name_path": "/var/sota/storage/bootloader/target_name",
-            "metadata_path": "/var/sota/storage/bootloader/metadata",
-            "action_handler_path": "/usr/bin/bl_actions.sh"
-        }
     ]
 }
