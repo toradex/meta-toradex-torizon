@@ -13,22 +13,6 @@ SRC_URI:append:genericx86-64 = " file://0001-rules-whitelist-hd-devices.patch"
 PACKAGECONFIG:append = " resolved networkd"
 RRECOMMENDS:${PN}:remove = "os-release"
 
-# Workaround for some systemd specific udev rules being packaged in
-# systemd package while they are needed by initramfs which doesn't
-# want install systemd. Please refer to the discussion:
-# https://www.mail-archive.com/openembedded-core@lists.openembedded.org/msg140195.html
-#
-# Fix it by splitting systemd specific udev rules to its own package,
-# which could be installed by initramfs.
-PACKAGES:prepend = "${PN}-udev-rules "
-RDEPENDS:${PN} += "systemd-udev-rules"
-FILES:${PN}-udev-rules = " \
-    ${rootlibexecdir}/udev/rules.d/70-uaccess.rules \
-    ${rootlibexecdir}/udev/rules.d/71-seat.rules \
-    ${rootlibexecdir}/udev/rules.d/73-seat-late.rules \
-    ${rootlibexecdir}/udev/rules.d/99-systemd.rules \
-"
-
 # /var is expected to be rw, so drop volatile-binds service files
 RDEPENDS:${PN}:remove = "volatile-binds"
 
