@@ -93,3 +93,6 @@ PREFERRED_PROVIDER_aktualizr-native = "aktualizr-torizon-native"
 PREFERRED_RPROVIDER_aktualizr = "aktualizr-torizon"
 PREFERRED_RPROVIDER_aktualizr-info = "aktualizr-torizon"
 PREFERRED_RPROVIDER_aktualizr-shared-prov = "aktualizr-torizon"
+
+# disable warning message from meta-security
+SKIP_META_SECURITY_SANITY_CHECK = "1"
