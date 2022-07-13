@@ -2,7 +2,6 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
 
 SRC_URI:append = " \
     file://0001-udisksdaemon-do-not-wait-for-polkit-authority.patch \
-    file://0002-udiskslinuxfilesystem-fix-mount-flags.patch \
 "
 
 EXTRA_OECONF:append = " --enable-fhs-media"
