@@ -3,7 +3,7 @@ LICENSE = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=815ca599c9df247a0c7f619bab123dad"
 
 SRC_URI = " \
-  gitsm://github.com/toradex/aktualizr-torizon.git;protocol=https \
+  gitsm://github.com/toradex/aktualizr-torizon.git;protocol=https;branch=master \
   file://aktualizr-torizon.service \
 "
 

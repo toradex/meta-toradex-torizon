@@ -12,7 +12,7 @@ RDEPENDS:${PN} = "udisks2 bash"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=74711154e9c987a4d5c87fc8d89e279f"
 
 SRC_URI = " \
-    git://github.com/tom5760/usermount;protocol=https \
+    git://github.com/tom5760/usermount;protocol=https;branch=master \
     file://usermount.service \
     file://usermount-mounter \
     file://mount-docker-dataroot \
