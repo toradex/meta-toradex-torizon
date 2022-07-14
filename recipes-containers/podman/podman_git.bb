@@ -108,6 +108,6 @@ FILES:${PN} += " \
 
 SYSTEMD_SERVICE:${PN} = "podman.service podman.socket"
 
-RDEPENDS:${PN} += "conmon virtual/runc iptables cni skopeo"
+RDEPENDS:${PN} += "conmon virtual-runc iptables cni skopeo"
 RRECOMMENDS:${PN} += "slirp4netns kernel-module-xt-masquerade kernel-module-xt-comment fuse-overlayfs"
 RCONFLICTS:${PN} = "${@bb.utils.contains('PACKAGECONFIG', 'docker', 'docker', '', d)}"
