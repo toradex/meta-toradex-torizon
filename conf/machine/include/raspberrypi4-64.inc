@@ -59,5 +59,9 @@ BBMASK += " \
     meta-lmp/meta-lmp-base/recipes-security \
     meta-lmp/meta-lmp-base/recipes-sota \
     meta-lmp/meta-lmp-base/recipes-support \
-    meta-toradex-torizon/recipes-bsp/u-boot \
+    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot \
+    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
+    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot.bbappend \
+    meta-toradex-torizon/recipes-bsp/u-boot/libubootenv_* \
+    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
 "
