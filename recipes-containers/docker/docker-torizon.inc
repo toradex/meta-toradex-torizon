@@ -3,24 +3,15 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 inherit bash-completion
 
 SRC_URI:append = " \
-    file://daemon.json.in \
+    file://daemon.json \
     file://docker.service \
     file://chrome.json \
     file://20-docker.conf \
     file://docker.sh \
 "
 
-DOCKER_MAX_CONCURRENT_DOWNLOADS ?= "3"
-DOCKER_MAX_DOWNLOAD_ATTEMPTS ?= "5"
-
 # Prefer docker.service instead of docker.socket as this is a critical service
 SYSTEMD_SERVICE:${PN} = "${@bb.utils.contains('DISTRO_FEATURES','systemd','docker.service','',d)}"
-
-do_install:prepend() {
-    sed -e 's/@@MAX_CONCURRENT_DOWNLOADS@@/${DOCKER_MAX_CONCURRENT_DOWNLOADS}/' \
-        -e 's/@@MAX_DOWNLOAD_ATTEMPTS@@/${DOCKER_MAX_DOWNLOAD_ATTEMPTS}/' \
-        ${WORKDIR}/daemon.json.in > ${WORKDIR}/daemon.json
-}
 
 do_install:append() {
     install -d ${D}${libdir}/docker
@@ -38,11 +29,7 @@ do_install:append() {
 
     COMPLETION_DIR=${D}${datadir}/bash-completion/completions
     install -d ${COMPLETION_DIR}
-    CLI_DIR="cli"
-    if [ ${BPN} = "docker-ce" ]; then
-        CLI_DIR="src/import/components/cli"
-    fi
-    install -m 0644 ${S}/${CLI_DIR}/contrib/completion/bash/docker ${COMPLETION_DIR}
+    install -m 0644 ${S}/cli/contrib/completion/bash/docker ${COMPLETION_DIR}
 
     # install systemd configuration snippet for Docker
     install -d ${D}${systemd_unitdir}/system.conf.d/
