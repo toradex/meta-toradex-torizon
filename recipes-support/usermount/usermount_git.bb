@@ -4,7 +4,7 @@ via D-Bus to automount removable devices as a normal user."
 SECTION = "applications"
 PRIORITY = "optional"
 HOMEPAGE="https://github.com/tom5760/usermount"
-LICENSE = "GPLv2"
+LICENSE = "MIT"
 
 DEPENDS = "udisks2"
 RDEPENDS:${PN} = "udisks2 bash"

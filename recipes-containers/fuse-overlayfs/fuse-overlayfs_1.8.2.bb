@@ -2,7 +2,7 @@ SUMMARY = "FUSE implementation of overlayfs."
 DESCRIPTION = "An implementation of overlay+shiftfs in FUSE for rootless \
 containers."
 
-LICENSE = "GPLv3+"
+LICENSE = "GPL-3.0-or-later"
 LIC_FILES_CHKSUM = "file://COPYING;md5=d32239bcb673463ab874e80d47fae504"
 
 SRCREV = "d01bdd73b6bd1ffccaa163ef3e2660e1838305cb"
