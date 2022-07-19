@@ -17,7 +17,7 @@ LICENSE = "MIT"
 IMAGE_FSTYPES = "cpio.gz"
 IMAGE_FSTYPES:remove = "wic wic.gz wic.bmap wic.vmdk wic.vdi ext4 ext4.gz teziimg"
 
-IMAGE_CLASSES:remove = "image_type:torizon image_types_ostree image_types_ota image_repo_manifest license_image qemuboot"
+IMAGE_CLASSES:remove = "image_type_torizon image_types_ostree image_types_ota image_repo_manifest license_image qemuboot"
 
 # avoid circular dependencies
 EXTRA_IMAGEDEPENDS = ""
