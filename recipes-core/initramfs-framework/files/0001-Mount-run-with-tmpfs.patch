@@ -1,10 +1,25 @@
+From 8561b065446950807a4ef8ac1856a6fb89c038aa Mon Sep 17 00:00:00 2001
+From: Sergio Prado <sergio.prado@toradex.com>
+Date: Tue, 19 Jul 2022 09:30:47 +0000
+Subject: [PATCH] Mount /run with tmpfs
+
+This patch was inherited from LmP.
+
+Upstream-Status: Inappropriate [TorizonCore Specific]
+
+Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
+---
+ finish | 3 ++-
+ init   | 4 +++-
+ 2 files changed, 5 insertions(+), 2 deletions(-)
+
 diff --git a/finish b/finish
-index 717383e..f34edd8 100755
+index ac0de9f996f8..ed8298d18aba 100755
 --- a/finish
 +++ b/finish
-@@ -14,10 +14,11 @@ finish_run() {
- 
- 		info "Switching root to '$ROOTFS_DIR'..."
+@@ -35,10 +35,11 @@ finish_run() {
+ 			mount -n --move "$dir" "${ROOTFS_DIR}/media/${dir##*/}"
+ 		done
  
 -		debug "Moving /dev, /proc and /sys onto rootfs..."
 +		debug "Moving /dev, /proc, /sys and /run onto rootfs..."
@@ -16,7 +31,7 @@ index 717383e..f34edd8 100755
  		cd $ROOTFS_DIR
  		exec switch_root -c /dev/console $ROOTFS_DIR ${bootparam_init:-/sbin/init}
 diff --git a/init b/init
-index c71ce0c..79cf5c1 100755
+index 567694aff71c..dc2548b6183f 100755
 --- a/init
 +++ b/init
 @@ -78,9 +78,11 @@ EFI_DIR=/sys/firmware/efi  # place to store device firmware information
@@ -32,3 +47,6 @@ index c71ce0c..79cf5c1 100755
  
  if [ -d $EFI_DIR ];then
  	mount -t efivarfs none /sys/firmware/efi/efivars
+-- 
+2.25.1
+

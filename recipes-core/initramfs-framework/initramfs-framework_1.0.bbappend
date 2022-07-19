@@ -3,9 +3,8 @@ FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 SRC_URI += " \
     file://plymouth \
     file://ostree \
-    file://run-tmpfs.patch \
-    file://0001-only-scan-for-block-devices.patch \
-    file://0002-redirect-console-when-conosle-null.patch \
+    file://0001-Mount-run-with-tmpfs.patch \
+    file://0002-only-scan-for-block-devices.patch \
 "
 
 PACKAGES:append = " \
