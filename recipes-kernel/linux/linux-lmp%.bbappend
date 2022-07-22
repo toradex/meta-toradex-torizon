@@ -1,6 +1,6 @@
 
-FILESEXTRAPATHS_prepend := "${THISDIR}/linux-lmp-dev:"
+FILESEXTRAPATHS:prepend := "${THISDIR}/linux-lmp-dev:"
 
-SRC_URI_append = " \
+SRC_URI:append = " \
     file://fragment.cfg \
 "
