@@ -4,6 +4,7 @@ WKS_FILE_DEPENDS:remove = "tezi-metadata virtual/dtb"
 CORE_IMAGE_BASE_INSTALL:append = "resize-helper"
 
 # Raspberry Pi
+KERNEL_BUILTIN_WIREGUARD:rpi = "1"
 PREFERRED_PROVIDER_virtual/bootloader = "u-boot-fio"
 PREFERRED_PROVIDER_virtual/bootloader:sota = "u-boot-fio"
 PREFERRED_PROVIDER_virtual/bootloader:rpi = "u-boot-fio"
@@ -49,6 +50,7 @@ BBMASK += " \
     meta-lmp/meta-lmp-base/recipes-security \
     meta-lmp/meta-lmp-base/recipes-sota \
     meta-lmp/meta-lmp-base/recipes-support \
+    meta-lmp/meta-lmp-bsp/recipes-kernel/linux-firmware \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot.bbappend \

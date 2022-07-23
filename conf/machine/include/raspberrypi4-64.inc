@@ -50,6 +50,7 @@ BBMASK += " \
     meta-lmp/meta-lmp-base/recipes-security \
     meta-lmp/meta-lmp-base/recipes-sota \
     meta-lmp/meta-lmp-base/recipes-support \
+    meta-lmp/meta-lmp-bsp/recipes-kernel/linux-firmware \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot.bbappend \
