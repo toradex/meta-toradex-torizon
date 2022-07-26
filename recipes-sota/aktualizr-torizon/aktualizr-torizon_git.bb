@@ -7,7 +7,7 @@ SRC_URI = " \
   file://aktualizr-torizon.service \
 "
 
-SRCREV = "31e531ea13c28a13c405754b7424b9953930add6"
+SRCREV = "e623fd9ad2a0ae189300ff8664f5829b22f1c459"
 SRCREV_use-head-next = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
