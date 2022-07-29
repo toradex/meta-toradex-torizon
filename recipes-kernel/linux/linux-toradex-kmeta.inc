@@ -1,7 +1,7 @@
 SRCREV_meta = "cf62fa8fd95e57773b16e060a86bc3eebae84ff0"
 SRCREV_meta_use-head-next = "${AUTOREV}"
 
-KMETABRANCH = "toradex_5.4.y"
+KMETABRANCH = "dunfell-5.x.y"
 KMETA = "kernel-meta"
 
 KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
