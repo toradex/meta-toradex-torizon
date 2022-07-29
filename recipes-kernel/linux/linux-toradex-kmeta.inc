@@ -1,7 +1,7 @@
 SRCREV_meta = "8bf6a8d695a6ba448e418c94d45b2c49b43416e9"
 SRCREV_meta:use-head-next = "${AUTOREV}"
 
-KMETABRANCH = "toradex_5.4.y"
+KMETABRANCH = "kirkstone-6.x.y"
 KMETA = "kernel-meta"
 
 KMETAREPOSITORY="github.com/toradex/toradex-kernel-cache.git"
