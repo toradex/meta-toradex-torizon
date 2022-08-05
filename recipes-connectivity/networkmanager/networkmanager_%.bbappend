@@ -14,6 +14,11 @@ PACKAGECONFIG:remove = "dnsmasq"
 PACKAGECONFIG:append = " modemmanager ppp"
 RPROVIDES:${PN} = "network-configuration"
 
+# this is to fix a build issue when pppd is not installed in the host machine
+# it is already fixed in meta-networking/kirkstone-next and should be removed
+# as soon as it gets into the next kirkstone release
+PACKAGECONFIG[ppp] = "-Dppp=true -Dpppd=/usr/sbin/pppd,-Dppp=false,ppp,ppp"
+
 do_install:append() {
     install -m 0600 ${WORKDIR}/toradex-nmconnection.conf ${D}${nonarch_libdir}/NetworkManager/conf.d
 
