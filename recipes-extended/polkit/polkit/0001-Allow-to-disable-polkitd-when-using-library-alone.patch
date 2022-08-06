@@ -1,6 +1,6 @@
-From fec68d81e6ba94dea22e708384dc104ffd3b2d73 Mon Sep 17 00:00:00 2001
+From 42236f4da0e9e9f5f3d001fff05dde1264763487 Mon Sep 17 00:00:00 2001
 From: Sergio Prado <sergio.prado@toradex.com>
-Date: Tue, 12 Jul 2022 20:27:40 -0300
+Date: Sat, 6 Aug 2022 00:30:25 +0000
 Subject: [PATCH] Allow to disable polkitd when using library alone
 
 Upstream-Status: Inappropriate [TorizonCore specific]
@@ -18,28 +18,28 @@ Signed-off-by: Ming Liu <ming.liu@toradex.com>
  4 files changed, 30 insertions(+), 7 deletions(-)
 
 diff --git a/configure.ac b/configure.ac
-index 0f87ea0e8a26..e2e9bae6ef7a 100644
+index 4c5d59691bd5..c6d28b55edc4 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -89,11 +89,12 @@ AS_IF([test x${with_duktape} == xyes], [
-   AC_SUBST(LIBJS_CFLAGS)
-   AC_SUBST(LIBJS_LIBS)
- ], [
--  PKG_CHECK_MODULES(LIBJS, [mozjs-78])
--
--  AC_SUBST(LIBJS_CFLAGS)
--  AC_SUBST(LIBJS_CXXFLAGS)
--  AC_SUBST(LIBJS_LIBS)
-+  AS_IF([test x${enable_polkitd} = yes], [
-+    PKG_CHECK_MODULES(LIBJS, [mozjs-60])
-+    AC_SUBST(LIBJS_CFLAGS)
-+    AC_SUBST(LIBJS_CXXFLAGS)
-+    AC_SUBST(LIBJS_LIBS)
-+  ])
- ])
- AM_CONDITIONAL(USE_DUKTAPE, [test x$with_duktape == xyes], [Using duktape as javascript engine library])
+@@ -80,11 +80,12 @@ PKG_CHECK_MODULES(GLIB, [gmodule-2.0 gio-unix-2.0 >= 2.30.0])
+ AC_SUBST(GLIB_CFLAGS)
+ AC_SUBST(GLIB_LIBS)
  
-@@ -254,6 +255,15 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
+-PKG_CHECK_MODULES(LIBJS, [mozjs-91])
+-
+-AC_SUBST(LIBJS_CFLAGS)
+-AC_SUBST(LIBJS_CXXFLAGS)
+-AC_SUBST(LIBJS_LIBS)
++AS_IF([test x${enable_polkitd} = yes], [
++  PKG_CHECK_MODULES(LIBJS, [mozjs-91])
++  AC_SUBST(LIBJS_CFLAGS)
++  AC_SUBST(LIBJS_CXXFLAGS)
++  AC_SUBST(LIBJS_LIBS)
++])
+ 
+ EXPAT_LIB=""
+ AC_ARG_WITH(expat, [  --with-expat=<dir>      Use expat from here],
+@@ -237,6 +238,15 @@ if test "x$with_systemdsystemunitdir" != "xno"; then
  fi
  AM_CONDITIONAL(HAVE_SYSTEMD, [test -n "$systemdsystemunitdir"])
  
@@ -55,14 +55,14 @@ index 0f87ea0e8a26..e2e9bae6ef7a 100644
  dnl ---------------------------------------------------------------------------
  dnl - User for running polkitd
  dnl ---------------------------------------------------------------------------
-@@ -597,6 +607,7 @@ echo "
+@@ -580,6 +590,7 @@ echo "
          Session tracking:           ${SESSION_TRACKING}
          PAM support:                ${have_pam}
          systemdsystemunitdir:       ${systemdsystemunitdir}
 +        polkitd:                    ${enable_polkitd}
          polkitd user:               ${POLKITD_USER}"
- if test "x${with_duktape}" = xyes; then
- echo "
+ 
+ if test "$have_pam" = yes ; then
 diff --git a/src/Makefile.am b/src/Makefile.am
 index b31382646143..5800930a970c 100644
 --- a/src/Makefile.am
