@@ -12,8 +12,6 @@ IMAGE_CLASSES:remove = "image_type_tezi image_types_fsl"
 
 IMAGE_BASENAME_SUFFIX ?= ""
 
-TDX_MAJOR = "5"
-
 IMX_DEFAULT_BSP = "nxp"
 IMX_DEFAULT_BSP:upstream = "mainline"
 
