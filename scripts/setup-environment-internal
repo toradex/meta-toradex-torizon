@@ -182,12 +182,14 @@ export BUILDDIR
 export BBPATH
 export BB_ENV_PASSTHROUGH_ADDITIONS
 
+AUTO_CONF_CREATED=0
 mkdir -p "${BUILDDIR}"/conf && cd "${BUILDDIR}"
 if [ -f "conf/auto.conf" ]; then
     oldmach=$(egrep "^MACHINE \?=" "conf/auto.conf" |
              sed -e 's%^MACHINE ?= %%' | sed -e 's/^"//' -e 's/"$//')
     olddisto=$(egrep "^DISTRO \?=" "conf/auto.conf" |
              sed -e 's%^DISTRO ?= %%' | sed -e 's/^"//' -e 's/"$//')
+    AUTO_CONF_CREATED=1
 fi
 
 if [ -e conf/checksum -a "${MACHINE}" = "$oldmach" -a "${DISTRO}" = "$olddisto" ]; then
@@ -219,7 +221,7 @@ else
     fi
 fi
 
-if [ "$INTEGRATION_BUILD" = "1" ]; then
+if [ "$INTEGRATION_BUILD" = "1" ] && [ "$AUTO_CONF_CREATED" = "0" ]; then
     cat > conf/auto.conf <<EOF
 # This is needed when building on integration. With use-head-next you
 # always get the newest kernel. Without use-head-next your build may fail.
@@ -228,7 +230,8 @@ MACHINEOVERRIDES =. "use-head-next:"
 EOF
 fi
 
-cat >> conf/auto.conf <<EOF
+if [ "$AUTO_CONF_CREATED" = "0" ]; then
+    cat >> conf/auto.conf <<EOF
 DISTRO ?= "${DISTRO}"
 MACHINE ?= "${MACHINE}"
 SDKMACHINE ?= "${SDKMACHINE}"
@@ -236,6 +239,11 @@ SDKMACHINE ?= "${SDKMACHINE}"
 # Extra options that can be changed by the user
 INHERIT += "rm_work"
 EOF
+else
+    sed -i "s/^DISTRO ?= \"[^\"]*\"$/DISTRO ?= \"${DISTRO}\"/" conf/auto.conf
+    sed -i "s/^MACHINE ?= \"[^\"]*\"$/MACHINE ?= \"${MACHINE}\"/" conf/auto.conf
+    sed -i "s/^SDKMACHINE ?= \"[^\"]*\"$/SDKMACHINE ?= \"${SDKMACHINE}\"/" conf/auto.conf
+fi
 
 cat > conf/site.conf <<_EOF
 SCONF_VERSION = "1"
