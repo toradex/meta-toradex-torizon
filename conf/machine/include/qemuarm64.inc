@@ -26,6 +26,3 @@ PREFERRED_PROVIDER_virtual/kernel_qemuarm64 = "linux-yocto"
 PREFERRED_PROVIDER_virtual/kernel_qemuarm64_preempt-rt = "linux-yocto-rt"
 
 PREFERRED_PROVIDER_u-boot-default-script:qemuarm64 = "u-boot-distro-boot"
-
-PREFERRED_VERSION_wireguard-module:qemuarm64 = "1.0.20200729"
-PREFERRED_VERSION_wireguard-tools:qemuarm64 = "1.0.20200827"
