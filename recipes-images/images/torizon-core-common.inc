@@ -35,7 +35,6 @@ CORE_IMAGE_BASE_INSTALL:append = " \
     ostree-devicetree-overlays \
     network-configuration \
     kernel-devsrc \
-    kernel-module-wireguard \
     wireguard-tools \
     fluent-bit \
     neofetch \
