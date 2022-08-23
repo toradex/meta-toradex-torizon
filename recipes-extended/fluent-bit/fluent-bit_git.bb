@@ -12,16 +12,16 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2ee41112a44fe7014dce33e26468ba93"
 SECTION = "net"
 
 SRC_URI = "\
-           git://github.com/fluent/fluent-bit.git;protocol=https;branch=master \
+           git://github.com/fluent/fluent-bit.git;protocol=https;branch=1.9 \
            file://fluent-bit.service \
            file://fluent-bit.conf \
            "
-SRCREV = "9eb4996b7d134227b568aefa5fa0f9ddd6a7b9ce"
-PV = "1.9.3+git${SRCPV}"
+SRCREV = "265783ebe99590cf1687d2f48b300f58febb883d"
+PV = "1.9.7+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
-DEPENDS = "zlib openssl bison-native flex-native"
+DEPENDS = "zlib openssl libyaml bison-native flex-native"
 
 # Use CMake 'Unix Makefiles' generator
 OECMAKE_GENERATOR ?= "Unix Makefiles"
@@ -48,7 +48,7 @@ EXTRA_OECMAKE += "-DFLB_IN_SYSTEMD=On "
 # Enable Kafka Output plugin
 EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On "
 
-inherit cmake systemd
+inherit cmake systemd pkgconfig
 
 SYSTEMD_SERVICE:${PN} = "fluent-bit.service"
 
