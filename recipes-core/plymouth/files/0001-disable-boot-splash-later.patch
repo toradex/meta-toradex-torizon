@@ -1,4 +1,4 @@
-From f06f6a832b2c110b8c076b9442f0b52acaa55270 Mon Sep 17 00:00:00 2001
+From ef09d07359e5a2dca1dd3a723c31c53d601492cf Mon Sep 17 00:00:00 2001
 From: Stefan Agner <stefan.agner@toradex.com>
 Date: Tue, 4 Feb 2020 16:23:46 +0100
 Subject: [PATCH] disable boot splash later
@@ -15,7 +15,7 @@ Signed-off-by: Stefan Agner <stefan.agner@toradex.com>
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/systemd-units/plymouth-quit.service.in b/systemd-units/plymouth-quit.service.in
-index cf9901e..e5d3b6d 100644
+index 147e9eef23a5..87fa20ccbe88 100644
 --- a/systemd-units/plymouth-quit.service.in
 +++ b/systemd-units/plymouth-quit.service.in
 @@ -1,6 +1,6 @@
@@ -25,7 +25,7 @@ index cf9901e..e5d3b6d 100644
 +After=rc-local.service plymouth-start.service systemd-user-sessions.service docker.service
  
  [Service]
- ExecStart=-@PLYMOUTH_CLIENT_DIR@/plymouth quit
+ ExecStart=-@PLYMOUTH_CLIENT_DIR@/plymouth quit --retain-splash
 -- 
 2.25.0
 
