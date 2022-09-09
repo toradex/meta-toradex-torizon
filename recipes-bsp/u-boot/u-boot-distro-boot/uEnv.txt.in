@@ -4,7 +4,10 @@ otaroot=1
 
 set_bootargs=env set bootcmd_args env set bootargs ${defargs} root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${tdxargs}
 
-set_kernel_load_addr=if test ${kernel_image_type} = "Image.gz"; then \
+set_kernel_load_addr=if test -n ${kernel_comp_addr_r}; then \
+    env set kernel_addr_load ${loadaddr}; \
+    env set bootcmd_unzip_k ';'; \
+elif test ${kernel_image_type} = "Image.gz"; then \
     env set kernel_addr_load ${loadaddr}; \
     env set bootcmd_unzip_k 'unzip $kernel_addr_load $kernel_addr_r'; \
 else \
