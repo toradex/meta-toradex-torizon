@@ -227,8 +227,9 @@ fi
 if [ "$INTEGRATION_BUILD" = "1" ] && [ "$AUTO_CONF_CREATED" = "0" ]; then
     cat > conf/auto.conf <<EOF
 # This is needed when building on integration. With use-head-next you
-# always get the newest kernel. Without use-head-next your build may fail.
-MACHINEOVERRIDES =. "use-head-next:"
+# always get the newest software (u-boot, kernel, aktualizr-torizon, etc).
+# Building on integration without use-head-next your build may fail.
+DISTROOVERRIDES .= ":use-head-next"
 
 EOF
 fi
