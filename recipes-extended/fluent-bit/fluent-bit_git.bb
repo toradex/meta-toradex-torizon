@@ -53,6 +53,10 @@ EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On -DWITH_CURL=Off "
 
 inherit cmake systemd pkgconfig
 
+# for risc-v
+TARGET_CC_ARCH:append:nezha-allwinner-d1 = " ${SELECTED_OPTIMIZATION}"
+TARGET_CC_ARCH:remove:nezha-allwinner-d1 = "-D_FORTIFY_SOURCE=2"
+
 SYSTEMD_SERVICE:${PN} = "fluent-bit.service"
 
 do_install:append() {
