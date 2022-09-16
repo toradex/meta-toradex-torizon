@@ -1,0 +1,13 @@
+--- git.orig/libnetwork/Makefile	2022-09-08 02:50:43.820948164 -0300
++++ git/libnetwork/Makefile	2022-09-08 03:04:06.522681472 -0300
+@@ -82,8 +82,8 @@
+ 
+ cross-local:
+ 	@echo "🐳 $@"
+-	@$(GO) build -linkshared $(GOBUILDFLAGS) -o "bin/docker-proxy-$$GOOS-$$GOARCH" ./cmd/proxy
+-	@$(GO) build -linkshared $(GOBUILDFLAGS) -o "bin/dnet-$$GOOS-$$GOARCH" ./cmd/dnet
++	@$(GO) build $(GOBUILDFLAGS) -o "bin/docker-proxy-$$GOOS-$$GOARCH" ./cmd/proxy
++	@$(GO) build $(GOBUILDFLAGS) -o "bin/dnet-$$GOOS-$$GOARCH" ./cmd/dnet
+ 
+ # Rebuild protocol buffers.
+ # These may need to be rebuilt after vendoring updates, so .proto files are declared .PHONY so they are always rebuilt.

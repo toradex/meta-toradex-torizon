@@ -1,0 +1,13 @@
+--- a/src/import/hack/make/.binary	2022-09-08 02:43:54.569047202 -0300
++++ b/src/import/hack/make/.binary	2022-09-08 02:46:11.612879337 -0300
+@@ -67,6 +67,10 @@
+ 				export CC="${CC:-x86_64-linux-gnu-gcc}"
+ 				export CGO_ENABLED=1
+ 				;;
++            linux/riscv64)
++				export CC="${CC:-riscv64-linux-gnu-gcc}"
++ 				export CGO_ENABLED=1
++ 				;;
+ 		esac
+ 	fi
+ 
