@@ -18,7 +18,7 @@ FILES:${PN} = " \
         ${systemd_unitdir}/network/* \
         "
 
-DEV_MATCH_DIRECTIVE ?= "Name=eth*"
+DEV_MATCH_DIRECTIVE ?= "Name=en*"
 
 do_install() {
     install -d ${D}/${systemd_unitdir}/network
