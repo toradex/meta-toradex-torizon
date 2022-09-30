@@ -47,7 +47,7 @@ CORE_IMAGE_BASE_INSTALL:append:sota = " \
     auto-provisioning \
 "
 
-CORE_IMAGE_BASE_INSTALL:append:mx8 = " \
+CORE_IMAGE_BASE_INSTALL:append:mx8-nxp-bsp = " \
     kernel-module-imx-gpu-viv \
 "
 
