@@ -8,7 +8,7 @@ SRC_URI += " \
 
 PACKAGECONFIG = "pango drm"
 
-EXTRA_OECONF += "--with-udev --with-runtimedir=/run"
+EXTRA_OECONF += "--with-udev --runstatedir=/run"
 
 do_install:append () {
     install -m 0644 ${WORKDIR}/torizonlogo-white.png ${D}${datadir}/plymouth/themes/spinner/watermark.png
