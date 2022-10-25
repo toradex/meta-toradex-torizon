@@ -11,7 +11,7 @@ QB_MACHINE = "-machine virt"
 QB_DRIVE_TYPE = "/dev/vda"
 QB_DEFAULT_FSTYPE = "wic"
 QB_MEM:qemuarm64 = "-m 1057"
-QB_OPT_APPEND:qemuarm64 = "-display default,show-cursor=on -device VGA,edid=on -device qemu-xhci -device usb-tablet -device usb-kbd -no-acpi -bios ${DEPLOY_DIR_IMAGE}/u-boot.bin -d unimp -semihosting-config enable=on,target=native"
+QB_OPT_APPEND:qemuarm64 = "-device qemu-xhci -device usb-tablet -device usb-kbd -no-acpi -bios ${DEPLOY_DIR_IMAGE}/u-boot.bin -d unimp -semihosting-config enable=on,target=native"
 
 IMAGE_FSTYPES_REMOVE = "tar.bz2 ext4 teziimg"
 IMAGE_FSTYPES:append = " wic"
