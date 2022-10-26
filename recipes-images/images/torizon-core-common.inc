@@ -42,6 +42,10 @@ CORE_IMAGE_BASE_INSTALL:append = " \
     mmc-utils \
 "
 
+CORE_IMAGE_BASE_INSTALL:append:tdx = " \
+    tdx-info \
+"
+
 # SOTA related packages
 CORE_IMAGE_BASE_INSTALL:append:sota = " \
     auto-provisioning \
