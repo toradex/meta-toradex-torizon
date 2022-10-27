@@ -130,7 +130,7 @@ IMAGE_DATETIME_FILES ??= " \
     ${libdir}/os-release \
 "
 
-ROOTFS_POSTPROCESS_COMMAND += "tweak_os_release_variant ; "
+ROOTFS_POSTPROCESS_COMMAND += "tweak_os_release_variant;"
 
 # Tweak /etc/os-release according to IMAGE_VARIANT defined in image recipe
 tweak_os_release_variant () {
@@ -139,6 +139,51 @@ tweak_os_release_variant () {
 	else
 		bbwarn "IMAGE_VARIANT is missing, would be better to define it for a TorizonCore image recipe."
 	fi
+}
+
+# Make bootloader binary and version files available in deployment directory.
+ROOTFS_POSTPROCESS_COMMAND += "gen_bootloader_ota_links;"
+
+UBOOT_BINARY_OTA = ""
+UBOOT_BINARY_OTA:apalis-imx6 = "u-boot-with-spl.imx"
+UBOOT_BINARY_OTA:colibri-imx6 = "u-boot-with-spl.imx"
+UBOOT_BINARY_OTA:colibri-imx6ull-emmc = "u-boot.imx"
+UBOOT_BINARY_OTA:colibri-imx7-emmc = "u-boot.imx"
+UBOOT_BINARY_OTA:apalis-imx8 = "imx-boot"
+UBOOT_BINARY_OTA:colibri-imx8x = "imx-boot"
+UBOOT_BINARY_OTA:apalis-imx8 = "imx-boot"
+UBOOT_BINARY_OTA:verdin-imx8mm = "imx-boot"
+UBOOT_BINARY_OTA:verdin-imx8mp = "imx-boot"
+UBOOT_BINARY_OTA:qemuarm64 = "u-boot.bin"
+
+UBOOT_BINARY_OTA_IGNORE = "0"
+UBOOT_BINARY_OTA_IGNORE:genericx86-64 = "1"
+
+# Create symbolic links for the bootloader binary and version information files; these are
+# expected to already exist in the deployment directory.
+gen_bootloader_ota_links () {
+    if [ "${UBOOT_BINARY_OTA_IGNORE}" = "1" ]; then
+        bbnote "Not generating links to bootloader binary for OTA on machine ${MACHINE}."
+        return 0
+    fi
+    if [ -z "${UBOOT_BINARY_OTA}" ]; then
+        bbfatal "Name of u-boot binary for OTA usage is not known for machine ${MACHINE}." \
+                "To ignore this error, please set UBOOT_BINARY_OTA_IGNORE=\"1\"."
+    fi
+
+    local deploydir="${DEPLOY_DIR_IMAGE}"
+    local binfile="${deploydir}/${UBOOT_BINARY_OTA}"
+    local verfile="${deploydir}/u-boot-version.json"
+
+    if [ ! -f "${binfile}" ]; then
+        bbfatal "Could not find bootloader binary file '${binfile}'"
+    fi
+    if [ ! -f "${verfile}" ]; then
+        bbfatal "Could not find bootloader version file '${verfile}'"
+    fi
+
+    ln -sfnr $(readlink -f ${binfile}) ${deploydir}/u-boot-ota.bin
+    ln -sfnr $(readlink -f ${verfile}) ${deploydir}/u-boot-ota.json
 }
 
 IMAGE_PREPROCESS_COMMAND += "adjust_rootfs_datetime;"
