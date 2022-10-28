@@ -55,5 +55,6 @@ BBMASK += " \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-distro-boot.bbappend \
     meta-toradex-torizon/recipes-bsp/u-boot/libubootenv_* \
+    meta-toradex-bsp-common/recipes-bsp/u-boot/libubootenv_* \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
 "
