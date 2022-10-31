@@ -1,7 +1,7 @@
 
 WKS_FILE_DEPENDS:remove = "tezi-metadata virtual/dtb"
 
-CORE_IMAGE_BASE_INSTALL:append = "resize-helper"
+CORE_IMAGE_BASE_INSTALL:append = "resize-helper u-boot-fio"
 
 # Raspberry Pi
 KERNEL_BUILTIN_WIREGUARD:rpi = "1"
