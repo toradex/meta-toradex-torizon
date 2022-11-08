@@ -6,9 +6,8 @@ SRC_URI += " \
     file://spinner.plymouth \
 "
 
-PACKAGECONFIG = "pango drm"
-
-EXTRA_OECONF += "--with-udev --runstatedir=/run"
+PACKAGECONFIG:remove = "initrd"
+PACKAGECONFIG:append = " drm"
 
 do_install:append () {
     install -m 0644 ${WORKDIR}/torizonlogo-white.png ${D}${datadir}/plymouth/themes/spinner/watermark.png
