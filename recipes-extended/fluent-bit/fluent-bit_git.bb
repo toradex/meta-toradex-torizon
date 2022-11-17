@@ -12,12 +12,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2ee41112a44fe7014dce33e26468ba93"
 SECTION = "net"
 
 SRC_URI = "\
-           git://github.com/fluent/fluent-bit.git;protocol=https;branch=1.9 \
+           git://github.com/fluent/fluent-bit.git;protocol=https;nobranch=1 \
            file://fluent-bit.service \
            file://fluent-bit.conf \
            "
-SRCREV = "265783ebe99590cf1687d2f48b300f58febb883d"
-PV = "1.9.7+git${SRCPV}"
+SRCREV = "8e5f9f910694e059d692438d51d7dc3b46e63e18"
+PV = "2.0.5+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
@@ -38,6 +38,9 @@ EXTRA_OECMAKE += "-DGNU_HOST=${HOST_SYS} -DHOST=${HOST_ARCH} "
 # Disable LuaJIT and filter_lua support
 EXTRA_OECMAKE += "-DFLB_LUAJIT=Off -DFLB_FILTER_LUA=Off "
 
+# Disable Windows/ia32 only features
+EXTRA_OECMAKE += "-DFLB_WASM=Off "
+
 # Disable Library and examples
 EXTRA_OECMAKE += "-DFLB_SHARED_LIB=Off -DFLB_EXAMPLES=Off "
 
@@ -46,7 +49,7 @@ DEPENDS += "systemd"
 EXTRA_OECMAKE += "-DFLB_IN_SYSTEMD=On "
 
 # Enable Kafka Output plugin
-EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On "
+EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On -DWITH_CURL=Off "
 
 inherit cmake systemd pkgconfig
 
