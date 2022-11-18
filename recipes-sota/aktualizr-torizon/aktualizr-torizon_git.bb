@@ -5,6 +5,8 @@ LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=815ca599c9df247a0c7f619bab123dad"
 SRC_URI = " \
   gitsm://github.com/toradex/aktualizr.git;protocol=https;branch=toradex-master \
   file://aktualizr-torizon.service \
+  file://gateway.url \
+  file://root.crt \
 "
 
 SRCREV = "904d06d17d48ad006b8d24b7a9eec646de299072"
@@ -40,6 +42,9 @@ do_install:append() {
     install -m 0700 -d ${D}${libdir}/sota/conf.d 
     install -m 0644 ${S}/config/sota-device-cred.toml ${D}/${libdir}/sota/conf.d/20-sota-device-cred.toml
     install -m 0644 ${S}/config/sota-uboot-env.toml ${D}/${libdir}/sota/conf.d/30-rollback.toml
+    
+    install -m 0644 ${WORKDIR}/gateway.url ${D}/${libdir}/sota/gateway.url
+    install -m 0644 ${WORKDIR}/root.crt ${D}/${libdir}/sota/root.crt
 }
 
 PACKAGES =+ "${PN}-misc"
