@@ -3,7 +3,7 @@ Description=Automatically provision the device to the Platform Services
 After=network-online.target
 Wants=network-online.target
 ConditionPathExists=/var/sota/auto-provisioning.json
-ConditionPathExists=!/var/sota/import/gateway.url
+ConditionPathExists=!/var/sota/import/pkey.pem
 
 [Service]
 Type=oneshot
