@@ -4,13 +4,12 @@ SOTA_BASE_DIR="/var/sota"
 SOTA_CRED_DIR="$SOTA_BASE_DIR/import"
 
 CONFIG_FILE="$SOTA_BASE_DIR/auto-provisioning.json"
-PROVISIONED_FILE="$SOTA_BASE_DIR/import/gateway.url"
+PROVISIONED_FILE="$SOTA_BASE_DIR/import/pkey.pem"
 
 PROV_CLIENT_ID=""
 PROV_SECRET=""
 PROV_TOKEN_ENDPOINT=""
 PROV_ACCESS_TOKEN=""
-PROV_URL_GATEWAY="https://ota-ce.torizon.io"
 PROV_REGISTER_ENDPOINT="https://app.torizon.io/api/accounts/devices"
 
 function log()
@@ -126,10 +125,6 @@ function write_credentials()
     fi
 
     rm -rf $SOTA_BASE_DIR/sql.db
-
-    if ! echo $PROV_URL_GATEWAY > $SOTA_CRED_DIR/gateway.url; then
-        exit_error "Error creating gateway.url file"
-    fi
 
     rm -rf $CONFIG_FILE
 }
