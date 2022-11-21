@@ -1,7 +1,7 @@
 #!/bin/bash
 
 UPGRADE_AVAILABLE=$(fw_printenv upgrade_available | cut -d '=' -f 2)
-DEVICE_PROVISIONED=$(test -e /var/sota/import/gateway.url -o -e /var/sota/import/director/root.json && echo '1')
+DEVICE_PROVISIONED=$(test -e /var/sota/import/pkey.pem -o -e /var/sota/import/director/root.json && echo '1')
 
 # if update in progress but device is not provisioned, aktualizr will be inactive,
 # so let's manually clean-up U-Boot variables to confirm the update
