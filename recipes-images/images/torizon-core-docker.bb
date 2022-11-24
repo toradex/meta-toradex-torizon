@@ -5,7 +5,7 @@ require torizon-core-container.inc
 
 CORE_IMAGE_BASE_INSTALL:append = " \
     docker-ce \
-    python3-docker-compose \
+    docker-compose \
     docker-compose-up \
     docker-integrity-checker \
     docker-watchdog \
