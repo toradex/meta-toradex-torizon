@@ -18,8 +18,6 @@ CORE_IMAGE_BASE_INSTALL:append = " \
     packagegroup-core-full-cmdline-utils \
     rsync \
     sshfs-fuse \
-    strace \
-    tcpdump \
     vim-tiny \
     zram \
 "
