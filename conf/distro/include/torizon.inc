@@ -71,13 +71,6 @@ BBMASK += " \
     /meta-freescale/recipes-graphics/cairo \
 "
 
-# our containerd recipe builds a new version that might not work with
-# Docker-CE. So for now, let's force the usage of containerd from
-# meta-virtualization
-BBMASK += " \
-    /meta-toradex-torizon/recipes-containers/containerd \
-"
-
 # machines where TorizonCore is experimental
 EXPERIMENTALOVERRIDES = ""
 # Currently TorizonCore does not support any experimental machines, in future such machines can be added like below:
