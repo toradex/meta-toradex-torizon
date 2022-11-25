@@ -6,4 +6,4 @@ SRC_URI_append = " \
     file://bootlimit.cfg \
 "
 
-require u-boot-version.inc
+require u-boot-ota.inc
