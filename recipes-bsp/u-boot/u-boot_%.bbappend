@@ -1,1 +1,1 @@
-require u-boot-version.inc
+require u-boot-ota.inc
