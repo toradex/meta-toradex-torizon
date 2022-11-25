@@ -142,7 +142,7 @@ tweak_os_release_variant () {
 }
 
 # Make bootloader binary and version files available in deployment directory.
-ROOTFS_POSTPROCESS_COMMAND += "gen_bootloader_ota_links;"
+ROOTFS_POSTPROCESS_COMMAND += "gen_bootloader_ota_files;"
 
 UBOOT_BINARY_OTA = ""
 UBOOT_BINARY_OTA:apalis-imx6 = "u-boot-with-spl.imx"
@@ -159,9 +159,115 @@ UBOOT_BINARY_OTA:qemuarm64 = "u-boot.bin"
 UBOOT_BINARY_OTA_IGNORE = "0"
 UBOOT_BINARY_OTA_IGNORE:genericx86-64 = "1"
 
-# Create symbolic links for the bootloader binary and version information files; these are
-# expected to already exist in the deployment directory.
-gen_bootloader_ota_links () {
+# Function: find_uboot_env_blob
+#
+# Purpose: Find the location of given "environment variables blob" inside a
+#          bootloader binary.
+#
+# Parameters:
+#
+# - $1: Name of u-boot binary file; this could be the any of the normal binaries
+#       produced by compiling u-boot or a container image where the u-boot
+#       binary would be encapsulated. The environment embedded into the binary
+#       is supposed to be a series of NUL terminated strings.
+# - $2: Name of the (known) u-boot environment file that is supposed to be embedded
+#       into the binary; this is supposed to be produced in the same way as done by
+#       u-boot's "u-boot-initial-env" make target except that no sorting of the
+#       environment should be performed.
+#
+# Output: String providing information about the offset and size of the environment
+#         found (if any); if the environment is not found the function will return
+#         a non-zero exit code.
+#
+# How it works:
+#
+# The function looks for the longest variable in the known environment and searches
+# for the same string inside the u-boot binary. For each "potential" hit it extracts
+# the whole (potential) environment from the binary and compares with the known
+# full environment (after replacing NULs with new lines) - if it matches then the
+# location is where the environment is located. This process requires that the
+# environment in the binary and the one being searched are in the exact same order.
+#
+find_uboot_env_blob () {
+    local binfile envfile \
+	  longest offset_in_env offsets_in_bin \
+	  env_found env_size env_offset
+
+    binfile="${1:?Binary file not specified}"
+    envfile="${2:?Environment file not specified}"
+
+    # Find longest line (variable assignment) in known environment:
+    longest=""
+    while IFS="" read line; do
+        if [ ${#line} -gt ${#longest} ]; then
+        longest="${line}"
+        fi
+    done < "${envfile}"
+
+    if [ ${#longest} -lt 8 ]; then
+        echo "Longest environment variable is too short!" >&2
+        return 1
+    fi
+
+    # Determine total size of environment:
+    env_size=$(stat -Lc "%s" "${envfile}")
+
+    # Find offset of the longest line in the known environment:
+    offset_in_env=$(strings -n"${#longest}" -td "${envfile}" |
+                        grep -F "${longest}" |
+                        { read location line; echo $location; })
+
+    # Find offsets of the longest line in the binary:
+    offsets_in_bin=$(strings -n"${#longest}" -td "${binfile}" |
+                        grep -F "${longest}" |
+                        { while read location line; do echo $location; done; })
+
+    env_found=0
+    for offset in ${offsets_in_bin}; do
+        env_offset=$(expr ${offset} - ${offset_in_env})
+        # Extract potential area from binary:
+        dd if="${binfile}" of="${binfile}.tmp" \
+           iflag="skip_bytes,count_bytes" \
+           skip="${env_offset}" count="${env_size}" 2>/dev/null
+        # Replace NULs with NLs just like `make u-boot-initial-env` in u-boot does.
+        sed -i 's/\x00/\x0A/g' "${binfile}.tmp"
+        if cmp "${binfile}.tmp" "${envfile}" >/dev/null; then
+            # Note: beware that the output here will be parsed later.
+            echo "Found environment in ${binfile}: offset=${env_offset}, size=${env_size}."
+            env_found=1
+            break
+        fi
+    done
+    rm -f "${binfile}.tmp"
+
+   if [ ${env_found} -eq 0 ]; then
+       echo "Could not find environment inside ${binfile}!" >&2
+       return 1
+   fi
+
+   return 0
+}
+
+# Function: gen_bootloader_ota_files
+#
+# Purpose: Generate bootloader files directed to platform/OTA usage.
+#
+# Parameters: None
+#
+# Results:
+#
+# - A symbolic link "u-boot-ota.bin" pointing to the u-boot binary to be employed
+#   with the platform.
+# - A file named "u-boot-ota.json" with information about the version of u-boot
+#   and the location and size of the environment blob inside the u-boot binary.
+#
+# Both of the above files are generated in the deployment directory.
+#
+gen_bootloader_ota_files () {
+    local deploydir binfile binfile_out \
+          verfile otafile envfile \
+          envinfo_msg envinfo_off envinfo_siz addjson
+
     if [ "${UBOOT_BINARY_OTA_IGNORE}" = "1" ]; then
         bbnote "Not generating links to bootloader binary for OTA on machine ${MACHINE}."
         return 0
@@ -171,9 +277,9 @@ gen_bootloader_ota_links () {
                 "To ignore this error, please set UBOOT_BINARY_OTA_IGNORE=\"1\"."
     fi
 
-    local deploydir="${DEPLOY_DIR_IMAGE}"
-    local binfile="${deploydir}/${UBOOT_BINARY_OTA}"
-    local verfile="${deploydir}/u-boot-version.json"
+    deploydir="${DEPLOY_DIR_IMAGE}"
+    binfile="${deploydir}/${UBOOT_BINARY_OTA}"
+    verfile="${deploydir}/u-boot-version.json"
 
     if [ ! -f "${binfile}" ]; then
         bbfatal "Could not find bootloader binary file '${binfile}'"
@@ -182,8 +288,53 @@ gen_bootloader_ota_links () {
         bbfatal "Could not find bootloader version file '${verfile}'"
     fi
 
-    ln -sfnr $(readlink -f ${binfile}) ${deploydir}/u-boot-ota.bin
-    ln -sfnr $(readlink -f ${verfile}) ${deploydir}/u-boot-ota.json
+    binfile_out="${deploydir}/u-boot-ota.bin"
+    ln -sfnr $(readlink -f ${binfile}) ${binfile_out}
+
+    otafile="${deploydir}/u-boot-ota.json"
+    envfile="${deploydir}/u-boot-initial-env.raw"
+
+    # Determine environment location and size inside u-boot binary.
+    envinfo_msg=$(find_uboot_env_blob "${binfile_out}" "${envfile}")
+    envinfo_off=$(echo "${envinfo_msg}" | sed 's/.* offset=\([0-9]\+\).*/\1/')
+    envinfo_siz=$(echo "${envinfo_msg}" | sed 's/.* size=\([0-9]\+\).*/\1/')
+
+    # Sanity check (arbitrary limits):
+    [ "${envinfo_off}" -gt 64 -a "${envinfo_siz}" -gt 32 ]
+
+    # Augment the information file with the u-boot environment location and size.
+    rm -f ${otafile}
+    cp -TLp ${verfile} ${otafile}
+
+    # Following sed command will take a JSON file like this:
+    # {
+    #   "key1": "value1",
+    #   "key2": "value2"
+    # }
+    # and turn it into something like this:
+    # {
+    #   "key1": "value1",
+    #   "key2": "value2",
+    # @@INSERT@@
+    # }
+    sed -i -n -e '
+        N;             # Pattern space contains current and next line
+        h;             # Save pattern space into hold space
+        s/ *\n//g;     # Remove new lines and spaces at end of line from pattern space
+        /[^,]}/ {      # Add comma and insertion point text
+            x;
+            s/ *\n/,\n@@INSERT@@\n/;
+            p;
+            d;
+        };
+        x;             # Get the pattern space with new lines back
+        P;             # Print first line
+        D;             # Delete first line and restart
+    ' ${otafile}
+
+    # Add new keys at insertion point.
+    addjson="  \"envoffset\": ${envinfo_off},\n  \"envsize\": ${envinfo_siz}"
+    sed -i -e "s/@@INSERT@@/${addjson}/" ${otafile}
 }
 
 IMAGE_PREPROCESS_COMMAND += "adjust_rootfs_datetime;"
