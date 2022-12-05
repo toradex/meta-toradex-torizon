@@ -1,8 +1,9 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
-SRC_URI += " \
+SRC_URI += "\
     file://plymouth \
     file://ostree \
+    file://kmod \
     file://0001-Mount-run-with-tmpfs.patch \
     file://0002-only-scan-for-block-devices.patch \
 "
@@ -10,6 +11,7 @@ SRC_URI += " \
 PACKAGES:append = " \
     initramfs-module-plymouth \
     initramfs-module-ostree \
+    initramfs-module-kmod \
 "
 
 SUMMARY:initramfs-module-plymouth = "initramfs support for plymouth"
@@ -20,7 +22,15 @@ SUMMARY:initramfs-module-ostree = "initramfs support for ostree based filesystem
 RDEPENDS:initramfs-module-ostree = "${PN}-base ostree-switchroot"
 FILES:initramfs-module-ostree = "/init.d/98-ostree"
 
+SUMMARY:initramfs-module-kmod = "initramfs support for loading kernel modules"
+RDEPENDS:initramfs-module-kmod = "${PN}-base"
+FILES:initramfs-module-kmod = "\
+    /init.d/01-kmod \
+    /etc/modules-load.d/* \
+"
+
 do_install:append() {
-        install -m 0755 ${WORKDIR}/plymouth ${D}/init.d/02-plymouth
-        install -m 0755 ${WORKDIR}/ostree ${D}/init.d/98-ostree
+    install -m 0755 ${WORKDIR}/plymouth ${D}/init.d/02-plymouth
+    install -m 0755 ${WORKDIR}/ostree ${D}/init.d/98-ostree
+    install -m 0755 ${WORKDIR}/kmod ${D}/init.d/01-kmod
 }

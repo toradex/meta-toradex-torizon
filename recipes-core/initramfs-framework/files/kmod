@@ -1,0 +1,14 @@
+#!/bin/sh
+
+kmod_enabled() {
+	return 0
+}
+
+kmod_run() {
+	for c in /etc/modules-load.d/??-*.conf; do
+		for m in $(cat $c); do
+			modprobe "$m"
+			echo "Kernel module loaded from ramdisk: $m - result: $?" > /dev/kmsg
+		done
+	done
+}

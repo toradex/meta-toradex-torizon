@@ -2,7 +2,8 @@ DESCRIPTION = "TorizonCore OSTree initramfs image"
 
 PACKAGE_INSTALL = "initramfs-framework-base initramfs-module-udev \
     initramfs-module-rootfs initramfs-module-debug initramfs-module-ostree \
-    initramfs-module-plymouth ${VIRTUAL-RUNTIME_base-utils} base-passwd"
+    initramfs-module-plymouth ${VIRTUAL-RUNTIME_base-utils} base-passwd \
+    initramfs-module-kmod"
 
 SYSTEMD_DEFAULT_TARGET = "initrd.target"
 
