@@ -34,3 +34,16 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/ostree ${D}/init.d/98-ostree
     install -m 0755 ${WORKDIR}/kmod ${D}/init.d/01-kmod
 }
+
+# Adding modules so plymouth can show the splash screen during boot
+SRC_URI:append:mx8-nxp-bsp = " file://50-imx8-graphics.conf"
+RDEPENDS:initramfs-module-kmod:append:mx8-nxp-bsp = " \
+    kernel-module-sec-dsim \
+    kernel-module-sec-mipi-dsim-imx \
+    kernel-module-ti-sn65dsi83 \
+"
+
+do_install:append:mx8-nxp-bsp() {
+    install -d ${D}/etc/modules-load.d/
+    install -m 0755 ${WORKDIR}/50-imx8-graphics.conf ${D}/etc/modules-load.d/50-imx8-graphics.conf
+}
