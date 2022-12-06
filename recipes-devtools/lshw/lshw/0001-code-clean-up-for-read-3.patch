@@ -1,0 +1,50 @@
+From 37c3f3934b9d03be2d0ec70caf3779e03c003c5a Mon Sep 17 00:00:00 2001
+From: Lyonel Vincent <lyonel@ezix.org>
+Date: Mon, 25 May 2020 15:24:38 +0200
+Subject: [PATCH] code clean-up for read(3)
+
+use ssize_t instead of size_t
+cf. Github PR #52
+---
+ src/core/cpuinfo.cc | 2 +-
+ src/core/osutils.cc | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/core/cpuinfo.cc b/src/core/cpuinfo.cc
+index 49f3052d8da1..9e41a42184a6 100644
+--- a/src/core/cpuinfo.cc
++++ b/src/core/cpuinfo.cc
+@@ -597,7 +597,7 @@ bool scan_cpuinfo(hwNode & n)
+   if (core)
+   {
+     char buffer[1024];
+-    size_t count;
++    ssize_t count;
+     string cpuinfo_str = "";
+     string description = "", version = "";
+     string plat = platform();
+diff --git a/src/core/osutils.cc b/src/core/osutils.cc
+index f023a465921b..a53ed89e9d7b 100644
+--- a/src/core/osutils.cc
++++ b/src/core/osutils.cc
+@@ -148,7 +148,7 @@ vector < string > &list)
+ {
+   char buffer[1024];
+   string buffer_str = "";
+-  size_t count = 0;
++  ssize_t count = 0;
+   data_file fd = file_open(file);
+ 
+   if (file_open_error(fd))
+@@ -174,7 +174,7 @@ const string & def)
+   if (fd >= 0)
+   {
+     char buffer[1024];
+-    size_t count = 0;
++    ssize_t count = 0;
+ 
+     memset(buffer, 0, sizeof(buffer));
+     result = "";
+-- 
+2.25.1
+
