@@ -33,12 +33,12 @@ _exit_handler() {
     if [ "$ec" -eq 113 ]; then
         exit "$ec"
     elif [ "$ec" -ge 64 -a "$ec" -le 112 ]; then
-	if [ "$$" -eq "$BASHPID" -a -n "$_die_handler" ]; then
-	    # This is the top-level shell (run it and use its exit code).
-	    eval "$_die_handler"
-	    exit "$?"
-	fi
-	# Any exit code in the "user-defined" range propagates to the parent shell.
+        if [ "$$" -eq "$BASHPID" -a -n "$_die_handler" ]; then
+            # This is the top-level shell (run it and use its exit code).
+            eval "$_die_handler"
+            exit "$?"
+        fi
+        # Any exit code in the "user-defined" range propagates to the parent shell.
         exit "$ec"
     fi
 }
@@ -49,8 +49,8 @@ die() {
     log "FATAL: $@"
     if [ "$$" -eq "$BASHPID" -a -n "$_die_handler" ]; then
         # This is the top-level shell (run it and use its exit code).
-	eval "$_die_handler"
-	exit "$?"
+        eval "$_die_handler"
+        exit "$?"
     fi
     exit 112;
 }
@@ -74,6 +74,7 @@ req_program "/usr/bin/jq"          && alias JQ="$_"
 req_program "/usr/bin/lsblk"       && alias LSBLK="$_"
 req_program "/usr/bin/mkdir"       && alias MKDIR="$_"
 req_program "/usr/bin/mmc"         && alias MMC="$_"
+req_program "/usr/bin/rm"          && alias RM="$_"
 req_program "/usr/bin/sed"         && alias SED="$_"
 req_program "/usr/bin/sha256sum"   && alias SHA256SUM="$_"
 req_program "/usr/sbin/shutdown"   && alias SHUTDOWN="$_"
@@ -297,6 +298,106 @@ clean_uboot_vars() {
     maybe_run FW_SETENV bl_updt_status
 }
 
+# Process the following fields under '.bootloader.env' (of the custom metadata):
+# 'resetOnUpdate', 'embeddedOffset', 'embeddedSize', 'setVars' and 'keepVars'.
+#
+# Result: Script to set all environment (written to file defined by $1).
+#
+create_setenv_script_from_embedded() {
+    local out_script=${1:?Output script must be specified}
+    local env_reset=$(echo "$SECONDARY_CUSTOM_METADATA" |
+                      JQ -r '.bootloader.env.resetOnUpdate' 2>/dev/null)
+    local env_offset=$(echo "$SECONDARY_CUSTOM_METADATA" |
+                       JQ -r '.bootloader.env.embeddedOffset' 2>/dev/null)
+    local env_size=$(echo "$SECONDARY_CUSTOM_METADATA" |
+                     JQ -r '.bootloader.env.embeddedSize' 2>/dev/null)
+
+    log "Create setenv script: envReset=$env_reset, envOffset=$env_offset, envSize=$env_size"
+
+    if [ "$env_reset" = "true" -a "$env_offset" -gt 0 -a "$env_size" -gt 0 ] 2>/dev/null; then
+        # Conditions to reset the environment look good.
+
+        # Extract environment from binary; save into separate file so that if we can't
+        # get the new environment we don't clear the previous one either for increased
+        # robustness.
+        DD if="$SECONDARY_FIRMWARE_PATH" \
+           iflag="skip_bytes,count_bytes" \
+           skip="${env_offset}" count="${env_size}" 2>/dev/null \
+           | SED 's/\x00/\x0A/g' > "${out_script}.new"
+        if [ $? -ne 0 ]; then
+            log "Could not extract environment from binary!"
+        else
+            echo '# Clear previous environment:' >> $out_script
+            FW_PRINTENV | sed 's/^\( *[^=]\+\)=\(.*\)$/\1=/' >> $out_script
+            if [ $? -ne 0 ]; then
+                log "Could not clear previous environment!"
+            fi
+
+            echo '# Set new environment:' >> $out_script
+            CAT "${out_script}.new" >> $out_script
+            RM -f "${out_script}.new"
+        fi
+
+        # Handle 'bootloader.env.keepVars' section.
+        local keep_expr=$(echo "$SECONDARY_CUSTOM_METADATA" |
+                          JQ -r '.bootloader.env.keepVars | join("\\|")' 2>/dev/null)
+        if [ -n "$keep_expr" ]; then
+            echo '# Restore variables to be kept (handle "keepVars"):' >> $out_script
+            FW_PRINTENV | sed -n "s/^ *\(${keep_expr}\)=\(.*\)$/\1=\2/p" >> $out_script
+        fi
+    else
+        log "Environment reset not requested through the metadata"
+    fi
+
+    # Handle 'bootloader.env.setVars' section.
+    local set_vars_text=$(
+        echo "$SECONDARY_CUSTOM_METADATA" |
+        JQ -r '.bootloader.env.setVars | to_entries[] | "\(.key)=\(.value)"' 2>/dev/null)
+    if [ $? -eq 0 -a -n "$set_vars_text" ]; then
+        echo '# Set some variables (handle "setVars"):' >> $out_script
+        echo "$set_vars_text" >> $out_script
+    fi
+
+    return 0
+}
+
+update_uboot_vars() {
+    # Create temporary script that will hold all fw_printenv operations to be
+    # executed at once.
+    local tmp_script=$(mktemp -t bl_update_script.XXXXXXXXXX)
+
+    # Handle environment reset; the only type supported at the moment is "embedded"
+    # meaning that the environment to reset to is somewhere inside the u-boot binary.
+    local env_type=$(echo "$SECONDARY_CUSTOM_METADATA" |
+                     JQ -r '.bootloader.env.type' 2>/dev/null)
+    if [ $? -eq 0 -a "$env_type" = "embedded" ]; then
+        create_setenv_script_from_embedded "${tmp_script}"
+    else
+        log "Metadata does not provide information about u-boot environment variables"
+    fi
+
+    # Handle the setting of the variables passed as parameter.
+    if [ "${#@}" -gt 0 ]; then
+        echo "# Set extra variables for update operation:" >> $tmp_script
+        printf "%s=%s\n" "$@" >> $tmp_script
+    fi
+
+    # Execute temporary script.
+    log "Executing setenv script"
+    maybe_run FW_SETENV -s "$tmp_script"
+    local setenv_res="$?"
+
+    if [ "$DRY_RUN" = "1" ]; then
+        log "This is the setenv script that would have been executed:"
+        log "$(CAT "${tmp_script}")"
+    fi
+
+    # Get rid of the temporary script.
+    RM -f "${tmp_script}"
+
+    return $setenv_res
+}
+
 on_install_failed() {
     if [ "$LOG_ENABLED" = "1" ]; then
         echo '{"status": "failed", "message": "action failed; check log at '$LOG_FILE'"}'
@@ -387,14 +488,13 @@ do_install() {
         die "SHA-256 mismatch for data in partition (actual: ${part_sha256:0:12}..., exp.: ${SECONDARY_FIRMWARE_SHA256:0:12}...)"
     fi
 
-    # 5: Save u-boot environment variables.
-    maybe_run FW_SETENV \
-              bl_prev_csdpart "$active_partnum" \
-              bl_updt_status "attempt" \
-              bootcount "0" \
-              upgrade_available "1"
-    local setenv_res="$?"
-    [ "$setenv_res" -eq 0 ] || die "Could not set u-boot environment"
+    # 5: Set u-boot environment variables.
+    update_uboot_vars bl_prev_csdpart "$active_partnum" \
+                      bl_updt_status "attempt" \
+                      bootcount "0" \
+                      upgrade_available "1"
+    local updenv_res="$?"
+    [ "$updenv_res" -eq 0 ] || die "Could not set u-boot environment"
 
     # 6: Switch active boot partition.
     if [ "$DRY_RUN" = "2" ]; then
@@ -428,10 +528,10 @@ do_install() {
 
 do_complete_install() {
     if [ -e /run/systemd/shutdown/scheduled ]; then
-	# This could happen if the polling cycle is <1 minute.
-	log "Delaying installation completion due to pending reboot"
+        # This could happen if the polling cycle is <1 minute.
+        log "Delaying installation completion due to pending reboot"
         echo '{"status": "need-completion", "message": "delaying completion due to pending reboot"}'
-	return 0
+        return 0
     fi
 
     # Note: if die is called from this point on the die handler will be called.; any failure here
