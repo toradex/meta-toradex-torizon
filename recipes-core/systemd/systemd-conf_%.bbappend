@@ -17,3 +17,9 @@ do_install_append() {
         sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${systemd_unitdir}/system.conf.d/10-${BPN}.conf 
 }
 
+# On Colibri iMX7, the default watchdog (/dev/watchdog0) is the one from the PMIC, and using it causes
+# problems when trying to shutdown the device, so let's force the usage of the internal watchdog from
+# the SoC (/dev/watchdog1).
+do_install_append_colibri-imx7-emmc() {
+	echo "WatchdogDevice=/dev/watchdog1" >> ${D}${systemd_unitdir}/system.conf.d/10-${BPN}.conf
+}
