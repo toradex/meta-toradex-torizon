@@ -5,3 +5,5 @@ SRC_URI_append = " \
     file://bootcount.cfg \
     file://bootlimit.cfg \
 "
+
+require u-boot-version.inc
