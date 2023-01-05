@@ -1,9 +1,27 @@
 #!/bin/bash
 
-for dev in `cat /proc/partitions | tr -s ' ' | cut -d ' ' -f 5`; do
-    if [[ "$dev" = @(loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*|hd*) ]]; then
-       udisksctl mount -b /dev/$dev 2>/dev/null || true
-    fi
+# wait for udev to settle before sending commands to udisks2
+udevadm settle
+
+# create the mountpoint base directory (if not created yet)
+mkdir -p /var/rootdirs/media
+
+# use fdisk to get all available formatted partitions
+for dev in `fdisk -l 2>/dev/null | grep -o "^/dev/[[:alnum:]]*"`; do
+    case "$(basename $dev)" in
+        loop*|mmcblk*[0-9]|msblk*[0-9]|mspblk*[0-9]|nvme*|sd*|vd*|xvd*|bcache*|cciss*|dasd*|ubd*|ubi*|scm*|pmem*|nbd*|zd*|hd*)
+
+            # skip partitions that are already mounted
+            if mount | grep -qw ^${dev}; then
+                echo "Partition $dev already mounted."
+                continue
+            fi
+
+            # mount partition
+            echo "Mounting $dev partition."
+            udisksctl mount -b $dev 2>/dev/null || true
+        ;;
+    esac
 done
 
 # check if Docker dataroot directory should be
