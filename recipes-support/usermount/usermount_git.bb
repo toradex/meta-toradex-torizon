@@ -7,7 +7,7 @@ HOMEPAGE="https://github.com/tom5760/usermount"
 LICENSE = "MIT"
 
 DEPENDS = "udisks2"
-RDEPENDS:${PN} = "udisks2 bash"
+RDEPENDS:${PN} = "udisks2 bash util-linux-fdisk"
 
 LIC_FILES_CHKSUM = "file://LICENSE;md5=74711154e9c987a4d5c87fc8d89e279f"
 
