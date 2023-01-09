@@ -9,7 +9,7 @@ OnFailure=docker-integrity-checker.service
 [Service]
 Type=simple
 WorkingDirectory=/var/sota/storage/docker-compose/
-ExecStart=/usr/bin/docker-compose -p torizon up -d --remove-orphans
+ExecStart=/usr/bin/docker-compose -p torizon up -d --remove-orphans --wait
 ExecStartPost=rm -f /tmp/recovery-attempt.txt
 ExecStop=/usr/bin/docker-compose -p torizon down
 RemainAfterExit=yes
