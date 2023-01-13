@@ -9,7 +9,7 @@ SRC_URI = " \
   file://root.crt \
 "
 
-SRCREV = "f93e6ebbdc1fd47a302148a536b7f982f029e912"
+SRCREV = "523bb652d07070d41e1344106e437eeb0b015304"
 SRCREV:use-head-next = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
