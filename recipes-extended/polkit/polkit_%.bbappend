@@ -1,17 +1,14 @@
-FILESEXTRAPATHS:prepend := "${THISDIR}/${BPN}:"
-
-SRC_URI:append = " \
-    file://0001-Allow-to-disable-polkitd-when-using-library-alone.patch \
-"
-
 # We only want to use the polkit library
 REQUIRED_DISTRO_FEATURES:remove = " polkit"
 
 DEPENDS:remove = "mozjs"
 
-EXTRA_OECONF:append = " --disable-polkitd"
-
 do_install:append() {
+    # remove from the package polkitd and other files not required by TorizonCore
+    rm -rf ${D}/etc/polkit-1/
+    rm -rf ${D}/usr/lib/polkit-1/polkitd
+    rm -rf ${D}/usr/share/polkit-1/rules.d
+
     # Avoid starting polkitd since we dont install it
     sed -i -e 's,ExecStart=.*,ExecStart=/bin/true,g' ${D}${systemd_unitdir}/system/polkit.service
     sed -i -e '/^ExecStart=.*$/aRemainAfterExit=yes' ${D}${systemd_unitdir}/system/polkit.service
