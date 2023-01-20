@@ -14,6 +14,7 @@ IMAGE_BASENAME_SUFFIX ?= ""
 
 # execute order 66
 TDX_MAJOR = "6"
+TDX_MINOR = "1"
 
 IMX_DEFAULT_BSP = "nxp"
 IMX_DEFAULT_BSP:upstream = "mainline"
