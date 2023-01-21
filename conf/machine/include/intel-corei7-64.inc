@@ -9,6 +9,7 @@ OSTREE_BOOTLOADER:intel-corei7-64 = "grub"
 OSTREE_DEPLOY_DEVICETREE:intel-corei7-64 = "0"
 EFI_PROVIDER:intel-corei7-64 = "grub-efi"
 SOTA_CLIENT_FEATURES:remove = "ubootenv"
+UBOOT_BINARY_OTA_IGNORE:intel-corei7-64 = "1"
 
 IMAGE_FSTYPES_REMOVE = "hddimg teziimg"
 IMAGE_FSTYPES:append = " wic.vmdk wic.vdi"

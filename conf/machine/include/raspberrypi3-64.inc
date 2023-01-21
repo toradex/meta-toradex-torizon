@@ -38,6 +38,7 @@ OSTREE_KERNEL_ARGS:sota:append:rpi = " root=LABEL=otaroot rootfstype=ext4 quiet 
 UBOOT_ENTRYPOINT:rpi = "0x00008000"
 UBOOT_DTB_LOADADDRESS:rpi = "0x02600000"
 UBOOT_DTBO_LOADADDRESS:rpi = "0x026d0000"
+UBOOT_BINARY_OTA_IGNORE:rpi = "1"
 
 # Use meta-lmp but maintain compatibility
 BBMASK += " \

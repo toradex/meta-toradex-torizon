@@ -21,6 +21,7 @@ KERNEL_CLASSES:nezha-allwinner-d1 = " toradex-fitimage "
 KERNEL_IMAGETYPE:nezha-allwinner-d1 = "fitImage"
 OSTREE_KERNEL:nezha-allwinner-d1 = "${KERNEL_IMAGETYPE}-${INITRAMFS_IMAGE}-${MACHINE}-${MACHINE}"
 #KERNEL_DEVICETREE:nezha-allwinner-d1:sota ?= " allwinner/sun20i-d1-nezha.dtb"
+UBOOT_BINARY_OTA_IGNORE:nezha-allwinner-d1 = "1"
 
 LINUX_VERSION_EXTENSION = "-torizon-${LINUX_KERNEL_TYPE}"
 
