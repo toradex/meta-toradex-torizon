@@ -57,6 +57,8 @@ do_install:append:torizon-signed() {
 # Adding modules so plymouth can show the splash screen during boot
 SRC_URI:append:mx8-nxp-bsp = " file://50-imx8-graphics.conf"
 RDEPENDS:initramfs-module-kmod:append:mx8-nxp-bsp = " \
+    kernel-module-display-connector \
+    kernel-module-lontium-lt8912b \
     kernel-module-sec-dsim \
     kernel-module-sec-mipi-dsim-imx \
     kernel-module-ti-sn65dsi83 \
