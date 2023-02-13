@@ -350,29 +350,29 @@ EOF
     fi
 fi
 
-cat <<EOF
+# cat <<EOF
 
-Welcome to Toradex TorizonCore
+# Welcome to Toradex TorizonCore
 
-For more information about OpenEmbedded see their website:
+# For more information about OpenEmbedded see their website:
 
-    http://www.openembedded.org/
+#     http://www.openembedded.org/
 
-Your build environemnt has been configured with:
+# Your build environemnt has been configured with:
 
-    MACHINE = ${MACHINE}
-    SDKMACHINE = ${SDKMACHINE}
-    DISTRO = ${DISTRO}
+#     MACHINE = ${MACHINE}
+#     SDKMACHINE = ${SDKMACHINE}
+#     DISTRO = ${DISTRO}
 
-You can now run 'bitbake <target>'
+# You can now run 'bitbake <target>'
 
-Some of common targets are:
+# Some of common targets are:
 
-    torizon-core-docker
-    torizon-core-podman
-    torizon-core-lite
+#     torizon-core-docker
+#     torizon-core-podman
+#     torizon-core-lite
 
-EOF
+# EOF
 
 if [ "${MACHINE}" = "qemuarm64" ]; then
     cat <<EOF
