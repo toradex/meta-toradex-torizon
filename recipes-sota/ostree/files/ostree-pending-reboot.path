@@ -2,7 +2,7 @@
 Description=Aktualizr OSTree Update Automatic Reboot
 
 [Path]
-PathExists=/run/aktualizr-session/need_reboot
+PathExists=/run/need-reboot
 
 [Install]
 WantedBy=multi-user.target
