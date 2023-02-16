@@ -17,7 +17,7 @@ S = "${WORKDIR}/git"
 PV = "1.0+git${SRCPV}"
 
 DEPENDS = "boost curl openssl libarchive libsodium sqlite3 asn1c-native"
-RDEPENDS:${PN}:class-target = "aktualizr-hwid lshw bash aktualizr-default-sec aktualizr-polling-interval greenboot"
+RDEPENDS:${PN}:class-target = "aktualizr-hwid lshw bash aktualizr-default-sec aktualizr-polling-interval aktualizr-reboot greenboot"
 
 inherit cmake pkgconfig systemd
 
