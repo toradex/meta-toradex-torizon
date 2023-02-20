@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+# Avoid being interrupted by systemd since operations here are supposed to be critical.
+trap '' TERM
+
 # ---
 # Configuration
 # ---
@@ -15,6 +18,8 @@ LOG_VARS="${BL_LOG_VARS:-0}"
 
 LOG_DIR="/var/lib/rollback-manager"
 LOG_FILE="${LOG_DIR}/bootloader-update.log"
+
+REBOOT_SENTINEL_FILE="/run/aktualizr-session/need_reboot"
 
 shopt -s expand_aliases
 set -o pipefail
@@ -77,7 +82,7 @@ req_program "/usr/bin/mmc"         && alias MMC="$_"
 req_program "/usr/bin/rm"          && alias RM="$_"
 req_program "/usr/bin/sed"         && alias SED="$_"
 req_program "/usr/bin/sha256sum"   && alias SHA256SUM="$_"
-req_program "/usr/sbin/shutdown"   && alias SHUTDOWN="$_"
+req_program "/usr/sbin/reboot"     && alias REBOOT="$_"
 req_program "/usr/bin/stat"        && alias STAT="$_"
 req_program "/usr/bin/touch"       && alias TOUCH="$_"
 req_program "/usr/bin/tr"          && alias TR="$_"
@@ -511,15 +516,18 @@ do_install() {
     # the previous partition before returning to aktualizr.
     # ---
 
-    # 7: Schedule reboot (precision is minutes); on return aktualizr will update its database to
-    #    indicate an update is pending.
+    # 7: Request a reboot; beware that this script itself could get a SIGTERM sent by systemd (which
+    #    is currently trapped and ignored).
     if [ "$DRY_RUN" = "2" ]; then
         log "Not rebooting in dry-run mode"
     else
-        maybe_run SHUTDOWN -r +1 2>/dev/null
-        local shdwn_res="$?"
-        # Do not die here since almost all work has been done.
-        [ "$shdwn_res" -eq 0 ] || log "Could not schedule reboot"
+        maybe_run TOUCH "${REBOOT_SENTINEL_FILE}" 2>/dev/null
+        if  [ "$?" -ne 0 ]; then
+            log "Could not create reboot sentinel file; falling back to normal reboot"
+            # Fall back to using reboot.
+            maybe_run REBOOT 2>/dev/null
+            [ "$?" -eq 0 ] || log "Could not schedule reboot"
+        fi
     fi
 
     echo '{"status": "need-completion", "message": "rebooting soon"}'
@@ -527,8 +535,8 @@ do_install() {
 }
 
 do_complete_install() {
-    if [ -e /run/systemd/shutdown/scheduled ]; then
-        # This could happen if the polling cycle is <1 minute.
+    if [ -e "${REBOOT_SENTINEL_FILE}" ]; then
+        # This could happen if the reboot path/service is disabled.
         log "Delaying installation completion due to pending reboot"
         echo '{"status": "need-completion", "message": "delaying completion due to pending reboot"}'
         return 0
