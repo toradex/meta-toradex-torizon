@@ -12,12 +12,12 @@ LIC_FILES_CHKSUM = "file://LICENSE;md5=2ee41112a44fe7014dce33e26468ba93"
 SECTION = "net"
 
 SRC_URI = "\
-           git://github.com/fluent/fluent-bit.git;protocol=https;branch=master \
+           git://github.com/fluent/fluent-bit.git;protocol=https;branch=1.9 \
            file://fluent-bit.service \
            file://fluent-bit.conf \
            "
-SRCREV = "9eb4996b7d134227b568aefa5fa0f9ddd6a7b9ce"
-PV = "1.9.3+git${SRCPV}"
+SRCREV = "3d71dbcb1a6a2abce47910225f1587c8fd08a6ec"
+PV = "1.9.10+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
@@ -47,6 +47,10 @@ EXTRA_OECMAKE += "-DFLB_IN_SYSTEMD=On "
 
 # Enable Kafka Output plugin
 EXTRA_OECMAKE += "-DFLB_OUT_KAFKA=On "
+
+# Enable YAML config format
+DEPENDS += "libyaml"
+EXTRA_OECMAKE += "-DFLB_CONFIG_YAML=On "
 
 inherit cmake systemd
 
