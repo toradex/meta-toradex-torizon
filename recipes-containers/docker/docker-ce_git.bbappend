@@ -1,9 +1,9 @@
 FILESEXTRAPATHS_prepend := "${THISDIR}/${BPN}:"
 
-SRCREV_docker = "5eb3275d4006e4093807c35b4f7776ecd73b13a7"
+SRCREV_docker = "f60dc77833b563cb54a6798e5bf6efd02aba048b"
 SRCREV_libnetwork = "55e924b8a84231a065879156c0de95aefc5f5435"
 
-DOCKER_VERSION = "19.03.14-ce"
+DOCKER_VERSION = "19.03.15-ce"
 
 # The patch that adds configurable maximum of download attempts originates
 # from https://github.com/docker/docker-ce/commit/74d15487080abcfce9d9359a746620a7f7c06c5b
