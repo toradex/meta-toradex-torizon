@@ -33,9 +33,9 @@ DESCRIPTION = "Linux container runtime \
 #     to stop changing).
 #   - The common components of this recipe and docker-ce do need to be moved
 #     to a docker.inc recipe
-SRCREV_moby = "b0f5bc36fea9dfb9672e1e9b1278ebab797b9ee0"
-SRCREV_libnetwork = "339b972b464ee3d401b5788b2af9e31d09d6b7da"
-SRCREV_cli = "f0df35096d5f5e6b559b42c7fde6c65a2909f7c5"
+SRCREV_moby = "9f156997b0d8905ad4accabccf63de5ea51061c8"
+SRCREV_libnetwork = "05b93e0d3a95952f70c113b0bc5bdb538d7afdd7"
+SRCREV_cli = "715524332ff91d0f9ec5ab2ec95f051456ed1dba"
 SRC_URI = "\
 	git://github.com/moby/moby.git;protocol=https;branch=20.10;name=moby \
 	git://github.com/moby/libnetwork.git;protocol=https;branch=master;name=libnetwork;destsuffix=git/libnetwork \
@@ -51,7 +51,7 @@ SRC_URI = "\
 	file://chrome.json \
 	"
 
-DOCKER_VERSION = "20.10.7"
+DOCKER_VERSION = "20.10.23"
 PV = "${DOCKER_VERSION}"
 
 require recipes-containers/docker/docker.inc
