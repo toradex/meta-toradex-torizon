@@ -5,7 +5,14 @@ TEZI_ROOT_NAME = "ota"
 TEZI_ROOT_SUFFIX = "ota.tar.zst"
 TEZI_USE_BOOTFILES = "false"
 
-TEZI_CONFIG_FORMAT = "3"
+MINIMUM_TORIZON_TEZI_CONFIG_FORMAT = "3"
+# Check if BSP's TEZI_CONFIG_FORMAT is higher than the one we need. If it is, we use BSP's value
+python() {
+    bsp_tezi = d.getVar('TEZI_CONFIG_FORMAT')
+    torizon_tezi = d.getVar('MINIMUM_TORIZON_TEZI_CONFIG_FORMAT')
+    if int(bsp_tezi) < int(torizon_tezi):
+        d.setVar('TEZI_CONFIG_FORMAT', torizon_tezi)
+}
 
 python adjust_tezi_artifacts() {
     artifacts = d.getVar('TEZI_ARTIFACTS').replace(d.getVar('KERNEL_IMAGETYPE'), '').replace(d.getVar('KERNEL_DEVICETREE'), '')
