@@ -29,4 +29,10 @@ else
     ext4load ${devtype} ${devnum}:1 ${scriptaddr} /boot/loader/uEnv.txt; env import -t ${scriptaddr} ${filesize}
 fi
 
+if test "${debug}" = "1"
+then
+    echo "Enabling kernel debug"
+    env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1 kgdboc=ttymxc0,115200"
+fi
+
 run bootcmd_run

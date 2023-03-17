@@ -13,6 +13,15 @@ setenv bootostree 'run bootcmd_load_f; run bootcmd_run'
 setenv altbootcmd 'run bootcmd_otenv; run bootcmd_set_rollback; if test -n "${kernel_image2}"; then run bootcmd_rollbackenv; fi; run bootostree; reset'
 setenv bootcmd_tdx 'setenv bootargs "${bootargs} ${tdxargs}"'
 
+if test "${debug}" = "1"
+then
+    echo "Enabling kernel debug"
+    # TODO: this is the command that should be the working one
+    #env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1 kgdboc=ttySO,115200"
+    # but for some unknown reason the kdgboc option is not working when setting it via cmdline
+    env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1"
+fi
+
 if test ! -e ${devtype} ${devnum}:1 uboot.env; then saveenv; fi
 
 if test "${rollback}" = "1"; then run altbootcmd; else run bootcmd_otenv; run bootcmd_tdx; run bootostree; if test ! "${upgrade_available}" = "1"; then setenv upgrade_available 1; saveenv; fi; reset; fi
