@@ -2,11 +2,16 @@ SUMMARY = "Toradex implementation of the Aktualizr SOTA client"
 LICENSE = "MPL-2.0"
 LIC_FILES_CHKSUM = "file://${S}/LICENSE;md5=815ca599c9df247a0c7f619bab123dad"
 
+GARAGE_SIGN_PV = "0.7.4-25-g7cfca74"
+SRC_URI[garagesign.md5sum] = "584cd16aa7824e34b593dae63796466b"
+SRC_URI[garagesign.sha256sum] = "c7d5fdceef3e815363e3aa398c38643ca213f9b7f66d50f55c76a66cb74565d2"
+
 SRC_URI = " \
   gitsm://github.com/toradex/aktualizr.git;protocol=https;branch=toradex-master \
   file://aktualizr-torizon.service \
   file://gateway.url \
   file://root.crt \
+  https://tuf-cli-releases.ota.here.com/cli-${GARAGE_SIGN_PV}.tgz;unpack=0;name=garagesign \
 "
 
 SRCREV = "0377fb86459855689365f173769e3b78c050f8c8"
@@ -16,7 +21,7 @@ S = "${WORKDIR}/git"
 
 PV = "1.0+git${SRCPV}"
 
-DEPENDS = "boost curl openssl libarchive libsodium sqlite3 asn1c-native"
+DEPENDS = "boost curl openssl libarchive libsodium sqlite3 asn1c-native ostree"
 RDEPENDS:${PN}:class-target = "aktualizr-hwid lshw bash aktualizr-default-sec aktualizr-polling-interval aktualizr-reboot greenboot"
 
 inherit cmake pkgconfig systemd
@@ -31,6 +36,8 @@ PACKAGECONFIG[warning-as-error] = "-DWARNING_AS_ERROR=ON,-DWARNING_AS_ERROR=OFF,
 PACKAGECONFIG[ostree] = "-DBUILD_OSTREE=ON,-DBUILD_OSTREE=OFF,ostree,"
 PACKAGECONFIG[ubootenv] = ",,u-boot-fw-utils,u-boot-fw-utils"
 PACKAGECONFIG:remove:class-native = "ubootenv"
+PACKAGECONFIG:class-native = "sota-tools"
+PACKAGECONFIG[sota-tools] = "-DBUILD_SOTA_TOOLS=ON -DGARAGE_SIGN_ARCHIVE=${WORKDIR}/cli-${GARAGE_SIGN_PV}.tgz, -DBUILD_SOTA_TOOLS=OFF,glib-2.0,"
 
 PROVIDES += "aktualizr"
 RPROVIDES:${PN} += "aktualizr aktualizr-info aktualizr-shared-prov"
