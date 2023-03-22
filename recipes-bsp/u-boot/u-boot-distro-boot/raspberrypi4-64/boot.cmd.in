@@ -1,0 +1,50 @@
+# SPDX-License-Identifier: GPL-2.0+ OR MIT
+#
+# Copyright 2023 MicroHobby
+#
+# TorizonCore boot script.
+
+setenv bootlimit 3
+setenv devtype mmc
+setenv devnum 0
+setenv otaroot 2
+
+if test -z "${altbootcmd}"
+then
+    env set altbootcmd 'env set rollback 1; run bootcmd'
+    env save
+fi
+
+if test "${rollback}" = "1" && test "${upgrade_available}" = "1"
+then
+    # Make sure to reset upgrade_available to avoid unnecessary wear
+    # Note this also makes rollback permanent. aktualizr will reset rollback
+    # when a new (hopefully better) update comes in.
+    env set upgrade_available 0
+    env save
+fi
+
+# save default U-Boot devicetree file to use in a rollback situation
+env set fdtfile2 "${fdtfile}"
+
+if test -n "${loadaddr}"
+then
+    ext4load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot/loader/uEnv.txt; env import -t ${loadaddr} ${filesize}
+else
+    ext4load ${devtype} ${devnum}:${otaroot} ${scriptaddr} /boot/loader/uEnv.txt; env import -t ${scriptaddr} ${filesize}
+fi
+
+if test "${debug}" = "1"
+then
+    echo "Enabling kernel debug"
+    env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1 kgdboc=ttymxc0,115200"
+fi
+
+# now that we have all the environment variables, we can set the bootcmd
+setenv bootargs "${defargs} ${bootargs} ${tdxargs}"
+
+ext4load ${devtype} ${devnum}:${otaroot} ${kernel_addr_r} /boot${kernel_image}
+ext4load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} /boot${ramdisk_image}
+env set ramdisk_size ${filesize}
+
+@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr}
