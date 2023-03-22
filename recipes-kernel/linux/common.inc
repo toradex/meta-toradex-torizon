@@ -10,6 +10,8 @@ do_configure:append() {
     # machine fragment
     if [ -f ${WORKDIR}/${MACHINE}.cfg ]; then
         cat ${WORKDIR}/${MACHINE}.cfg >> ${B}/.config
+    else
+        bbfatal "No machine specific config fragment found for ${MACHINE}"
     fi
 
     # debug fragment
