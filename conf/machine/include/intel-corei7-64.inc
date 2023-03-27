@@ -22,9 +22,3 @@ PREFERRED_PROVIDER_virtual/dtb = ""
 
 IMAGE_INSTALL:remove = " minnowboard-efi-startup"
 LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
-
-# Use meta-lmp but maintain compatibility
-BBMASK += " \
-    meta-lmp/meta-lmp-base \
-    meta-lmp/meta-lmp-bsp \
-"
