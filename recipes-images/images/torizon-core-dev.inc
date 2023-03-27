@@ -1,9 +1,7 @@
 CORE_IMAGE_BASE_INSTALL:append = "\
     strace \
-    ltrace \
     tcpdump \
     gdbserver \
-    valgrind \
     perf \
     trace-cmd \
 "
