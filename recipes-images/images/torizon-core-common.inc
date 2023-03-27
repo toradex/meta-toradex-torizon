@@ -40,6 +40,8 @@ CORE_IMAGE_BASE_INSTALL:append = " \
     neofetch \
     libpwquality \
     mmc-utils \
+    iproute2 \
+    iproute2-ip \
 "
 
 CORE_IMAGE_BASE_INSTALL:append:tdx = " \
