@@ -1,0 +1,6 @@
+kernel_image_type=@@KERNEL_IMAGETYPE@@
+overlays_file="overlays.txt"
+bootlimit=3
+devtype=mmc
+devnum=0
+otaroot=2
