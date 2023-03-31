@@ -8,10 +8,19 @@ SRC_URI += "\
     file://0002-only-scan-for-block-devices.patch \
 "
 
+SRC_URI:append:secure-boot = "\
+    file://composefs \
+    file://80-composefs.conf \
+"
+
 PACKAGES:append = " \
     initramfs-module-plymouth \
     initramfs-module-ostree \
     initramfs-module-kmod \
+"
+
+PACKAGES:append:secure-boot = "\
+    initramfs-module-composefs \
 "
 
 SUMMARY:initramfs-module-plymouth = "initramfs support for plymouth"
@@ -20,7 +29,11 @@ FILES:initramfs-module-plymouth = "/init.d/02-plymouth"
 
 SUMMARY:initramfs-module-ostree = "initramfs support for ostree based filesystems"
 RDEPENDS:initramfs-module-ostree = "${PN}-base ostree-switchroot"
-FILES:initramfs-module-ostree = "/init.d/98-ostree"
+FILES:initramfs-module-ostree = "/init.d/95-ostree"
+
+SUMMARY:initramfs-module-composefs = "initramfs support for booting composefs images"
+RDEPENDS:initramfs-module-composefs = "${PN}-base kernel-module-composefs fsverity-utils util-linux-mount"
+FILES:initramfs-module-composefs = "/init.d/98-composefs"
 
 SUMMARY:initramfs-module-kmod = "initramfs support for loading kernel modules"
 RDEPENDS:initramfs-module-kmod = "${PN}-base"
@@ -31,8 +44,14 @@ FILES:initramfs-module-kmod = "\
 
 do_install:append() {
     install -m 0755 ${WORKDIR}/plymouth ${D}/init.d/02-plymouth
-    install -m 0755 ${WORKDIR}/ostree ${D}/init.d/98-ostree
+    install -m 0755 ${WORKDIR}/ostree ${D}/init.d/95-ostree
     install -m 0755 ${WORKDIR}/kmod ${D}/init.d/01-kmod
+}
+
+do_install:append:secure-boot() {
+    install -m 0755 ${WORKDIR}/composefs ${D}/init.d/98-composefs
+    install -d ${D}/etc/modules-load.d/
+    install -m 0755 ${WORKDIR}/80-composefs.conf ${D}/etc/modules-load.d/80-composefs.conf
 }
 
 # Adding modules so plymouth can show the splash screen during boot
