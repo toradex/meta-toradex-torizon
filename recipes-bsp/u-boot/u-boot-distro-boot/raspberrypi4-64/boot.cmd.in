@@ -37,7 +37,7 @@ fi
 if test "${debug}" = "1"
 then
     echo "Enabling kernel debug"
-    env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1 kgdboc=ttymxc0,115200"
+    env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1 kgdboc=ttyAMA0,115200"
 fi
 
 # now that we have all the environment variables, we can set the bootcmd
