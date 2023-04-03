@@ -36,12 +36,13 @@ KERNEL_DEVICETREE:raspberrypi4-64:sota ?= " broadcom/bcm2711-rpi-4-b.dtb overlay
 KERNEL_BOOTCMD = "booti"
 
 LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
+PREFERRED_VERSION_linux-raspberrypi = "5.15.%"
 
 ## Mimic meta-raspberrypi behavior
 ENABLE_UART:rpi = "1"
 SERIAL_CONSOLES = "115200;ttyAMA0"
-KERNEL_SERIAL:rpi = "${@oe.utils.conditional("ENABLE_UART", "1", "console=ttyAMA0,115200", "", d)}"
-OSTREE_KERNEL_ARGS_COMMON_RPI = "coherent_pool=1M 8250.nr_uarts=1 console=tty1 ${KERNEL_SERIAL} ${OSTREE_KERNEL_ARGS_COMMON}"
+KERNEL_SERIAL:sota:rpi = "${@oe.utils.conditional("ENABLE_UART", "1", "console=ttyAMA0,115200", "", d)}"
+OSTREE_KERNEL_ARGS:sota = " 8250.nr_uarts=1 bcm2708_fb.fbwidth=656 bcm2708_fb.fbheight=614 bcm2708_fb.fbswap=1 vc_mem.mem_base=0x3ec00000 vc_mem.mem_size=0x40000000 dwc_otg.lpm_enable=0 ${KERNEL_SERIAL} usbhid.mousepoll=0 "
 # This boot arguments are the same from torizon.bbclass
 OSTREE_KERNEL_ARGS:sota:append:rpi = " root=LABEL=otaroot rootfstype=ext4 quiet logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles splash fbcon=map:10 "
 
