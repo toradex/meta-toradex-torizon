@@ -21,7 +21,7 @@ SDK_NAME_PREFIX = "${DISTRO}"
 SDK_VERSION = "${DISTRO_VERSION}"
 
 # TorizonCore machine specific overrides
-INHERIT += "torizon toradex-sanity"
+INHERIT += "torizon toradex-mirrors toradex-sanity"
 
 # build Docker from the Docker-CE project
 PREFERRED_PROVIDER_virtual/docker = "docker-ce"
