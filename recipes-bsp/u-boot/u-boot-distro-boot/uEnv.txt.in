@@ -4,28 +4,47 @@ otaroot=1
 
 set_bootargs=env set bootcmd_args env set bootargs ${defargs} root=LABEL=otaroot rootfstype=ext4 ${bootargs} ${tdxargs}
 
-set_kernel_load_addr=if test -n ${kernel_comp_addr_r}; then \
-    env set kernel_addr_load ${loadaddr}; \
-    env set bootcmd_unzip_k ';'; \
-elif test ${kernel_image_type} = "Image.gz"; then \
-    env set kernel_addr_load ${loadaddr}; \
-    env set bootcmd_unzip_k 'unzip $kernel_addr_load $kernel_addr_r'; \
-else \
-    env set kernel_addr_load ${kernel_addr_r}; \
-    env set bootcmd_unzip_k ';'; \
-fi || true
+# this will set the kernel load address
+# in case of booting a FIT image, the kernel load address will point to the
+# fitimage load address, which is calculated by adding 32M to the ramdisk
+# load address, i.e. the ramdisk image must not be bigger than 32M!
+set_kernel_load_addr=env set bootcmd_unzip_k ';'; \
+                     if test ${kernel_image_type} = "fitImage"; then \
+                         env set fitimage_addr_r ${ramdisk_addr_r}; \
+                         env set kernel_addr_load ${fitimage_addr_r}; \
+                     else \
+                         if test -n ${kernel_comp_addr_r}; then \
+                             env set kernel_addr_load ${loadaddr}; \
+                         elif test ${kernel_image_type} = "Image.gz"; then \
+                             env set kernel_addr_load ${loadaddr}; \
+                             env set bootcmd_unzip_k 'unzip $kernel_addr_load $kernel_addr_r'; \
+                         else \
+                             env set kernel_addr_load ${kernel_addr_r}; \
+                         fi; \
+                     fi
 
 load_overlay=load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/${overlays_file}; env import -t ${loadaddr} ${filesize}
-apply_overlays=fdt addr ${fdt_addr_r} && fdt resize 0x20000 && \
-               fdt mknode /chosen overlays && \
-               for overlay_file in ${fdt_overlays}; do \
-                   echo "Applying Overlay: ${overlay_file}" && \
-                   load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/overlays/${overlay_file} && fdt apply ${loadaddr}; \
-                   fdt set /chosen/overlays ${overlay_file} $?; \
-               done;
+apply_overlays=if test ${kernel_image_type} = "fitImage"; then \
+                   env set fdt_high; \
+                   env set fdt_resize true; \
+                   for overlay_file in ${fdt_overlays}; do \
+                       echo "Applying Overlay: ${overlay_file}"; \
+                       env set fitconf_fdt_overlays "${fitconf_fdt_overlays}"#conf-"${overlay_file}"; \
+                   done; \
+               else \
+                   fdt addr ${fdt_addr_r} && fdt resize 0x20000 && \
+                   fdt mknode /chosen overlays && \
+                   for overlay_file in ${fdt_overlays}; do \
+                       echo "Applying Overlay: ${overlay_file}" && \
+                       load ${devtype} ${devnum}:${otaroot} ${loadaddr} /boot${fdtdir}/overlays/${overlay_file} && fdt apply ${loadaddr}; \
+                       fdt set /chosen/overlays ${overlay_file} $?; \
+                   done; \
+               fi
 
 bootcmd_load_k=load ${devtype} ${devnum}:${otaroot} ${kernel_addr_load} "/boot"${kernel_image}
-bootcmd_load_r=load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}
+bootcmd_load_r=if test ${kernel_image_type} != "fitImage"; then \
+                   load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} "/boot"${ramdisk_image}; env set ramdisk_size ${filesize}; \
+               fi || true
 
 # check kernel_image2 to avoid booting from other then default emmc in case of
 # bootlimit is reached and there is no other deployed image
@@ -45,7 +64,9 @@ set_fdt_path=if test -n "${fdtdir}"; then \
                 env set fdt_path /boot${fdt_file}; \
              fi || true
 
-bootcmd_dtb=load ${devtype} ${devnum}:${otaroot} ${fdt_addr_r} ${fdt_path}; \
+bootcmd_dtb=if test ${kernel_image_type} != "fitImage"; then \
+                load ${devtype} ${devnum}:${otaroot} ${fdt_addr_r} ${fdt_path}; \
+            fi || true; \
             if test ${skip_fdt_overlays} != 1; then \
                     if test -e ${devtype} ${devnum}:${otaroot} /boot${fdtdir}/${overlays_file}; then \
                         run load_overlay && run apply_overlays || true; \
@@ -75,8 +96,17 @@ board_fixups=if test "${board}" = "verdin-imx8mm"; then \
              fi || true
 
 bootcmd_boot=if test ${bootscript_debug} != 1; then \
-                 @@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}; \
+                 if test ${kernel_image_type} = "fitImage"; then \
+                     if test -n "${fdtdir}"; then \
+                         bootm ${fitimage_addr_r}#conf-${fdtfile}${fitconf_fdt_overlays} ; \
+                     else \
+                         bootm ${fitimage_addr_r}#conf-${fdt_file}${fitconf_fdt_overlays} ; \
+                     fi; \
+                 else \
+                     @@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}; \
+                 fi; \
              fi || true
+
 bootcmd_run=run board_fixups && run check_rollback_needed && run set_bootargs && run set_fdt_path && \
             run bootcmd_dtb && run bootcmd_args && run set_bootargs_custom && run set_kernel_load_addr && \
             run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
