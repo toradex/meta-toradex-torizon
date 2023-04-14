@@ -74,7 +74,9 @@ board_fixups=if test "${board}" = "verdin-imx8mm"; then \
                  fi; \
              fi || true
 
-bootcmd_boot=@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}
+bootcmd_boot=if test ${bootscript_debug} != 1; then \
+                 @@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}; \
+             fi || true
 bootcmd_run=run board_fixups && run check_rollback_needed && run set_bootargs && run set_fdt_path && \
             run bootcmd_dtb && run bootcmd_args && run set_bootargs_custom && run set_kernel_load_addr && \
             run bootcmd_load_k && run bootcmd_unzip_k && run bootcmd_load_r && run bootcmd_boot
