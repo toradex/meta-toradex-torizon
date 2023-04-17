@@ -98,9 +98,9 @@ board_fixups=if test "${board}" = "verdin-imx8mm"; then \
 bootcmd_boot=if test ${bootscript_debug} != 1; then \
                  if test ${kernel_image_type} = "fitImage"; then \
                      if test -n "${fdtdir}"; then \
-                         bootm ${fitimage_addr_r}#conf-${fdtfile}${fitconf_fdt_overlays} ; \
+                         bootm ${fitimage_addr_r}#conf-@@KERNEL_DTB_PREFIX@@${fdtfile}${fitconf_fdt_overlays} ; \
                      else \
-                         bootm ${fitimage_addr_r}#conf-${fdt_file}${fitconf_fdt_overlays} ; \
+                         bootm ${fitimage_addr_r}#conf-@@KERNEL_DTB_PREFIX@@${fdt_file}${fitconf_fdt_overlays} ; \
                      fi; \
                  else \
                      @@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr_r}; \
