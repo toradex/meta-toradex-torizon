@@ -44,6 +44,7 @@ users:x:100:torizon
 input:x:101:torizon
 kvm:x:102:
 render:x:103:
+sgx:x:104:
 systemd-bus-proxy:x:984:
 systemd-timesync:x:985:
 systemd-resolve:x:986:
