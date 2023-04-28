@@ -1,7 +1,5 @@
 # List of containers tags TorizonCore is compatible with
 export CT_TAG_DEBIAN=2-bullseye
-export CT_TAG_DEBIAN_SHELL=2
-export CT_TAG_DEV_TOOLS=2
 export CT_TAG_DOCKER_COMPOSE=2
 export CT_TAG_WAYLAND_BASE=2
 export CT_TAG_WAYLAND_BASE_VIVANTE=2
