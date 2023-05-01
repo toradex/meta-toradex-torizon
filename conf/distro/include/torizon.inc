@@ -19,7 +19,10 @@ SDK_NAME_PREFIX = "${DISTRO}"
 SDK_VERSION = "${DISTRO_VERSION}"
 
 # TorizonCore machine specific overrides
-INHERIT += "torizon toradex-sanity"
+INHERIT += "torizon"
+
+# Toradex specific classes
+INHERIT += "toradex-sanity toradex-mirrors"
 
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
