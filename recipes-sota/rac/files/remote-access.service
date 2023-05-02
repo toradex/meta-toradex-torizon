@@ -1,0 +1,16 @@
+[Unit]
+Description=Torizon Remote Access Client
+After=network-online.target nss-lookup.target boot-complete.target
+Requires=boot-complete.target
+Wants=network-online.target
+ConditionPathExists=|/var/sota/import/pkey.pem
+
+[Service]
+RestartSec=10
+Restart=always
+Environment="CONFIG_FILE=/etc/rac/client.toml"
+ExecStartPre=/usr/bin/sudo -u torizon mkdir -p /home/torizon/run/rac
+ExecStart=/usr/bin/rac
+
+[Install]
+WantedBy=multi-user.target
