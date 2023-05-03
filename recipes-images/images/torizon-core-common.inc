@@ -42,6 +42,7 @@ CORE_IMAGE_BASE_INSTALL:append = " \
     mmc-utils \
     iproute2 \
     iproute2-ip \
+    ethtool \
 "
 
 CORE_IMAGE_BASE_INSTALL:append:tdx = " \
