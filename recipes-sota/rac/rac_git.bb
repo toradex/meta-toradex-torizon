@@ -23,6 +23,7 @@ PV = "0.0+git${SRCPV}"
 
 RAC_BINARY = "rac-32"
 RAC_BINARY:mx8-nxp-bsp = "rac-64"
+RAC_BINARY:qemuarm64 = "rac-64"
 
 do_install () {
     install -d ${D}${bindir}/
@@ -35,4 +36,4 @@ do_install () {
     install -m 0644 ${WORKDIR}/client.toml ${D}${sysconfdir}/rac
 }
 
-INSANE_SKIP:${PN} += "already-stripped"
+INSANE_SKIP:${PN} += "already-stripped arch"
