@@ -11,11 +11,13 @@ PREFERRED_PROVIDER_virtual/bootloader:sota = "u-boot"
 PREFERRED_PROVIDER_virtual/bootloader:rpi = "u-boot"
 PREFERRED_PROVIDER_u-boot:rpi = "u-boot"
 PREFERRED_PROVIDER_virtual/dtb = ""
-SOTA_CLIENT_FEATURES:append:rpi = " ubootenv"
 WKS_FILE_DEPENDS_BOOTLOADERS:rpi = "virtual/bootloader"
 WKS_FILE_DEPENDS:append:rpi = " u-boot-default-script"
 PREFERRED_PROVIDER_u-boot-default-script:rpi = "u-boot-distro-boot"
 PREFERRED_PROVIDER_u-boot-default-script:sota:rpi = "u-boot-distro-boot"
+
+PREFERRED_PROVIDER_u-boot-fw-utils = "libubootenv"
+PREFERRED_RPROVIDER_u-boot-fw-utils = "libubootenv"
 
 IMAGE_FSTYPES:remove:rpi = "ext3 rpi-sdimg teziimg"
 
@@ -49,7 +51,6 @@ UBOOT_BINARY_OTA_IGNORE:rpi = "1"
 
 BBMASK += " \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
-    meta-toradex-torizon/recipes-bsp/u-boot/libubootenv_* \
-    meta-toradex-bsp-common/recipes-bsp/u-boot/libubootenv_* \
+    meta-raspberrypi/recipes-bsp/u-boot/u-boot_%.bbappend \
     meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
 "
