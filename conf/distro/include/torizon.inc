@@ -72,6 +72,8 @@ USERADD_ERROR_DYNAMIC = "skip"
 BBMASK += " \
     /meta-toradex-bsp-common/recipes-core/systemd/systemd_%.bbappend \
     /meta-freescale/recipes-graphics/cairo \
+    /openembedded-core/meta/recipes-devtools/cargo \
+    /openembedded-core/meta/recipes-devtools/rust \
 "
 
 # machines where TorizonCore is experimental
@@ -92,3 +94,15 @@ PREFERRED_RPROVIDER_aktualizr-shared-prov = "aktualizr-torizon"
 SKIP_META_SECURITY_SANITY_CHECK = "1"
 
 GOVERSION ?= "1.19%"
+
+# Rust toolchain preferred versions:
+RUSTVERSION ?= "1.69%"
+
+PREFERRED_VERSION_cargo ?= "${RUSTVERSION}"
+PREFERRED_VERSION_cargo-native ?= "${RUSTVERSION}"
+PREFERRED_VERSION_libstd-rs ?= "${RUSTVERSION}"
+PREFERRED_VERSION_rust ?= "${RUSTVERSION}"
+PREFERRED_VERSION_rust-cross-${TARGET_ARCH} ?= "${RUSTVERSION}"
+PREFERRED_VERSION_rust-llvm ?= "${RUSTVERSION}"
+PREFERRED_VERSION_rust-llvm-native ?= "${RUSTVERSION}"
+PREFERRED_VERSION_rust-native ?= "${RUSTVERSION}"
