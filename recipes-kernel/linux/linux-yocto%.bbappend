@@ -7,3 +7,6 @@ SRC_URI += "\
 "
 
 inherit toradex-kernel-localversion
+
+require common.inc
+require specific.inc
