@@ -65,7 +65,7 @@ index 7e23001e1fe7..c255fb17bf09 100644
  
 +      val = uboot_config_get_fdtfile(cancellable, error);
 +      if (val && i)
-+        g_ptr_array_add (new_lines, g_strdup_printf ("fdtfile%s=/boot%s", index_suffix, val));
++        g_ptr_array_add (new_lines, g_strdup_printf ("fdtfile%s=%s", index_suffix, val));
 +
        val = ostree_bootconfig_parser_get (config, "options");
        if (val)
