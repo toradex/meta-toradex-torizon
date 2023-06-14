@@ -8,7 +8,7 @@ SRC_URI += "\
     file://0002-only-scan-for-block-devices.patch \
 "
 
-SRC_URI:append:secure-boot = "\
+SRC_URI:append:torizon-signed = "\
     file://composefs \
     file://80-composefs.conf \
 "
@@ -19,7 +19,7 @@ PACKAGES:append = " \
     initramfs-module-kmod \
 "
 
-PACKAGES:append:secure-boot = "\
+PACKAGES:append:torizon-signed = "\
     initramfs-module-composefs \
 "
 
@@ -48,7 +48,7 @@ do_install:append() {
     install -m 0755 ${WORKDIR}/kmod ${D}/init.d/01-kmod
 }
 
-do_install:append:secure-boot() {
+do_install:append:torizon-signed() {
     install -m 0755 ${WORKDIR}/composefs ${D}/init.d/98-composefs
     install -d ${D}/etc/modules-load.d/
     install -m 0755 ${WORKDIR}/80-composefs.conf ${D}/etc/modules-load.d/80-composefs.conf
