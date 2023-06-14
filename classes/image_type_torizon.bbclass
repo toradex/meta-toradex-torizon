@@ -14,7 +14,7 @@ python() {
         d.setVar('TEZI_CONFIG_FORMAT', torizon_tezi)
 }
 
-TEZI_ROOT_FSOPTS:append:secure-boot = " -O verity"
+TEZI_ROOT_FSOPTS:append:torizon-signed = " -O verity"
 
 python adjust_tezi_artifacts() {
     artifacts = d.getVar('TEZI_ARTIFACTS').replace(d.getVar('KERNEL_IMAGETYPE'), '').replace(d.getVar('KERNEL_DEVICETREE'), '')
@@ -131,9 +131,9 @@ generate_diff_file () {
 }
 
 EXTRA_DO_IMAGE_OSTREECOMMIT_POSTFUNCS = " "
-EXTRA_DO_IMAGE_OSTREECOMMIT_POSTFUNCS:secure-boot = "composefs_image_gen"
+EXTRA_DO_IMAGE_OSTREECOMMIT_POSTFUNCS:torizon-signed = "composefs_image_gen"
 EXTRA_DO_IMAGE_OSTREECOMMIT_DEPENDS = " "
-EXTRA_DO_IMAGE_OSTREECOMMIT_DEPENDS:secure-boot = "composefs-tools-native:do_populate_sysroot fsverity-utils-native:do_populate_sysroot"
+EXTRA_DO_IMAGE_OSTREECOMMIT_DEPENDS:torizon-signed = "composefs-tools-native:do_populate_sysroot fsverity-utils-native:do_populate_sysroot"
 do_image_ostreecommit[postfuncs] += "${EXTRA_DO_IMAGE_OSTREECOMMIT_POSTFUNCS}"
 do_image_ostreecommit[depends] += "${EXTRA_DO_IMAGE_OSTREECOMMIT_DEPENDS}"
 composefs_image_gen() {
@@ -153,10 +153,10 @@ composefs_image_gen() {
 
     fsverity digest --compact ${CFS_IMG_FILE} > ${WORKDIR}/composefs_digest
 }
-CONVERSION_CMD:tar:prepend:secure-boot = "cp ${WORKDIR}/composefs-*.img ${OTA_SYSROOT}/ostree/deploy/torizon/deploy/ ; "
+CONVERSION_CMD:tar:prepend:torizon-signed = "cp ${WORKDIR}/composefs-*.img ${OTA_SYSROOT}/ostree/deploy/torizon/deploy/ ; "
 
 EXTRA_DO_IMAGE_OTA_PREFUNCS = " "
-EXTRA_DO_IMAGE_OTA_PREFUNCS:secure-boot = "composefs_image_digest_set"
+EXTRA_DO_IMAGE_OTA_PREFUNCS:torizon-signed = "composefs_image_digest_set"
 do_image_ota[prefuncs] += "${EXTRA_DO_IMAGE_OTA_PREFUNCS}"
 python composefs_image_digest_set() {
     with open(d.getVar('WORKDIR') + "/composefs_digest") as f:

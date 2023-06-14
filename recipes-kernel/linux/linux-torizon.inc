@@ -1,7 +1,7 @@
 FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
 
 PATCHES_NXP_BSP = " "
-PATCHES_NXP_BSP:secure-boot = "\
+PATCHES_NXP_BSP:torizon-signed = "\
     file://0001-fs-verity-define-a-function-to-return-the-integrity-.patch \
 "
 
@@ -9,7 +9,7 @@ SRC_URI:append:use-nxp-bsp = "\
     ${PATCHES_NXP_BSP} \
 "
 
-SRC_URI:append:secure-boot = "\
+SRC_URI:append:torizon-signed = "\
     file://0001-fsverity-Export-fsverity_get_digest.patch \
 "
 

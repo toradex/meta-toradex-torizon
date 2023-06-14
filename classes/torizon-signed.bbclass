@@ -3,8 +3,8 @@
 # inherit class to sign BSP related images
 inherit tdx-signed
 
-# globally enable the build with secure-boot support
-DISTROOVERRIDES:append = ":secure-boot"
+# globally enable signing of operating system images
+DISTROOVERRIDES:append = ":torizon-signed"
 
 # enable FIT images in TorizonCore
 KERNEL_CLASSES:append = " kernel-fitimage"
