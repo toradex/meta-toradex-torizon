@@ -5,7 +5,3 @@ inherit tdx-signed
 
 # globally enable signing of operating system images
 DISTROOVERRIDES:append = ":torizon-signed"
-
-# enable FIT images in TorizonCore
-KERNEL_CLASSES:append = " kernel-fitimage"
-KERNEL_IMAGETYPE:forcevariable = "fitImage"
