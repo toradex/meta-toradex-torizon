@@ -40,11 +40,4 @@ then
     env set tdxargs "${tdxargs} rodata=off nokaslr maxcpus=1 kgdboc=ttyAMA0,115200"
 fi
 
-# now that we have all the environment variables, we can set the bootcmd
-setenv bootargs "${defargs} ${bootargs} ${tdxargs}"
-
-ext4load ${devtype} ${devnum}:${otaroot} ${kernel_addr_r} /boot${kernel_image}
-ext4load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} /boot${ramdisk_image}
-env set ramdisk_size ${filesize}
-
-@@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr}
+run bootcmd_run

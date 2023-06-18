@@ -4,3 +4,25 @@ bootlimit=3
 devtype=mmc
 devnum=0
 otaroot=2
+
+set_bootargs=env set bootargs "${defargs} ${bootargs} ${tdxargs}"
+
+bootcmd_load_k=ext4load ${devtype} ${devnum}:${otaroot} ${kernel_addr_r} /boot${kernel_image}
+
+bootcmd_load_r=ext4load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} /boot${ramdisk_image}; env set ramdisk_size ${filesize}
+
+# check kernel_image2 to avoid booting from other then default emmc in case of
+# bootlimit is reached and there is no other deployed image
+check_rollback_needed=if test -n "${kernel_image2}" && test "${rollback}" = "1"; then \
+    echo "Rollback enabled. Booting previously deployed version."; \
+    env set kernel_image ${kernel_image2}; \
+    env set ramdisk_image ${ramdisk_image2}; \
+    env set bootargs "${bootargs2}"; \
+fi || true
+
+bootcmd_boot=if test ${bootscript_debug} != 1; then \
+    @@KERNEL_BOOTCMD@@ ${kernel_addr_r} ${ramdisk_addr_r}:${ramdisk_size} ${fdt_addr}; \
+    fi || true
+
+bootcmd_run=run check_rollback_needed && run set_bootargs && \
+            run bootcmd_load_k && run bootcmd_load_r && run bootcmd_boot
