@@ -37,8 +37,8 @@ CORE_IMAGE_BASE_INSTALL:remove = "set-hostname"
 
 # Use meta-lmp but maintain compatibility
 BBMASK += " \
-    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
-    meta-toradex-torizon/recipes-bsp/u-boot/libubootenv_* \
+    meta-common-torizon/recipes-bsp/u-boot/u-boot-toradex \
+    meta-common-torizon/recipes-bsp/u-boot/libubootenv_* \
     meta-toradex-bsp-common/recipes-bsp/u-boot/libubootenv_* \
-    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
+    meta-common-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
 "

@@ -129,7 +129,7 @@ DISTRO_DEFAULT="torizon-upstream" && echo "$MACHINE" | grep -E -q '(imx8|am62|qe
 DISTRO=${DISTRO:-$DISTRO_DEFAULT}
 
 # Create a common list of "<distro>(<layer>)" supported by TorizonCore, sorted by <distro>
-DISTLAYERS=$(find layers/meta-toradex-torizon -print | grep "conf/distro/.*\.conf" |
+DISTLAYERS=$(find layers/meta-common-torizon -print | grep "conf/distro/.*\.conf" |
             sed -e 's/\.conf//g' -e 's/layers\///' |
             awk -F'/conf/distro/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
 
@@ -144,7 +144,7 @@ if [ -z "${SDKMACHINE}" ]; then
 fi
 
 MANIFESTS="${OEROOT}"/.repo/manifests
-SCRIPTS="${OEROOT}"/layers/meta-toradex-torizon/scripts
+SCRIPTS="${OEROOT}"/layers/meta-common-torizon/scripts
 
 # We can be called with only 1 parameter max (build folder)
 BUILDDIR=${1:-build-$DISTRO}

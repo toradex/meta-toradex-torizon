@@ -51,7 +51,7 @@ OSTREE_KERNEL_ARGS:sota:append:rpi = " root=LABEL=otaroot rootfstype=ext4 quiet 
 UBOOT_BINARY_OTA_IGNORE:raspberrypi4-64 = "1"
 
 BBMASK += " \
-    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex \
+    meta-common-torizon/recipes-bsp/u-boot/u-boot-toradex \
     meta-raspberrypi/recipes-bsp/u-boot/u-boot_%.bbappend \
-    meta-toradex-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
+    meta-common-torizon/recipes-bsp/u-boot/u-boot-toradex_%.bbappend \
 "
