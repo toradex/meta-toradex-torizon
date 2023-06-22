@@ -11,7 +11,6 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            github.com/docker/docker:github.com/docker/docker \
            github.com/docker/go-connections:github.com/docker/go-connections \
            github.com/docker/go-units:github.com/docker/go-units \
-           github.com/fsnotify/fsnotify:github.com/fsnotify/fsnotify \
            github.com/golang/mock:github.com/golang/mock \
            github.com/hashicorp/go-multierror:github.com/hashicorp/go-multierror \
            github.com/hashicorp/go-version:github.com/hashicorp/go-version \
@@ -28,6 +27,7 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            github.com/spf13/pflag:github.com/spf13/pflag \
            github.com/stretchr/testify:github.com/stretchr/testify \
            github.com/theupdateframework/notary:github.com/theupdateframework/notary \
+           github.com/tilt-dev/fsnotify:github.com/tilt-dev/fsnotify \
            go.opentelemetry.io/otel:go.opentelemetry.io/otel \
            go.opentelemetry.io/otel/exporters/otlp/internal/retry:github.com/open-telemetry/opentelemetry-go/exporters/otlp/internal/retry//exporters/otlp/internal/retry:force \
            go.opentelemetry.io/otel/exporters/otlp/otlptrace:github.com/open-telemetry/opentelemetry-go/exporters/otlp/internal/retry//exporters/otlp/otlptrace:force \
@@ -40,7 +40,6 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            golang.org/x/sync:golang.org/x/sync \
            gopkg.in/yaml.v2:gopkg.in/yaml.v2 \
            gotest.tools/v3:github.com/gotestyourself/gotest.tools \
-           k8s.io/client-go:k8s.io/client-go \
            github.com/Azure/go-ansiterm:github.com/Azure/go-ansiterm \
            github.com/Microsoft/go-winio:github.com/Microsoft/go-winio \
            github.com/beorn7/perks:github.com/beorn7/perks \
@@ -59,6 +58,7 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            github.com/docker/go:github.com/docker/go \
            github.com/docker/go-metrics:github.com/docker/go-metrics \
            github.com/felixge/httpsnoop:github.com/felixge/httpsnoop \
+           github.com/fsnotify/fsevents:github.com/fsnotify/fsevents \
            github.com/fvbommel/sortorder:github.com/fvbommel/sortorder \
            github.com/go-logr/logr:github.com/go-logr/logr \
            github.com/go-logr/stdr:github.com/go-logr/stdr \
@@ -97,10 +97,12 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            github.com/moby/sys/sequential:github.com/moby/sys/sequential//sequential \
            github.com/moby/sys/signal:github.com/moby/sys/signal//signal \
            github.com/moby/sys/symlink:github.com/moby/sys/symlink//symlink \
+           github.com/moby/sys/mountinfo:github.com/moby/sys/mountinfo//mountinfo \
            github.com/modern-go/concurrent:github.com/modern-go/concurrent \
            github.com/modern-go/reflect2:github.com/modern-go/reflect2 \
            github.com/opencontainers/runc:github.com/opencontainers/runc \
            github.com/pelletier/go-toml:github.com/pelletier/go-toml \
+           github.com/pelletier/go-toml/v2:github.com/pelletier/go-toml/v2 \
            github.com/pmezard/go-difflib:github.com/pmezard/go-difflib \
            github.com/prometheus/client_golang:github.com/prometheus/client_golang \
            github.com/prometheus/client_model:github.com/prometheus/client_model \
@@ -108,7 +110,6 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            github.com/prometheus/procfs:github.com/prometheus/procfs \
            github.com/rivo/uniseg:github.com/rivo/uniseg \
            github.com/serialx/hashring:github.com/serialx/hashring \
-           github.com/spf13/viper:github.com/spf13/viper \
            github.com/tonistiigi/fsutil:github.com/tonistiigi/fsutil \
            github.com/tonistiigi/units:github.com/tonistiigi/units \
            github.com/tonistiigi/vt100:github.com/tonistiigi/vt100 \
@@ -138,9 +139,30 @@ export sites="github.com/AlecAivazis/survey/v2:github.com/AlecAivazis/survey/v2 
            k8s.io/utils:k8s.io/utils \
            sigs.k8s.io/structured-merge-diff/v4:sigs.k8s.io/structured-merge-diff/v4 \
            sigs.k8s.io/yaml:sigs.k8s.io/yaml \
+           go.uber.org/goleak:go.uber.org/goleak \
+           github.com/aws/aws-sdk-go-v2:github.com/aws/aws-sdk-go-v2 \
+           github.com/aws/aws-sdk-go-v2/config:github.com/aws/aws-sdk-go-v2/config/:force \
+           github.com/aws/aws-sdk-go-v2/credentials:github.com/aws/aws-sdk-go-v2/credentials/:force \
+           github.com/aws/aws-sdk-go-v2/feature/ec2/imds:github.com/aws/aws-sdk-go-v2//feature/ec2/imds:force \
+           github.com/aws/aws-sdk-go-v2/internal/configsources:github.com/aws/aws-sdk-go-v2//internal/configsources:force \
+           github.com/aws/aws-sdk-go-v2/internal/endpoints/v2:github.com/aws/aws-sdk-go-v2//internal/endpoints/v2:force \
+           github.com/aws/aws-sdk-go-v2/internal/ini:github.com/aws/aws-sdk-go-v2//internal/ini:force \
+           github.com/aws/aws-sdk-go-v2/service/internal/presigned-url:github.com/aws/aws-sdk-go-v2//service/internal/presigned-url:force \
+           github.com/aws/aws-sdk-go-v2/service/sso:github.com/aws/aws-sdk-go-v2//service/sso:force \
+           github.com/aws/aws-sdk-go-v2/service/sts:github.com/aws/aws-sdk-go-v2/service/sts//service/sts:force \
+           github.com/aws/smithy-go:github.com/aws/smithy-go \
+           github.com/fsnotify/fsnotify:github.com/fsnotify/fsnotify \
+           github.com/hashicorp/hcl:github.com/hashicorp/hcl \
+           github.com/magiconair/properties:github.com/magiconair/properties \
+           github.com/spf13/afero:github.com/spf13/afero \
+           github.com/spf13/cast:github.com/spf13/cast \
+           github.com/spf13/jwalterweatherman:github.com/spf13/jwalterweatherman \
+           github.com/subosito/gotenv:github.com/subosito/gotenv \
+           gopkg.in/ini.v1:gopkg.in/ini.v1 \
            github.com/cucumber/godog:github.com/cucumber/godog \
            k8s.io/api:k8s.io/api \
-           k8s.io/apimachinery:k8s.io/apimachinery"
+           k8s.io/apimachinery:k8s.io/apimachinery \
+           k8s.io/client-go:k8s.io/client-go"
 
 
 do_compile:prepend() {
