@@ -11,6 +11,13 @@ bootcmd_load_k=ext4load ${devtype} ${devnum}:${otaroot} ${kernel_addr_r} /boot${
 
 bootcmd_load_r=ext4load ${devtype} ${devnum}:${otaroot} ${ramdisk_addr_r} /boot${ramdisk_image}; env set ramdisk_size ${filesize}
 
+# for rpi we need to overlay some u-boot info into the device tree
+# this device tree was loaded by the Broadcom bootloader
+uboot_info_overlay= \
+    fdt addr ${fdt_addr} ; \
+    fdt resize ; \
+    fdt chosen
+
 # check kernel_image2 to avoid booting from other then default emmc in case of
 # bootlimit is reached and there is no other deployed image
 check_rollback_needed=if test -n "${kernel_image2}" && test "${rollback}" = "1"; then \
@@ -25,4 +32,5 @@ bootcmd_boot=if test ${bootscript_debug} != 1; then \
     fi || true
 
 bootcmd_run=run check_rollback_needed && run set_bootargs && \
+            run uboot_info_overlay && \
             run bootcmd_load_k && run bootcmd_load_r && run bootcmd_boot
