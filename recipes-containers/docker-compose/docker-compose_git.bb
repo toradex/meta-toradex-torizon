@@ -9,7 +9,7 @@ DEPENDS = " \
 
 # Specify the first two important SRCREVs as the format
 SRCREV_FORMAT="compose_survey"
-SRCREV_compose = "a93f09efacbbc59324ddbab8b81dea8423a0cb63"
+SRCREV_compose = "02ad467f89ebc343aa03ce89d18875ea4d604ea3"
 
 SRC_URI = "git://github.com/docker/compose;name=compose;branch=v2;protocol=https"
 
@@ -25,7 +25,7 @@ LIC_FILES_CHKSUM = "file://src/import/LICENSE;md5=175792518e4ac015ab6696d16c4f60
 
 GO_IMPORT = "import"
 
-PV = "v2.15.2"
+PV = "v2.17.2"
 
 COMPOSE_PKG = "github.com/docker/compose/v2"
 
