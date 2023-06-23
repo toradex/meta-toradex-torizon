@@ -16,8 +16,8 @@ SRC_URI = "\
            file://fluent-bit.service \
            file://fluent-bit.conf \
            "
-SRCREV = "4c0ca4fc5f28a34ca7d80e18b0d529bf9d07b1c2"
-PV = "2.0.9+git${SRCPV}"
+SRCREV = "2983b235a37243b91562cda29501d388b13cb7e8"
+PV = "2.1.8+git${SRCPV}"
 
 S = "${WORKDIR}/git"
 
