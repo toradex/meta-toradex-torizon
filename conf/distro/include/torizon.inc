@@ -54,12 +54,15 @@ IMAGE_BOOT_FILES_REMOVE:sota = "boot.scr-${MACHINE};boot.scr overlays.txt overla
 IMAGE_BOOT_FILES_REMOVE:append:apalis-imx8 = " hdmitxfw.bin dpfw.bin"
 
 DISTRO_FEATURES:append = " virtualization stateless-system"
+# FIXME: We need the opengl for beagleplay, but this can be an issue for
+# upstream, so I'm comenting here to not forget in the next rebase
 DISTRO_FEATURES:remove = "3g alsa irda pcmcia nfc ldconfig pulseaudio wayland x11 ptest multiarch vulkan"
-DISTRO_FEATURES:imx-generic-bsp:remove = "opengl"
 
+# FIXME: This can be an issue for the upstream, so we are only commenting
+# instead of removing it.
 # No need for x11 even for native
-DISTRO_FEATURES_NATIVE:imx-generic-bsp:remove = "x11"
-DISTRO_FEATURES_NATIVESDK:imx-generic-bsp:remove = "x11"
+# DISTRO_FEATURES_NATIVE:remove = "x11"
+# DISTRO_FEATURES_NATIVESDK:remove = "x11"
 
 # Note, enable or disable the useradd-staticids in a configured system,
 # the TMPDIR/DEPLOY_DIR/SSTATE_DIR may contain incorrect uid/gid values.
