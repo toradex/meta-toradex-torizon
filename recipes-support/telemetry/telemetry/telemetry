@@ -31,13 +31,34 @@ tdx-info > /tmp/tdx-info.json
 BOARDMODEL=$(cat /tmp/tdx-info.json | jq '."hardware-info"."hw-model"')
 BOARDARCH=$(cat /tmp/tdx-info.json | jq '."hardware-info"."processor-arch"')
 OSRELEASE=$(cat /tmp/tdx-info.json | jq '."software-summary"."distro-version"')
-DATETIME=$(date +%Y-%m-%d)
 
 # get emerg, alert, crit, err, warning dmesg levels
 DMESG=$(dmesg -r --level=emerg,alert,crit,err,warn)
 
 # query the region
-REGION=$(curl -s https://ipapi.co/city)
+# if the region is null try 3x
+for i in {1..3}
+do
+    REGION=$(curl -s https://ipapi.co/city)
+    # try to set the date and time
+    dateFromServer=$(curl -v --silent https://google.com/ 2>&1 \
+        | grep Date | sed -e 's/< Date: //'); date +"%d%m%Y%H%M%S" -d "$dateFromServer"
+
+    if [ ! -z "$REGION" ]
+    then
+        break
+    # else we are in the last iteration exit
+    elif [ $i -eq 3 ]
+    then
+        echo "E: Region was undefined"
+        REGION="Undefined"
+    fi
+
+    sleep 3
+done
+
+# we should have a date now
+DATETIME=$(date +%Y-%m-%d)
 
 # debug
 echo "REGION: $REGION"
