@@ -1,0 +1,11 @@
+[Unit]
+Description=Send Telemetry about the Common TorizonCore usage
+Requires=set-hostname.service network-online.target
+After=set-hostname.service network-online.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/sbin/telemetry
+
+[Install]
+WantedBy=multi-user.target
