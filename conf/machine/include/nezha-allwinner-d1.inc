@@ -33,7 +33,8 @@ IMAGE_BOOT_FILES:nezha-allwinner-d1 = "${KERNEL_IMAGETYPE} sun20i-d1-nezha.dtb b
 IMAGE_BOOT_FILES:sota:nezha-allwinner-d1 = "${KERNEL_IMAGETYPE} sun20i-d1-nezha.dtb boot.scr-${MACHINE};boot.scr.uimg"
 
 hostname:pn-base-files = "torizon-nezha"
-CORE_IMAGE_BASE_INSTALL:remove = "set-hostname"
+# FIXME: rac does not compile for riscv64, https://github.com/briansmith/ring/issues/1182
+CORE_IMAGE_BASE_INSTALL:remove = "set-hostname rac"
 
 # Use meta-lmp but maintain compatibility
 BBMASK += " \
