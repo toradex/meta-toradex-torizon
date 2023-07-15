@@ -19,7 +19,7 @@ do
         exit 0
     fi
 
-    sleep 3
+    sleep 60
 done
 
 export JSON_OUTPUT=1
@@ -54,7 +54,7 @@ do
         REGION="Undefined"
     fi
 
-    sleep 3
+    sleep 60
 done
 
 # we should have a date now
