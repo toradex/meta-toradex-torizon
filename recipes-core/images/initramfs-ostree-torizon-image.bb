@@ -9,6 +9,10 @@ PACKAGE_INSTALL:append:torizon-signed = "\
     initramfs-module-composefs \
 "
 
+PACKAGE_INSTALL:append:apalis-imx8 = "\
+    firmware-imx-hdmi \
+"
+
 SYSTEMD_DEFAULT_TARGET = "initrd.target"
 
 # Do not pollute the initrd image with rootfs features

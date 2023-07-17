@@ -42,6 +42,12 @@ FILES:initramfs-module-kmod = "\
     /etc/modules-load.d/* \
 "
 
+SUMMARY:initramfs-module-firmware = "initramfs support for HDMI firmware"
+RDEPENDS:initramfs-module-firmware = "${PN}-base firmware-imx-hdmi"
+FILES:initramfs-module-firmware = "\
+    /usr/lib/firmware/* \
+"
+
 do_install:append() {
     install -m 0755 ${WORKDIR}/plymouth ${D}/init.d/02-plymouth
     install -m 0755 ${WORKDIR}/ostree ${D}/init.d/95-ostree
