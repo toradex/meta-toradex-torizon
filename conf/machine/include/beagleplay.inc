@@ -55,6 +55,7 @@ LINUX_VERSION_EXTENSION = "-torizon-${LINUX_KERNEL_TYPE}"
 OSTREE_KERNEL_ARGS:sota:append:beagleplay = "console=ttyS2,115200 root=LABEL=otaroot rootfstype=ext4 quiet logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles splash "
 
 UBOOT_BINARY_OTA_IGNORE:beagleplay = "1"
+OSTREE_DEPLOY_DEVICETREE:beagleplay = "0"
 
 PREFERRED_PROVIDER_virtual/mesa = "mesa-pvr"
 PREFERRED_PROVIDER_virtual/egl = "mesa-pvr"
