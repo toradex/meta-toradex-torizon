@@ -11,7 +11,7 @@ SRC_URI = " \
     file://client.toml \
 "
 
-SRCREV = "f8b4c04befa20176c20ba2066ffaa88754a95864"
+SRCREV = "13752dbebc90b36a9e0e52c056c0c4ec68aec59d"
 SRCREV:use-head-next = "${AUTOREV}"
 
 S = "${WORKDIR}/git"
@@ -41,6 +41,7 @@ SRC_URI += " \
     crate://crates.io/backtrace/0.3.67 \
     crate://crates.io/base16ct/0.1.1 \
     crate://crates.io/base64/0.13.1 \
+    crate://crates.io/base64/0.21.2 \
     crate://crates.io/base64ct/1.5.3 \
     crate://crates.io/bcrypt-pbkdf/0.9.0 \
     crate://crates.io/bit-vec/0.6.3 \
@@ -49,6 +50,7 @@ SRC_URI += " \
     crate://crates.io/block-buffer/0.9.0 \
     crate://crates.io/block-padding/0.3.2 \
     crate://crates.io/blowfish/0.9.1 \
+    crate://crates.io/bstr/1.5.0 \
     crate://crates.io/bumpalo/3.11.1 \
     crate://crates.io/byteorder/1.4.3 \
     crate://crates.io/bytes/1.4.0 \
@@ -62,7 +64,7 @@ SRC_URI += " \
     crate://crates.io/color-eyre/0.6.2 \
     crate://crates.io/config/0.13.3 \
     crate://crates.io/console/0.15.5 \
-    crate://crates.io/const-oid/0.9.1 \
+    crate://crates.io/const-oid/0.9.2 \
     crate://crates.io/core-foundation-sys/0.8.3 \
     crate://crates.io/cpufeatures/0.2.5 \
     crate://crates.io/crc32fast/1.3.2 \
@@ -77,12 +79,15 @@ SRC_URI += " \
     crate://crates.io/cxxbridge-macro/1.0.91 \
     crate://crates.io/data-encoding/2.3.3 \
     crate://crates.io/der/0.6.1 \
+    crate://crates.io/der/0.7.6 \
     crate://crates.io/diff/0.1.13 \
     crate://crates.io/digest/0.10.6 \
     crate://crates.io/digest/0.9.0 \
     crate://crates.io/dirs-sys/0.3.7 \
     crate://crates.io/dirs/4.0.0 \
+    crate://crates.io/doc-comment/0.3.3 \
     crate://crates.io/downcast-rs/1.2.0 \
+    crate://crates.io/dyn-clone/1.0.11 \
     crate://crates.io/ecdsa/0.14.8 \
     crate://crates.io/ed25519-dalek/1.0.1 \
     crate://crates.io/ed25519/1.5.2 \
@@ -117,11 +122,14 @@ SRC_URI += " \
     crate://crates.io/ghash/0.5.0 \
     crate://crates.io/gimli/0.27.2 \
     crate://crates.io/git2/0.16.1 \
+    crate://crates.io/globset/0.4.10 \
     crate://crates.io/group/0.12.1 \
     crate://crates.io/h2/0.3.15 \
     crate://crates.io/hashbrown/0.12.3 \
+    crate://crates.io/heck/0.4.1 \
     crate://crates.io/hermit-abi/0.2.6 \
     crate://crates.io/hex-literal/0.3.4 \
+    crate://crates.io/hex/0.4.3 \
     crate://crates.io/hmac/0.12.1 \
     crate://crates.io/http-body/0.4.5 \
     crate://crates.io/http-range-header/0.3.0 \
@@ -173,6 +181,7 @@ SRC_URI += " \
     crate://crates.io/num-traits/0.2.15 \
     crate://crates.io/num_cpus/1.15.0 \
     crate://crates.io/object/0.30.3 \
+    crate://crates.io/olpc-cjson/0.1.3 \
     crate://crates.io/once_cell/1.16.0 \
     crate://crates.io/opaque-debug/0.3.0 \
     crate://crates.io/output_vt100/0.1.3 \
@@ -182,9 +191,13 @@ SRC_URI += " \
     crate://crates.io/parking_lot/0.12.1 \
     crate://crates.io/parking_lot_core/0.9.6 \
     crate://crates.io/password-hash/0.4.2 \
+    crate://crates.io/path-absolutize/3.1.0 \
+    crate://crates.io/path-dedot/3.1.0 \
     crate://crates.io/pathdiff/0.2.1 \
     crate://crates.io/pbkdf2/0.11.0 \
     crate://crates.io/pem-rfc7468/0.6.0 \
+    crate://crates.io/pem-rfc7468/0.7.0 \
+    crate://crates.io/pem/1.1.1 \
     crate://crates.io/percent-encoding/2.2.0 \
     crate://crates.io/pin-project-internal/1.0.12 \
     crate://crates.io/pin-project-lite/0.2.9 \
@@ -224,6 +237,7 @@ SRC_URI += " \
     crate://crates.io/rustls/0.20.7 \
     crate://crates.io/rustversion/1.0.11 \
     crate://crates.io/ryu/1.0.12 \
+    crate://crates.io/same-file/1.0.6 \
     crate://crates.io/scopeguard/1.1.0 \
     crate://crates.io/scratch/1.0.3 \
     crate://crates.io/sct/0.7.0 \
@@ -233,6 +247,7 @@ SRC_URI += " \
     crate://crates.io/serde_derive/1.0.152 \
     crate://crates.io/serde_json/1.0.93 \
     crate://crates.io/serde_path_to_error/0.1.9 \
+    crate://crates.io/serde_plain/1.0.1 \
     crate://crates.io/serde_urlencoded/0.7.1 \
     crate://crates.io/serial-core/0.4.0 \
     crate://crates.io/serial-unix/0.4.0 \
@@ -247,9 +262,12 @@ SRC_URI += " \
     crate://crates.io/signature/1.6.4 \
     crate://crates.io/slab/0.4.7 \
     crate://crates.io/smallvec/1.10.0 \
+    crate://crates.io/snafu-derive/0.7.4 \
+    crate://crates.io/snafu/0.7.4 \
     crate://crates.io/socket2/0.4.7 \
     crate://crates.io/spin/0.5.2 \
     crate://crates.io/spki/0.6.0 \
+    crate://crates.io/spki/0.7.2 \
     crate://crates.io/ssh-encoding/0.1.0 \
     crate://crates.io/ssh-key/0.5.1 \
     crate://crates.io/static_assertions/1.1.0 \
@@ -296,6 +314,7 @@ SRC_URI += " \
     crate://crates.io/vcpkg/0.2.15 \
     crate://crates.io/vergen/7.5.1 \
     crate://crates.io/version_check/0.9.4 \
+    crate://crates.io/walkdir/2.3.3 \
     crate://crates.io/want/0.3.0 \
     crate://crates.io/wasi/0.10.0+wasi-snapshot-preview1 \
     crate://crates.io/wasi/0.11.0+wasi-snapshot-preview1 \
@@ -308,7 +327,6 @@ SRC_URI += " \
     crate://crates.io/wasm-bindgen/0.2.83 \
     crate://crates.io/web-sys/0.3.60 \
     crate://crates.io/webpki/0.22.0 \
-    crate://crates.io/whoami/1.4.0 \
     crate://crates.io/winapi-i686-pc-windows-gnu/0.4.0 \
     crate://crates.io/winapi-util/0.1.5 \
     crate://crates.io/winapi-x86_64-pc-windows-gnu/0.4.0 \
@@ -328,19 +346,29 @@ SRC_URI += " \
     crate://crates.io/yasna/0.5.1 \
     crate://crates.io/zeroize/1.5.7 \
     crate://crates.io/zeroize_derive/1.3.3 \
+    git://github.com/toradex/tough;protocol=https;nobranch=1;name=tough;destsuffix=tough \
     git://github.com/warp-tech/russh.git;protocol=https;nobranch=1;name=russh;destsuffix=russh \
 "
 
 SRCREV_FORMAT .= "russh"
 SRCREV_russh = "0.37.0-beta.1"
+SRCREV_FORMAT .= "tough"
+SRCREV_tough = "rac"
 
 # There is a postfunc that runs after do_configure. This fixing logic needs to run after this postfunc.
 # It is because of this ordering this is do_compile:prepend instead of do_configure:append.
 do_compile:prepend() {
-    # Need to fix config file due to the unique layout of the russh repo
+    # Need to fix config file due to the tough and russh repo having a virtual manifest.
+    # Which is not supported by the cargo bbclasses currently,
+    # see: https://github.com/openembedded/openembedded-core/commit/684a8af41c5bb70db68e75f72bdc4c9b09630810
+    sed -i 's|tough =.*|tough = { path = "${WORKDIR}/tough/tough" }|g' ${CARGO_HOME}/config
+    sed -i '/^tough =.*/a olpc-cjson = { path = "${WORKDIR}/tough/olpc-cjson" }' ${CARGO_HOME}/config
+
     sed -i 's|russh =.*|russh = { path = "${WORKDIR}/russh/russh" }|g' ${CARGO_HOME}/config
-    echo 'russh-keys = { path = "${WORKDIR}/russh/russh-keys" }' >> ${CARGO_HOME}/config
-    echo 'russh-cryptovec = { path = "${WORKDIR}/russh/cryptovec" }' >> ${CARGO_HOME}/config
+    sed -i '/^russh =.*/a \
+    russh-keys = { path = "${WORKDIR}/russh/russh-keys" } \
+    russh-cryptovec = { path = "${WORKDIR}/russh/cryptovec" }' ${CARGO_HOME}/config
+
 }
 
 do_install:append() {
