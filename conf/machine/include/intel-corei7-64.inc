@@ -2,7 +2,7 @@
 WKS_FILE:intel-corei7-64:sota = "efiimage-sota.wks"
 WKS_FILE_DEPENDS:remove = "tezi-metadata virtual/dtb"
 
-CORE_IMAGE_BASE_INSTALL:append = "resize-helper"
+CORE_IMAGE_BASE_INSTALL:append = "resize-helper docker-binfmt"
 
 OSTREE_KERNEL_ARGS:sota:append:intel-corei7-64 = "console=ttyS0,115200 root=LABEL=otaroot rootfstype=ext4 quiet logo.nologo vt.global_cursor_default=0 plymouth.ignore-serial-consoles splash fbcon=map:10 "
 OSTREE_BOOTLOADER:intel-corei7-64 = "grub"

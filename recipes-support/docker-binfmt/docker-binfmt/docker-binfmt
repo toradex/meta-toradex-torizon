@@ -1,0 +1,7 @@
+#!/usr/bin/bash
+#
+# Copyright (c) MicroHobby <matheus@castello.eng.br> 2023
+# All rights reserved.
+# 
+
+docker run --rm --privileged torizon/binfmt
