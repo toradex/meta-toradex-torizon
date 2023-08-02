@@ -97,7 +97,7 @@ SKIP_META_SECURITY_SANITY_CHECK = "1"
 GOVERSION ?= "1.19%"
 
 # Rust toolchain preferred versions:
-RUSTVERSION ?= "1.69%"
+RUSTVERSION ?= "1.70%"
 
 PREFERRED_VERSION_cargo ?= "${RUSTVERSION}"
 PREFERRED_VERSION_cargo-native ?= "${RUSTVERSION}"
