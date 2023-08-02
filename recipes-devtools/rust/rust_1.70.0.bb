@@ -66,6 +66,7 @@ do_rust_setup_snapshot () {
     fi
 }
 addtask rust_setup_snapshot after do_unpack before do_configure
+addtask do_test_compile after do_configure do_rust_gen_targets
 do_rust_setup_snapshot[dirs] += "${WORKDIR}/rust-snapshot"
 do_rust_setup_snapshot[vardepsexclude] += "UNINATIVE_LOADER"
 
@@ -223,6 +224,11 @@ FILES:${PN}-dev = ""
 do_compile () {
 }
 
+do_test_compile[dirs] = "${B}"
+do_test_compile () {
+    rust_runx build src/tools/remote-test-server --target "${RUST_TARGET_SYS}"
+}
+
 ALLOW_EMPTY:${PN} = "1"
 
 PACKAGES =+ "${PN}-tools-clippy ${PN}-tools-rustfmt"
@@ -350,3 +356,8 @@ RUSTLIB_DEP:class-nativesdk = ""
 INSANE_SKIP:${PN} = "staticdev"
 
 BBCLASSEXTEND = "native nativesdk"
+
+# Since 1.70.0 upgrade this fails to build with gold:
+# http://errors.yoctoproject.org/Errors/Details/708196/
+# ld: error: version script assignment of  to symbol __rust_alloc_error_handler_should_panic failed: symbol not defined
+LDFLAGS:append = "${@bb.utils.contains('DISTRO_FEATURES', 'ld-is-gold', ' -fuse-ld=bfd', '', d)}"
