@@ -7,7 +7,7 @@ SRC_URI = "git://github.com/flatcar-linux/nss-altfiles.git;protocol=https;branch
 
 # Modify these as desired
 PV = "2.23.0+git${SRCPV}"
-SRCREV = "9078c543ba7d2bc5011737675b3dddb882673ce7"
+SRCREV = "f640895a9f893390375ce5aa26ab22b5e8b14b1f"
 
 S = "${WORKDIR}/git"
 
