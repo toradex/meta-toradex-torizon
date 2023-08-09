@@ -17,3 +17,6 @@ do_install:append() {
         sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${systemd_unitdir}/system.conf.d/10-${BPN}.conf 
 }
 
+do_install:append:ti-soc() {
+	sed -i '$ d' ${D}${systemd_unitdir}/system.conf.d/10-${BPN}.conf
+}
