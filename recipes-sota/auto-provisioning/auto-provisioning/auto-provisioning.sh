@@ -10,7 +10,8 @@ PROV_CLIENT_ID=""
 PROV_SECRET=""
 PROV_TOKEN_ENDPOINT=""
 PROV_ACCESS_TOKEN=""
-PROV_REGISTER_ENDPOINT="https://app.torizon.io/api/accounts/devices"
+
+PROV_REGISTER_ENDPOINT=${PROV_REGISTER_ENDPOINT:-"https://app.torizon.io/api/accounts/devices"}
 
 function log()
 {
