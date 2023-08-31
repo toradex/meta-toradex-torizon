@@ -53,6 +53,7 @@ CORE_IMAGE_BASE_INSTALL:append:tdx = " \
 CORE_IMAGE_BASE_INSTALL:append:sota = " \
     auto-provisioning \
     rac \
+    provision-device \
 "
 
 CORE_IMAGE_BASE_INSTALL:append:mx8-nxp-bsp = " \
