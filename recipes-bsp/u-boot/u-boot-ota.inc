@@ -28,12 +28,15 @@ generate_environ_file () {
         return 1
     fi
     # Extract environment similar to what `make u-boot-initial-env` does but
-    # without sorting it.
-    "${OBJCOPY}" \
-        --dump-section .rodata.default_environment="${outdir}/${outfile}" \
-        "${outdir}/env/common.o"
-    # Replace NULs by NLs:
-    sed --in-place -e 's/\x00/\x0A/g' "${outdir}/${outfile}"
+    # without sorting it and replace NULs by NLs:
+    if [ ! -f ${outdir}/tools/printinitialenv ]; then
+        "${OBJCOPY}" \
+            --dump-section .rodata.default_environment="${outdir}/${outfile}" \
+            "${outdir}/env/common.o"
+        sed --in-place -e 's/\x00/\x0A/g' "${outdir}/${outfile}"
+    else
+        ${outdir}/tools/printinitialenv > "${outdir}/${outfile}"
+    fi
 }
 
 do_compile:append () {
