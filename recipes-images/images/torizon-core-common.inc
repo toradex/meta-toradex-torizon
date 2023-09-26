@@ -5,6 +5,11 @@ DESCRIPTION:append:experimental = " This release is not a officially supported \
 build of TorizonCore, and is labeled experimental because of limited hardware \
 constraints such as storage or memory, or include software we are still evaluating."
 
+IMAGE_FEATURES += "ssh-server-openssh bash-completion-pkgs"
+
+# Enough free space for a full image update
+IMAGE_OVERHEAD_FACTOR = "2.3"
+
 inherit core-image
 
 do_rootfs[cleandirs] += "${IMAGE_ROOTFS}"
@@ -43,6 +48,19 @@ CORE_IMAGE_BASE_INSTALL:append = " \
     iproute2 \
     iproute2-ip \
     ethtool \
+    cpufrequtils \
+    curl \
+    htop \
+    jq \
+    ldd \
+    less \
+    openssh-sftp-server \
+    packagegroup-core-full-cmdline-multiuser \
+    packagegroup-core-full-cmdline-utils \
+    rsync \
+    sshfs-fuse \
+    vim-tiny \
+    zram \
 "
 
 CORE_IMAGE_BASE_INSTALL:append:tdx = " \

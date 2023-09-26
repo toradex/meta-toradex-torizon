@@ -5,11 +5,4 @@ device monitoring, and more."
 
 require torizon-core-common.inc
 
-IMAGE_FEATURES += "ssh-server-dropbear"
-
 IMAGE_VARIANT = "Lite"
-
-# Extras (for development)
-CORE_IMAGE_BASE_INSTALL:append = " \
-    bash \
-"

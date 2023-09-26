@@ -1,7 +1,9 @@
 SUMMARY = "TorizonCore"
 DESCRIPTION = "TorizonCore Linux with no containers pre-provisioned."
 
-require torizon-core-container.inc
+require torizon-core-common.inc
+
+IMAGE_FEATURES += "bash-completion-pkgs"
 
 CORE_IMAGE_BASE_INSTALL:append = " \
     docker-ce \
