@@ -24,42 +24,42 @@ SPLASH = "plymouth"
 
 # Base packages
 CORE_IMAGE_BASE_INSTALL:append = " \
+    cpufrequtils \
+    curl \
+    ethtool \
     evtest \
+    fluent-bit \
+    htop \
     i2c-tools \
+    iproute2 \
+    iproute2-ip \
+    jq \
+    kernel-devsrc \
     kernel-modules \
-    usermount \
+    ldd \
+    less \
+    libpwquality \
+    mmc-utils \
     nano \
+    neofetch \
+    network-configuration \
+    openssh-sftp-server \
+    ostree-customize-plymouth \
+    ostree-devicetree-overlays \
+    packagegroup-core-full-cmdline-multiuser \
+    packagegroup-core-full-cmdline-utils \
+    rsync \
     set-hostname \
-    systemd-analyze \
+    sshfs-fuse \
     sudo \
+    systemd-analyze \
     torizon-conf \
     torizon-users \
     tzdata \
     udev-toradex-rules \
-    ostree-customize-plymouth \
-    ostree-devicetree-overlays \
-    network-configuration \
-    kernel-devsrc \
-    wireguard-tools \
-    fluent-bit \
-    neofetch \
-    libpwquality \
-    mmc-utils \
-    iproute2 \
-    iproute2-ip \
-    ethtool \
-    cpufrequtils \
-    curl \
-    htop \
-    jq \
-    ldd \
-    less \
-    openssh-sftp-server \
-    packagegroup-core-full-cmdline-multiuser \
-    packagegroup-core-full-cmdline-utils \
-    rsync \
-    sshfs-fuse \
+    usermount \
     vim-tiny \
+    wireguard-tools \
     zram \
 "
 
@@ -110,6 +110,6 @@ PSEUDO_PASSWD:prepend = "${@bb.utils.contains('DISTRO_FEATURES', 'stateless-syst
 TORADEX_PRODUCT_IDS:remove:colibri-imx6 = "0014 0016"
 
 CORE_IMAGE_BASE_INSTALL:append:torizon-signed = "\
-    kernel-module-composefs \
     fsverity-utils \
+    kernel-module-composefs \
 "
