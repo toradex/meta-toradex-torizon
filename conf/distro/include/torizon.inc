@@ -21,9 +21,6 @@ SDK_VERSION = "${DISTRO_VERSION}"
 # TorizonCore machine specific overrides
 INHERIT += "torizon toradex-sanity"
 
-# build Docker from the Docker-CE project
-PREFERRED_PROVIDER_virtual/docker = "docker-ce"
-
 # This also disables the static packageconfig. runc needs to be dynamically
 # linked for seccomp support. https://github.com/opencontainers/runc/issues/2008
 PACKAGECONFIG:remove:pn-${PREFERRED_PROVIDER_virtual/runc} = "static"
