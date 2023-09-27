@@ -11,6 +11,8 @@ ValueError: ZIP does not support timestamps before 1980
 Prevent that by forcing the date_time when (for some reason) the value is
 less than 1980.
 
+Upstream-Status: Inappropriate [Torizon specific]
+
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 ---
  Lib/zipfile.py | 3 +++
