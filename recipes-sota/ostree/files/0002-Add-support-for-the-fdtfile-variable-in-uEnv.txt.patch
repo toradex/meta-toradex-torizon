@@ -1,6 +1,6 @@
 From d5e01a6b4c208bc12ed8c7b99074c5c1bece764c Mon Sep 17 00:00:00 2001
 From: Sergio Prado <sergio.prado@toradex.com>
-Date: Wed, 13 Jul 2022 14:52:33 -0300
+Date: Thu, 28 set 2023 14:37:29 -0300
 Subject: [PATCH] Add support for the fdtfile variable in uEnv.txt
 
 When TorizonCore Builder applies a device tree to a TorizonCore
@@ -13,6 +13,7 @@ rollback situation.
 
 Upstream-Status: Inappropriate [TorizonCore specific]
 
+Signed-off-by: Eduardo Ferreira <eduardo.barbosa@toradex.com>
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
 ---
  src/libostree/ostree-bootloader-uboot.c | 34 +++++++++++++++++++++++++
@@ -22,7 +23,7 @@ diff --git a/src/libostree/ostree-bootloader-uboot.c b/src/libostree/ostree-boot
 index 7e23001e1fe7..c255fb17bf09 100644
 --- a/src/libostree/ostree-bootloader-uboot.c
 +++ b/src/libostree/ostree-bootloader-uboot.c
-@@ -103,6 +103,36 @@ append_system_uenv (OstreeBootloaderUboot   *self,
+@@ -98,6 +98,36 @@ append_system_uenv (OstreeBootloaderUboot *self, const char *bootargs, GPtrArray *new_lines,
    return TRUE;
  }
  
@@ -57,9 +58,10 @@ index 7e23001e1fe7..c255fb17bf09 100644
 +}
 +
  static gboolean
- create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
-                                         int                    bootversion,
-@@ -148,6 +178,10 @@ create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
+ create_config_from_boot_loader_entries (OstreeBootloaderUboot *self, int bootversion,
+                                         GPtrArray *new_lines, GCancellable *cancellable,
+                                         GError **error)
+@@ -141,6 +171,10 @@ create_config_from_boot_loader_entries (OstreeBootloaderUboot     *self,
        if (val)
          g_ptr_array_add (new_lines, g_strdup_printf ("fdtdir%s=/boot%s", index_suffix, val));
  
