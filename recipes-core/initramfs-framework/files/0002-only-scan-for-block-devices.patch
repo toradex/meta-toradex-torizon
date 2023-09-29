@@ -1,5 +1,22 @@
+From 73f4c94cce922960ff9fa3ae76f5a8750b5e1391 Mon Sep 17 00:00:00 2001
+From: Eduardo Ferreira <eduardo.barbosa@toradex.com>
+Date: Thu, 28 Sep 2023 16:17:26 -0300
+Subject: [PATCH] Only scan for block devices
+
+To mount rootfs udev has to be run from initramfs. udev then scans all the devices
+and executes all the rules. This is quite long operation that slows down boot.
+
+This patces udev to only scan for block devices, to speed up boot process.
+
+Upstream-Status: Inappropriate [TorizonCore Specific]
+
+Signed-off-by: Eduardo Ferreira <eduardo.barbosa@toradex.com>
+---
+ udev | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
 diff --git a/udev b/udev
-index 4898b89..5645e45 100644
+index 4898b89..925b7d9 100644
 --- a/udev
 +++ b/udev
 @@ -45,6 +45,7 @@ udev_run() {
@@ -8,6 +25,9 @@ index 4898b89..5645e45 100644
  	$_UDEV_DAEMON --daemon
 -	udevadm trigger --action=add
 +	udevadm trigger --action=add --subsystem-match=block \
-+			--subsystem-match=graphics --subsystem-match=drm --subsystem-match=tty
++	  --subsystem-match=graphics --subsystem-match=drm --subsystem-match=tty
  	udevadm settle
  }
+-- 
+2.34.1
+
