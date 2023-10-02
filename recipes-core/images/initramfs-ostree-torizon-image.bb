@@ -7,6 +7,7 @@ PACKAGE_INSTALL = "initramfs-framework-base initramfs-module-udev \
 
 SYSTEMD_DEFAULT_TARGET = "initrd.target"
 
+IMAGE_NAME_SUFFIX = ""
 # Do not pollute the initrd image with rootfs features
 IMAGE_FEATURES = "splash"
 
