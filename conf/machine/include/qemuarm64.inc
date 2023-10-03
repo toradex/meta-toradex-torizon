@@ -4,6 +4,8 @@ UBOOT_ENTRYPOINT = "0x40080000"
 WKS_FILE_DEPENDS:remove = "tezi-metadata virtual/dtb"
 WKS_FILE:sota:qemuarm64 = "torizon-sota.wks"
 
+CORE_IMAGE_BASE_INSTALL:append = "resize-helper"
+
 OSTREE_KERNEL_ARGS:qemuarm64 = "console=ttyAMA0 root=LABEL=otaroot rootfstype=ext4"
 OSTREE_DEPLOY_DEVICETREE:qemuarm64 = "0"
 
