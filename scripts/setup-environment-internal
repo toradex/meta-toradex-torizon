@@ -112,7 +112,7 @@ fi
 # Create a common list of "<machine>(<layer>)", sorted by <machine>
 # Blacklist unsupported machines of TorizonCore
 MACHLAYERS=$(find layers/ -print | grep "conf/machine/.*\.conf" |
-            grep -E '(apalis.*\.conf|colibri.*\.conf|verdin.*\.conf|qemuarm64\.conf|genericx86-64\.conf|raspberrypi4-64\.conf|raspberrypi3-64\.conf|raspberrypi0-2w-64\.conf|raspberrypi0-wifi\.conf|intel-corei7-64\.conf|nezha-allwinner-d1\.conf|beaglebone-yocto\.conf|beagleplay\.conf)' |
+            grep -E '(apalis.*\.conf|colibri.*\.conf|verdin.*\.conf|qemuarm64\.conf|genericx86-64\.conf|raspberrypi4-64\.conf|raspberrypi3-64\.conf|raspberrypi0-2w-64\.conf|raspberrypi0-wifi\.conf|intel-corei7-64\.conf|nezha-allwinner-d1\.conf|beaglebone-yocto\.conf|beagleplay\.conf|qemux86-64\.conf)' |
             grep -E -v '(imx7-nand|colibri-vf|tk1|colibri-imx7|colibri-imx6ull|verdin-am62-k3r5)\.conf' |
             sed -e 's/\.conf//g' -e 's/layers\///' |
             awk -F'/conf/machine/' '{print $NF "(" $1 ")"}' | LC_ALL=C sort)
