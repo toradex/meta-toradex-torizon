@@ -7,7 +7,7 @@ python() {
     if tdx_image == "torizon-core-common-docker-dev":
         if tdx_debug != "1":
             bb.fatal(f"You are trying to build a development image with TDX_DEBUG={tdx_debug}")
-    elif tdx:
+    else:
         # for common Torizon OS we are only allowing to build development images
         bb.fatal(
             f"\n\nYou are trying to build {machine} with TDX_IMAGE={tdx_image}" \
