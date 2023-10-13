@@ -370,8 +370,8 @@ You can now run 'bitbake <target>'
 Some of common targets are:
 
     torizon-core-docker
+    torizon-minimal
     torizon-core-podman
-    torizon-core-lite
 
 EOF
 
