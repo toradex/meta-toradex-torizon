@@ -1,8 +1,8 @@
 
-FILESEXTRAPATHS:prepend := "${THISDIR}/linux-intel:"
-
-SRC_URI:append = " \
-    file://fragment.cfg \
-"
-
 require common.inc
+
+FILESEXTRAPATHS:prepend := "${THISDIR}/files:"
+
+SRC_URI:append = "\
+     file://0001-i915-hwmon-dgfx-check.patch \
+"

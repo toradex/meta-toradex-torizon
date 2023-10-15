@@ -20,5 +20,8 @@ CORE_IMAGE_BASE_INSTALL:remove = "set-hostname"
 PREFERRED_PROVIDER_u-boot-default-script = ""
 PREFERRED_PROVIDER_virtual/dtb = ""
 
+PREFERRED_PROVIDER_virtual/kernel = "linux-intel"
+PREFERRED_VERSION_linux-intel = "5.10.%"
+
 IMAGE_INSTALL:remove = " minnowboard-efi-startup"
 LINUX_VERSION_EXTENSION ?= "-torizon-${LINUX_KERNEL_TYPE}"
