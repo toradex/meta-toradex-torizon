@@ -38,7 +38,7 @@ def get_rdeps(d):
     if is_ti(d):  # TI
         return 'ostree-uboot-env' if d.getVar('PREFERRED_PROVIDER_u-boot') else ''
     else:  # NXP/x86 generic/QEMU
-        return 'ostree-uboot-env' if d.getVar('PREFERRED_PROVIDER_u-boot-default-script') and ('raspberrypi' not in d.getVar('MACHINE')) else ''
+        return 'ostree-uboot-env' if d.getVar('PREFERRED_PROVIDER_u-boot-default-script') else ''
 
 DEPENDS:append:class-target = " ${@get_deps(d)}"
 RDEPENDS:${PN}:append:class-target = " ${@get_rdeps(d)}"
