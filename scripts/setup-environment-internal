@@ -264,6 +264,7 @@ TMPDIR = "${BUILDDIR}/tmp"
 
 # Where to save the packages and images
 DEPLOY_DIR = "${BUILDDIR}/deploy"
+TI_COMMON_DEPLOY = "\${DEPLOY_DIR}"
 
 # Go through the Firewall
 #HTTP_PROXY = "http://${PROXYHOST}:${PROXYPORT}/"
