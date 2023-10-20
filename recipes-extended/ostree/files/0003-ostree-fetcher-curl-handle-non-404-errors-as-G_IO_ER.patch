@@ -1,0 +1,37 @@
+From 49d7fb731409c172a83f28fd1b4b2b811b0fb3dd Mon Sep 17 00:00:00 2001
+From: Lucas Morishita <lucas.morishita@toradex.com>
+Date: Mon, 31 Jul 2023 09:53:49 -0300
+Subject: [PATCH] ostree-fetcher-curl: handle non 404 errors as
+ G_IO_ERROR_TIMED_OUT
+
+This will return G_IO_ERROR_TIMED_OUT with any call
+that fails except on cases were the call returns a
+NOT_FOUND error. This will trigger a retry.
+
+Upstream-status: Backport [https://github.com/ostreedev/ostree/commit/4085eee9ed676d43554c073fa9212ab6a29376a8]
+
+Signed-off-by: Lucas Morishita <lucas.morishita@toradex.com>
+Signed-off-by: Jeremias Cordoba <jeremias.cordoba@toradex.com>
+---
+ src/libostree/ostree-fetcher-curl.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/src/libostree/ostree-fetcher-curl.c b/src/libostree/ostree-fetcher-curl.c
+index fdf8a2ef..526258bd 100644
+--- a/src/libostree/ostree-fetcher-curl.c
++++ b/src/libostree/ostree-fetcher-curl.c
+@@ -325,7 +325,11 @@ check_multi_info (OstreeFetcher *fetcher)
+             }
+           else
+             {
+-              g_task_return_new_error (task, G_IO_ERROR, G_IO_ERROR_FAILED,
++              /* When it is not a file, we want to retry the request.
++               * We accomplish that by using G_IO_ERROR_TIMED_OUT.
++               */
++              int g_io_error_code = is_file ? G_IO_ERROR_FAILED : G_IO_ERROR_TIMED_OUT;
++              g_task_return_new_error (task, G_IO_ERROR, g_io_error_code,
+                                        "While fetching %s: [%u] %s", eff_url, curlres,
+                                        curl_easy_strerror (curlres));
+               _ostree_fetcher_journal_failure (req->fetcher->remote_name,
+-- 
+2.41.0
