@@ -272,6 +272,12 @@ _EOF
 
 EULA_ACCEPTED=""
 
+# TI does not have an EULA that needs user acceptance. So in order to avoid
+# showing NXP's EULA we just say that EULA was accepted for AM62.
+if [ "${MACHINE}" = "verdin-am62" ]; then
+    EULA_ACCEPTED=1
+fi
+
 if egrep -q '^\s*ACCEPT_FSL_EULA\s*=\s*\"[^\"]*\"' conf/local.conf; then
     EULA_ACCEPTED=1
 fi
