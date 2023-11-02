@@ -1,1 +1,1 @@
-export DOCKER_CONFIG=/etc/docker
+unset DOCKER_CONFIG
