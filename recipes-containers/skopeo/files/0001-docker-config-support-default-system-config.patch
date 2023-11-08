@@ -1,6 +1,6 @@
-From 2f2c54edf048a1c1dab81df2fba3d2d98263a679 Mon Sep 17 00:00:00 2001
-From: Sergio Prado <sergio.prado@toradex.com>
-Date: Tue, 19 Jul 2022 11:36:18 +0000
+From 88b8742b19cf643cb4d22f09b7a8634eb7930fca Mon Sep 17 00:00:00 2001
+From: Eduardo Ferreira <eduardo.barbosa@toradex.com>
+Date: Wed, 8 Nov 2023 10:54:46 -0300
 Subject: [PATCH] Support docker system config
 
 TorizonCore maintains a system docker configuration which should also be added to the default config search path.
@@ -11,31 +11,32 @@ Upstream-Status: Inappropriate [TorizonCore specific]
 
 Signed-off-by: Ricardo Salveti <ricardo@foundries.io>
 Signed-off-by: Sergio Prado <sergio.prado@toradex.com>
+Signed-off-by: Eduardo Ferreira <eduardo.barbosa@toradex.com>
 ---
  .../github.com/containers/image/v5/pkg/docker/config/config.go | 3 +++
  1 file changed, 3 insertions(+)
 
-diff --git a/src/import/vendor/github.com/containers/image/v5/pkg/docker/config/config.go b/src/import/vendor/github.com/containers/image/v5/pkg/docker/config/config.go
-index 1d73dc405e7d..6b8bdb9e0627 100644
---- a/src/import/vendor/github.com/containers/image/v5/pkg/docker/config/config.go
-+++ b/src/import/vendor/github.com/containers/image/v5/pkg/docker/config/config.go
-@@ -41,6 +41,7 @@ var (
+diff --git a/vendor/github.com/containers/image/v5/pkg/docker/config/config.go b/vendor/github.com/containers/image/v5/pkg/docker/config/config.go
+index 2e79d0ff..ca0a5c5c 100644
+--- a/vendor/github.com/containers/image/v5/pkg/docker/config/config.go
++++ b/vendor/github.com/containers/image/v5/pkg/docker/config/config.go
+@@ -37,6 +37,7 @@ var (
  	defaultPerUIDPathFormat = filepath.FromSlash("/run/containers/%d/auth.json")
  	xdgConfigHomePath       = filepath.FromSlash("containers/auth.json")
  	xdgRuntimeDirPath       = filepath.FromSlash("containers/auth.json")
-+	dockerSystemConfigPath  = filepath.FromSlash("/usr/lib/docker/config.json")
++	dockerSystemConfigPath	= filepath.FromSlash("/usr/lib/docker/config.json")
  	dockerHomePath          = filepath.FromSlash(".docker/config.json")
  	dockerLegacyHomePath    = ".dockercfg"
  	nonLinuxAuthFilePath    = filepath.FromSlash(".config/containers/auth.json")
-@@ -221,6 +222,8 @@ func getAuthFilePaths(sys *types.SystemContext, homeDir string) []authPath {
- 		xdgCfgHome = filepath.Join(homeDir, ".config")
- 	}
- 	paths = append(paths, authPath{path: filepath.Join(xdgCfgHome, xdgConfigHomePath), legacyFormat: false})
-+	// Load values from system config by default
-+	paths = append(paths, authPath{path: dockerSystemConfigPath, legacyFormat: false})
- 	if dockerConfig := os.Getenv("DOCKER_CONFIG"); dockerConfig != "" {
- 		paths = append(paths,
- 			authPath{path: filepath.Join(dockerConfig, "config.json"), legacyFormat: false},
+@@ -229,6 +230,8 @@ func getAuthFilePaths(sys *types.SystemContext, homeDir string) []authPath {
+ 			xdgCfgHome = filepath.Join(homeDir, ".config")
+ 		}
+ 		paths = append(paths, newAuthPathDefault(filepath.Join(xdgCfgHome, xdgConfigHomePath)))
++		// Load values from system config by default
++		paths = append(paths, newAuthPathDefault(dockerSystemConfigPath))
+ 		if dockerConfig := os.Getenv("DOCKER_CONFIG"); dockerConfig != "" {
+ 			paths = append(paths, newAuthPathDefault(filepath.Join(dockerConfig, "config.json")))
+ 		} else {
 -- 
-2.25.1
+2.34.1
 
