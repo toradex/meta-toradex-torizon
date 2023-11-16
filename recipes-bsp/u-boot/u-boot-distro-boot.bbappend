@@ -13,7 +13,7 @@ do_compile:append () {
     bbdebug 1 "Building uEnv.txt..."
     sed -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
         -e 's/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/' \
-        -e 's/@@KERNEL_DTB_PREFIX@@/${KERNEL_DTB_PREFIX}/' \
+        -e 's/@@KERNEL_DTB_PREFIX@@/${DTB_PREFIX}/' \
         -e 's/@@DISTRO_BOOT_PREDEF_FITCONF@@/${DISTRO_BOOT_PREDEF_FITCONF}/' \
         ${WORKDIR}/uEnv.txt.in > uEnv.txt
 }
