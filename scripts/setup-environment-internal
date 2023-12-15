@@ -263,8 +263,8 @@ SSTATE_DIR ?= "${OEROOT}/sstate-cache"
 TMPDIR = "${BUILDDIR}/tmp"
 
 # Where to save the packages and images
-DEPLOY_DIR = "${BUILDDIR}/deploy"
-TI_COMMON_DEPLOY = "\${DEPLOY_DIR}"
+TI_COMMON_DEPLOY = "${BUILDDIR}/deploy"
+DEPLOY_DIR = "\${TI_COMMON_DEPLOY}\${@'' if d.getVar('BB_CURRENT_MC') == 'default' else '/\${BB_CURRENT_MC}'}"
 
 # Go through the Firewall
 #HTTP_PROXY = "http://${PROXYHOST}:${PROXYPORT}/"
