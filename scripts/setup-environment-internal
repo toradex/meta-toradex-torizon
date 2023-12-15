@@ -271,6 +271,12 @@ _EOF
 
 EULA_ACCEPTED=""
 
+# TI does not have an EULA that needs user acceptance. So in order to avoid
+# showing NXP's EULA we just say that EULA was accepted for AM62.
+if [ "${MACHINE}" = "verdin-am62" ]; then
+    EULA_ACCEPTED=1
+fi
+
 if egrep -q '^\s*ACCEPT_FSL_EULA\s*=\s*\"[^\"]*\"' conf/local.conf; then
     EULA_ACCEPTED=1
 fi
@@ -350,29 +356,29 @@ EOF
     fi
 fi
 
-# cat <<EOF
+cat <<EOF
 
-# Welcome to Toradex TorizonCore
+Welcome to Toradex TorizonCore
 
-# For more information about OpenEmbedded see their website:
+For more information about OpenEmbedded see their website:
 
-#     http://www.openembedded.org/
+    http://www.openembedded.org/
 
-# Your build environemnt has been configured with:
+Your build environemnt has been configured with:
 
-#     MACHINE = ${MACHINE}
-#     SDKMACHINE = ${SDKMACHINE}
-#     DISTRO = ${DISTRO}
+    MACHINE = ${MACHINE}
+    SDKMACHINE = ${SDKMACHINE}
+    DISTRO = ${DISTRO}
 
-# You can now run 'bitbake <target>'
+You can now run 'bitbake <target>'
 
-# Some of common targets are:
+Some of common targets are:
 
-#     torizon-core-docker
-#     torizon-core-podman
-#     torizon-core-lite
+    torizon-core-docker
+    torizon-minimal
+    torizon-core-podman
 
-# EOF
+EOF
 
 if [ "${MACHINE}" = "qemuarm64" ]; then
     cat <<EOF

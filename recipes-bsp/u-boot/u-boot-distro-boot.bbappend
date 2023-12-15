@@ -4,10 +4,23 @@ SRC_URI:append = " \
     file://uEnv.txt.in \
 "
 
+# DISTRO_BOOT_PREDEF_FITCONF: String in this variable will be added by the boot script to the string
+# passed to 'bootm' when booting a FIT image. This can be leveraged to force some FIT configurations
+# (such as configurations representing device-tree overlays) to be used when booting.
+DISTRO_BOOT_PREDEF_FITCONF ??= ""
+
+do_compile:append () {
+    bbdebug 1 "Building uEnv.txt..."
+    sed -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/' \
+        -e 's/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/' \
+        -e 's/@@KERNEL_DTB_PREFIX@@/${DTB_PREFIX}/' \
+        -e 's/@@DISTRO_BOOT_PREDEF_FITCONF@@/${DISTRO_BOOT_PREDEF_FITCONF}/' \
+        ${WORKDIR}/uEnv.txt.in > uEnv.txt
+}
+
 do_install () {
-    sed -e 's/@@KERNEL_BOOTCMD@@/${KERNEL_BOOTCMD}/;s/@@KERNEL_IMAGETYPE@@/${KERNEL_IMAGETYPE}/;s/@@KERNEL_DTB_PREFIX@@/${KERNEL_DTB_PREFIX}/' ${WORKDIR}/uEnv.txt.in > ${WORKDIR}/uEnv.txt
     install -d ${D}${libdir}/ostree-boot
-    install -m 0644 ${WORKDIR}/uEnv.txt ${D}${libdir}/ostree-boot/
+    install -m 0644 uEnv.txt ${D}${libdir}/ostree-boot/
 }
 
 PACKAGES = "ostree-uboot-env"

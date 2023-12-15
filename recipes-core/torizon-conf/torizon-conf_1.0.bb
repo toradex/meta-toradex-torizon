@@ -18,4 +18,5 @@ do_install () {
     install -m 0755 ${WORKDIR}/machine.sh ${D}${sysconfdir}/profile.d/
     sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${sysconfdir}/profile.d/machine.sh
     install -m 0755 ${WORKDIR}/containers-tags.sh ${D}${sysconfdir}/profile.d/
+    sed -i "s/@@MACHINE@@/${MACHINE}/g" ${D}${sysconfdir}/profile.d/containers-tags.sh
 }
